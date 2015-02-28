@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
+		9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */; };
+		9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */; };
+		9ADD7CA71AA2212800BDCFA8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */; };
+		9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */; };
+		9ADD7CB61AA2212800BDCFA8 /* EdwinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9ADD7CB01AA2212800BDCFA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9ADD7C921AA2212800BDCFA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9ADD7C991AA2212800BDCFA8;
+			remoteInfo = Edwin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADD7C9E1AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9ADD7CA41AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9ADD7CA91AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		9ADD7CAF1AA2212800BDCFA8 /* EdwinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EdwinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADD7CB41AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdwinTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9ADD7C971AA2212800BDCFA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9ADD7CAC1AA2212800BDCFA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9ADD7C911AA2212800BDCFA8 = {
+			isa = PBXGroup;
+			children = (
+				9ADD7C9C1AA2212800BDCFA8 /* Edwin */,
+				9ADD7CB21AA2212800BDCFA8 /* EdwinTests */,
+				9ADD7C9B1AA2212800BDCFA8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9ADD7C9B1AA2212800BDCFA8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */,
+				9ADD7CAF1AA2212800BDCFA8 /* EdwinTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9ADD7C9C1AA2212800BDCFA8 /* Edwin */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */,
+				9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */,
+				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
+				9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */,
+				9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */,
+				9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */,
+			);
+			path = Edwin;
+			sourceTree = "<group>";
+		};
+		9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7C9E1AA2212800BDCFA8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9ADD7CB21AA2212800BDCFA8 /* EdwinTests */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */,
+				9ADD7CB31AA2212800BDCFA8 /* Supporting Files */,
+			);
+			path = EdwinTests;
+			sourceTree = "<group>";
+		};
+		9ADD7CB31AA2212800BDCFA8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7CB41AA2212800BDCFA8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9ADD7C991AA2212800BDCFA8 /* Edwin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9ADD7CB91AA2212800BDCFA8 /* Build configuration list for PBXNativeTarget "Edwin" */;
+			buildPhases = (
+				9ADD7C961AA2212800BDCFA8 /* Sources */,
+				9ADD7C971AA2212800BDCFA8 /* Frameworks */,
+				9ADD7C981AA2212800BDCFA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Edwin;
+			productName = Edwin;
+			productReference = 9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9ADD7CAE1AA2212800BDCFA8 /* EdwinTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9ADD7CBC1AA2212800BDCFA8 /* Build configuration list for PBXNativeTarget "EdwinTests" */;
+			buildPhases = (
+				9ADD7CAB1AA2212800BDCFA8 /* Sources */,
+				9ADD7CAC1AA2212800BDCFA8 /* Frameworks */,
+				9ADD7CAD1AA2212800BDCFA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9ADD7CB11AA2212800BDCFA8 /* PBXTargetDependency */,
+			);
+			name = EdwinTests;
+			productName = EdwinTests;
+			productReference = 9ADD7CAF1AA2212800BDCFA8 /* EdwinTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9ADD7C921AA2212800BDCFA8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Wrong Bag";
+				TargetAttributes = {
+					9ADD7C991AA2212800BDCFA8 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					9ADD7CAE1AA2212800BDCFA8 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 9ADD7C991AA2212800BDCFA8;
+					};
+				};
+			};
+			buildConfigurationList = 9ADD7C951AA2212800BDCFA8 /* Build configuration list for PBXProject "Edwin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9ADD7C911AA2212800BDCFA8;
+			productRefGroup = 9ADD7C9B1AA2212800BDCFA8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9ADD7C991AA2212800BDCFA8 /* Edwin */,
+				9ADD7CAE1AA2212800BDCFA8 /* EdwinTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9ADD7C981AA2212800BDCFA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */,
+				9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */,
+				9ADD7CA71AA2212800BDCFA8 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9ADD7CAD1AA2212800BDCFA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9ADD7C961AA2212800BDCFA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */,
+				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9ADD7CAB1AA2212800BDCFA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9ADD7CB61AA2212800BDCFA8 /* EdwinTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9ADD7CB11AA2212800BDCFA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9ADD7C991AA2212800BDCFA8 /* Edwin */;
+			targetProxy = 9ADD7CB01AA2212800BDCFA8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9ADD7CA41AA2212800BDCFA8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9ADD7CA91AA2212800BDCFA8 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9ADD7CB71AA2212800BDCFA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9ADD7CB81AA2212800BDCFA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9ADD7CBA1AA2212800BDCFA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Edwin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9ADD7CBB1AA2212800BDCFA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Edwin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		9ADD7CBD1AA2212800BDCFA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EdwinTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Edwin.app/Edwin";
+			};
+			name = Debug;
+		};
+		9ADD7CBE1AA2212800BDCFA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EdwinTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Edwin.app/Edwin";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9ADD7C951AA2212800BDCFA8 /* Build configuration list for PBXProject "Edwin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9ADD7CB71AA2212800BDCFA8 /* Debug */,
+				9ADD7CB81AA2212800BDCFA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9ADD7CB91AA2212800BDCFA8 /* Build configuration list for PBXNativeTarget "Edwin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9ADD7CBA1AA2212800BDCFA8 /* Debug */,
+				9ADD7CBB1AA2212800BDCFA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		9ADD7CBC1AA2212800BDCFA8 /* Build configuration list for PBXNativeTarget "EdwinTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9ADD7CBD1AA2212800BDCFA8 /* Debug */,
+				9ADD7CBE1AA2212800BDCFA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9ADD7C921AA2212800BDCFA8 /* Project object */;
+}
