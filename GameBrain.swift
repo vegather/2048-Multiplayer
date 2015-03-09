@@ -17,7 +17,7 @@ protocol GameBrainDelegate {
 //    func moveTileFromCoordinate(from: Coordinate, toCoordinate to: Coordinate)
 //    func mergeTilesAtCoordinate(coordinate: Coordinate)
     
-    func performActions(actions: [TileAction])
+    func performActions<T: Evolvable>(actions: [MoveAction<T>])
     
     func userHasNewScore(newUserScore: Int)
     func opponentHasNewScore(newOpponentScore: Int)
@@ -26,12 +26,12 @@ protocol GameBrainDelegate {
     func opponentsTurn()
 }
 
-enum Turn {
-    case User
-    case Opponent
-}
-
 class GameBrain {
+ 
+    private enum Turn {
+        case User
+        case Opponent
+    }
     
     private var userScore = 0
     private var opponentScore = 0
