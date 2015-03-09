@@ -89,12 +89,6 @@ struct Coordinate: Printable {
     }
 }
 
-//struct Tile {
-//    let value:    TileValue;
-//    let position: Coordinate;
-//}
-
-
 // This class should preferable by a struct, but Swift currently can't handle generic enums (see MoveAction)
 // that have more than one associated value if one of the values are of the generic type. Having this be a 
 // class works because it is a reference type, and pointers have a fixed size. The size of copied types 
