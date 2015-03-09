@@ -34,19 +34,28 @@ class GameBoard<T: Evolvable> {
     // -------------------------------
     
     func moveInDirection(direction: MoveDirection) {
+        var resultFromMove:(Int, [MoveAction<T>])
+        
         switch direction {
         case .Left:
-            moveLeft()
+            resultFromMove = moveLeft()
         case .Right:
-            moveRight()
+            resultFromMove = moveRight()
         case .Up:
-            moveUp()
+            resultFromMove = moveUp()
         case .Down:
-            moveDown()
+            resultFromMove = moveDown()
+        }
+        
+        let (score, moves) = resultFromMove
+        println("Move to \(direction) results in \(score)")
+        
+        for action: MoveAction<T> in moves {
+            println("Move: \(action)")
         }
     }
     
-    private func moveLeft() -> [MoveAction<T>] {
+    private func moveLeft() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         
         for row in 0..<self.dimension {
@@ -100,15 +109,14 @@ class GameBoard<T: Evolvable> {
                     } else {
                         firstCol = col
                     }
-                    
                 }
             }
         }
         
-        return actions
+        return (0, actions)
     }
     
-    private func moveRight() -> [MoveAction<T>] {
+    private func moveRight() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         
         for row in 0..<self.dimension {
@@ -168,19 +176,23 @@ class GameBoard<T: Evolvable> {
         }
 
         
-        return actions
+        return (0, actions)
     }
     
-    private func moveUp() -> [MoveAction<T>] {
+    private func moveUp() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         
-        return actions
+        
+        
+        return (0, actions)
     }
     
-    private func moveDown() -> [MoveAction<T>] {
+    private func moveDown() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         
-        return actions
+        
+        
+        return (0, actions)
     }
     
     
