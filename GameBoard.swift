@@ -9,7 +9,7 @@
 import Foundation
 
 protocol GameBoardProtocol: class {
-    func spawnedTile<T: Evolvable>(position: Coordinate, value: T)
+    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
     func performedActions<T: Evolvable>(actions: [MoveAction<T>])
     func updateScoreBy(scoreIncrement: Int)
 }
@@ -205,8 +205,27 @@ class GameBoard<T: Evolvable> {
     // MARK: Spawning new pieces
     // -------------------------------
     
-    func spawnRandomGamePiece() {
+    // Will do nothing if there are no empty spots on the board
+    func spawnNewGamePieceAtRandomPosition() {
+        var emptySpots = [Coordinate]()
         
+        for row in 0..<self.dimension {
+            for col in 0..<self.dimension {
+                if self.board[row][col] == nil {
+                    emptySpots.append(Coordinate(x: col, y: row))
+                }
+            }
+        }
+        
+        let indexOfSpot = Int(arc4random()) % emptySpots.count
+        
+        let spot = emptySpots[indexOfSpot]
+        let value = T.getBaseValue()
+        
+        self.board[spot.y][spot.x] = value
+        
+        self.delegate?.spawnedGamePiece(position: spot, value: value)
     }
     
 }
+

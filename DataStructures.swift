@@ -17,6 +17,7 @@ enum MoveDirection {
 
 protocol Evolvable: Equatable, Printable {
     func evolve() -> Self?
+    class func getBaseValue() -> Self
 }
 
 enum TileValue: Int, Evolvable {
@@ -59,6 +60,10 @@ enum TileValue: Int, Evolvable {
         case .OneHundredAndThirtyOneThousandAndSeventyTwo:  return nil
         default:                                            return nil
         }
+    }
+    
+    static func getBaseValue() -> TileValue {
+        return TileValue.Two
     }
     
     var description: String {
