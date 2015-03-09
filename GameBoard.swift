@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol GameBoardProtocol: class {
+protocol GameBoardDelegate: class {
     func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
     func performedActions<T: Evolvable>(actions: [MoveAction<T>])
     func updateScoreBy(scoreIncrement: Int)
@@ -18,9 +18,9 @@ class GameBoard<T: Evolvable> {
     
     private var board: Array<Array<T?>>
     private let dimension: Int
-    weak private var delegate: GameBoardProtocol?
+    weak private var delegate: GameBoardDelegate?
     
-    init(delegate: GameBoardProtocol?, dimension: Int) {
+    init(delegate: GameBoardDelegate, dimension: Int) {
         self.delegate = delegate
         self.dimension = dimension
         

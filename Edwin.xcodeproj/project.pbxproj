@@ -64,6 +64,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A5582F71AAE68E6004F0C2D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */,
+				9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */,
+				9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9A5582F81AAE6902004F0C2D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		9A5582F91AAE690B004F0C2D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */,
+				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		9ADD7C911AA2212800BDCFA8 = {
 			isa = PBXGroup;
 			children = (
@@ -85,15 +112,9 @@
 		9ADD7C9C1AA2212800BDCFA8 /* Edwin */ = {
 			isa = PBXGroup;
 			children = (
-				9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */,
-				9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */,
-				9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */,
-				9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */,
-				9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */,
-				9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */,
-				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
-				9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */,
-				9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */,
+				9A5582F91AAE690B004F0C2D /* Views */,
+				9A5582F81AAE6902004F0C2D /* Controllers */,
+				9A5582F71AAE68E6004F0C2D /* Model */,
 				9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */,
 			);
 			path = Edwin;
@@ -102,6 +123,9 @@
 		9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */,
+				9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */,
+				9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */,
 				9ADD7C9E1AA2212800BDCFA8 /* Info.plist */,
 			);
 			name = "Supporting Files";

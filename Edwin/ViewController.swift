@@ -8,16 +8,41 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, GameBrainDelegate {
 
+    var gameBrain: GameBrain!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.gameBrain = GameBrain(delegate: self, dimension: 4)
     }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Game Brain Delegate Methods
+    // -------------------------------
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func performActions<T: Evolvable>(actions: [MoveAction<T>]) {
+        
+    }
+    
+    func userHasNewScore(newUserScore: Int) {
+        
+    }
+    
+    func opponentHasNewScore(newOpponentScore: Int) {
+        
+    }
+    
+    func usersTurn() {
+        
+    }
+    
+    func opponentsTurn() {
+        
     }
 
 

@@ -12,7 +12,7 @@ import Foundation
 // repeatedly until all the tiles that require moving have been moved.
 // After that, any tiles that should merge will be on top of each other.
 // For these tiles, mergeTilesAtCoordinate will be called.
-protocol GameBrainDelegate {
+protocol GameBrainDelegate: class {
 //    func spawnTile(tile: Tile)
 //    func moveTileFromCoordinate(from: Coordinate, toCoordinate to: Coordinate)
 //    func mergeTilesAtCoordinate(coordinate: Coordinate)
@@ -26,7 +26,7 @@ protocol GameBrainDelegate {
     func opponentsTurn()
 }
 
-class GameBrain {
+class GameBrain: GameBoardDelegate {
  
     private enum Turn {
         case User
@@ -35,14 +35,34 @@ class GameBrain {
     
     private var userScore = 0
     private var opponentScore = 0
-    private let delegate: GameBrainDelegate
     private var currentPlayer = Turn.User
     
-    init(delegate: GameBrainDelegate) {
+    private var gameBoard: GameBoard<TileValue>?
+    private weak var delegate: GameBrainDelegate?
+    
+    init(delegate: GameBrainDelegate, dimension: Int) {
         self.delegate = delegate
+        self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
     } 
     
     func moveInDirection(direction: MoveDirection) {
+        
+    }
+    
+    
+    // -------------------------------
+    // MARK: Game Board Delegate Methods
+    // -------------------------------
+    
+    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T) {
+        
+    }
+    
+    func performedActions<T: Evolvable>(actions: [MoveAction<T>]) {
+        
+    }
+    
+    func updateScoreBy(scoreIncrement: Int) {
         
     }
 }
