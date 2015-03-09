@@ -47,12 +47,15 @@ class GameBoard<T: Evolvable> {
             resultFromMove = moveDown()
         }
         
-        let (score, moves) = resultFromMove
-        println("Move to \(direction) results in \(score)")
+        let (scoreIncrease, moves) = resultFromMove
+        println("Move to \(direction) results in \(scoreIncrease)")
         
         for action: MoveAction<T> in moves {
             println("Move: \(action)")
         }
+        
+        self.delegate?.performedActions(moves)
+        self.delegate?.updateScoreBy(scoreIncrease)
     }
     
     private func moveLeft() -> (Int, [MoveAction<T>]) {
