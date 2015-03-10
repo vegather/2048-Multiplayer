@@ -49,8 +49,74 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Left)
+        self.gameBoard?.moveInDirection(MoveDirection.Right)
+        
+        
+        
+        self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
+        
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        
+        self.gameBoard?.moveInDirection(MoveDirection.Right)
+        
+        
+        
+        
+        self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
+        
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        
+        self.gameBoard?.moveInDirection(MoveDirection.Right)
+        
+        
+        
+        
+        
+        self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
+        
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        
+        self.gameBoard?.moveInDirection(MoveDirection.Right)
+        
+        
+        
+        
+        self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
+        
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        
+        self.gameBoard?.moveInDirection(MoveDirection.Right)
     } 
     
     func moveInDirection(direction: MoveDirection) {
