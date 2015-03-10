@@ -51,7 +51,7 @@ class GameBoard<T: Evolvable> {
         println("GameBoard - Move to \(direction) results in \(scoreIncrease) points")
         
         for action: MoveAction<T> in moves {
-            println("GameBoard - Move: \(action)")
+            println("GameBoard - Action: \(action)")
         }
         
         println("Board after the move in direction \(direction)")
