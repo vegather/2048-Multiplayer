@@ -48,7 +48,7 @@ class GameBoard<T: Evolvable> {
         }
         
         let (scoreIncrease, moves) = resultFromMove
-        println("GameBoard - Move to \(direction) results in \(scoreIncrease)")
+        println("GameBoard - Move to \(direction) results in \(scoreIncrease) points")
         
         for action: MoveAction<T> in moves {
             println("GameBoard - Move: \(action)")
