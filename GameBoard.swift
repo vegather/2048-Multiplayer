@@ -68,6 +68,7 @@ class GameBoard<T: Evolvable> {
             var firstCol:  Int? //Used to temporary store a column index to check for potential merging
             for col in 0..<self.dimension {
                 if let currentTile: T = self.board[row][col] {
+                    println("Moving left and found a tile at x: \(col), y: \(row)")
                     
                     if let first = firstCol {
                         if currentTile == self.board[row][first] {
