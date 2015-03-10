@@ -48,10 +48,10 @@ class GameBoard<T: Evolvable> {
         }
         
         let (scoreIncrease, moves) = resultFromMove
-        println("Move to \(direction) results in \(scoreIncrease)")
+        println("GameBoard - Move to \(direction) results in \(scoreIncrease)")
         
         for action: MoveAction<T> in moves {
-            println("Move: \(action)")
+            println("GameBoard - Move: \(action)")
         }
         
         self.delegate?.performedActions(moves)
@@ -222,10 +222,17 @@ class GameBoard<T: Evolvable> {
         let spot = emptySpots[indexOfSpot]
         let value = T.getBaseValue()
         
+        println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
+        
         self.board[spot.y][spot.x] = value
         
         self.delegate?.spawnedGamePiece(position: spot, value: value)
     }
+    
+    
+    
+    
+    
     
 }
 
