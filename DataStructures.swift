@@ -143,7 +143,7 @@ enum MoveAction<T: Evolvable>: Printable {
             case let .Move(from, to):
                 return "Move(from: \(from), to: \(to))"
             case let .Merge(from, to, toGamePiece):
-                return "Merge(from: \(from), to: \(to), toGamePiece: \(toGamePiece))"
+                return "Merge(from: \(from), and: \(to), toGamePiece: \(toGamePiece))"
             }
         }
     }
