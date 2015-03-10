@@ -33,6 +33,7 @@ enum MoveDirection: Printable {
 protocol Evolvable: Equatable, Printable {
     func evolve() -> Self?
     class func getBaseValue() -> Self
+    var scoreValue: Int { get } // The score increase that this piece should amount to
 }
 
 enum TileValue: Int, Evolvable {
@@ -79,6 +80,12 @@ enum TileValue: Int, Evolvable {
     
     static func getBaseValue() -> TileValue {
         return TileValue.Two
+    }
+    
+    var scoreValue: Int {
+        get {
+            return self.rawValue
+        }
     }
     
     var description: String {

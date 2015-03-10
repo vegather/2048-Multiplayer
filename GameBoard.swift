@@ -36,6 +36,9 @@ class GameBoard<T: Evolvable> {
     func moveInDirection(direction: MoveDirection) {
         var resultFromMove:(Int, [MoveAction<T>])
         
+        println("Board before moving")
+        self.printBoard()
+        
         switch direction {
         case .Left:
             resultFromMove = moveLeft()
@@ -47,9 +50,9 @@ class GameBoard<T: Evolvable> {
             resultFromMove = moveDown()
         }
         
-//        let (scoreIncrease, moves) = resultFromMove
-//        println("GameBoard - Move to \(direction) results in \(scoreIncrease) points")
-//        
+        let (scoreIncrease, moves) = resultFromMove
+        println()
+//
 //        for action: MoveAction<T> in moves {
 //            println("GameBoard - Action: \(action)")
 //        }
@@ -57,19 +60,20 @@ class GameBoard<T: Evolvable> {
         println("Board after the move in direction \(direction)")
         self.printBoard()
         
+        println("Score increase: \(scoreIncrease)\n\n")
+        
 //        self.delegate?.performedActions(moves)
 //        self.delegate?.updateScoreBy(scoreIncrease)
     }
     
     private func moveLeft() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
+        var score: Int = 0
         
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for col in 0..<self.dimension {
                 if let currentTile: T = self.board[row][col] {
-//                    println("Moving left and found a tile at x: \(col), y: \(row)")
-                    
                     if let temp = tempCol {
                         if currentTile == self.board[row][temp] {
                             // Merge
@@ -77,13 +81,9 @@ class GameBoard<T: Evolvable> {
                             // Find the leftmost available position
                             var leftmostCol = temp - 1
                             while leftmostCol >= 0 && self.board[row][leftmostCol] == nil {
-//                                println("decrementing leftmostCol from \(leftmostCol)")
                                 leftmostCol--
                             }
                             leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
-                            
-                            
-//                            println("Doing a merge from \(Coordinate(x: temp, y: row)) and \(Coordinate(x: col,   y: row)). leftmostCol: \(leftmostCol)")
                             
                             // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
                             if let newValue = currentTile.evolve() {
@@ -91,6 +91,7 @@ class GameBoard<T: Evolvable> {
                                 actions.append(MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                                              andFrom: Coordinate(x: col,   y: row),
                                                          toGamePiece: newPiece))
+                                score += newValue.scoreValue
                             }
                             
                             // Update board
@@ -106,27 +107,20 @@ class GameBoard<T: Evolvable> {
                             tempCol = nil
                             
                         } else {
-//                            println("No merge")
-                            
                             if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: temp, y: row)) {
                                 actions.append(moveAction)
                             }
                             
                             tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
-//                            println("1 - Setting tempCol to \(tempCol)")
                         }
                     } else {
                         if col == self.dimension - 1 {
                             // Currently on the right edge. No need to store this to check for merging. Can just move it
                             if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: col, y: row)) {
-//                                println("2 - Created a move action: \(moveAction)")
                                 actions.append(moveAction)
-                            } else {
-//                                println("2 - No move required")
                             }
                         } else {
                             tempCol = col
-//                            println("2 - Setting tempCol to \(tempCol)")
                         }
                     }
                 } else if let temp = tempCol {
@@ -141,7 +135,7 @@ class GameBoard<T: Evolvable> {
             }
         }
         
-        return (0, actions)
+        return (score, actions)
     }
     
     private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
@@ -155,7 +149,6 @@ class GameBoard<T: Evolvable> {
         leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
         
         if leftmostCol != fromCoordinate.x { // If it could even move
-//            println("MOVING")
             
             returnValue = MoveAction.Move(from: fromCoordinate,
                                             to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
@@ -272,12 +265,12 @@ class GameBoard<T: Evolvable> {
         let spot = emptySpots[indexOfSpot]
         let value = T.getBaseValue()
         
-        println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
+//        println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
         
         self.board[spot.y][spot.x] = value
         
-        println("Board after spawn:")
-        self.printBoard()
+//        println("Board after spawn:")
+//        self.printBoard()
         
         self.delegate?.spawnedGamePiece(position: spot, value: value)
     }
