@@ -37,6 +37,8 @@ class TileView: UIView {
         self.valueLabel.sizeToFit()
         
         super.init(frame: frame)
+        
+        self.addSubview(self.valueLabel)
     }
     
     required init(coder aDecoder: NSCoder) {

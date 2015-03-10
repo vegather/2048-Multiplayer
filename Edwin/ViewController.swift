@@ -51,18 +51,22 @@ class ViewController: UIViewController, GameBrainDelegate {
     
     func leftSwipe() {
         println("Left")
+        self.gameBrain.moveInDirection(MoveDirection.Left)
     }
     
     func rightSwipe() {
         println("Right")
+        self.gameBrain.moveInDirection(MoveDirection.Right)
     }
     
     func upSwipe() {
         println("Up")
+        self.gameBrain.moveInDirection(MoveDirection.Up)
     }
     
     func downSwipe() {
         println("Down")
+        self.gameBrain.moveInDirection(MoveDirection.Down)
     }
     
     

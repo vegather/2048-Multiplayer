@@ -9,7 +9,7 @@
 import Foundation
 
 protocol GameBoardDelegate: class {
-    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
+//    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
     func performedActions<T: Evolvable>(actions: [MoveAction<T>])
     func updateScoreBy(scoreIncrement: Int)
 }
@@ -491,7 +491,8 @@ class GameBoard<T: Evolvable> {
 //        println("Board after spawn:")
 //        self.printBoard()
         
-        self.delegate?.spawnedGamePiece(position: spot, value: value)
+//        self.delegate?.spawnedGamePiece(position: spot, value: value)
+        self.delegate?.performedActions([MoveAction.Spawn(position: spot, value: value)])
     }
     
     
