@@ -16,6 +16,53 @@ class ViewController: UIViewController, GameBrainDelegate {
         super.viewDidLoad()
         
         self.gameBrain = GameBrain(delegate: self, dimension: 4)
+        
+        self.setupSwipes()
+    }
+    
+    func setupSwipes() {
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("leftSwipe"))
+        leftSwipe.numberOfTouchesRequired = 1
+        leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
+        view.addGestureRecognizer(leftSwipe)
+        
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("rightSwipe"))
+        rightSwipe.numberOfTouchesRequired = 1
+        rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
+        view.addGestureRecognizer(rightSwipe)
+        
+        let upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("upSwipe"))
+        upSwipe.numberOfTouchesRequired = 1
+        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
+        view.addGestureRecognizer(upSwipe)
+        
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: Selector("downSwipe"))
+        downSwipe.numberOfTouchesRequired = 1
+        downSwipe.direction = UISwipeGestureRecognizerDirection.Down
+        view.addGestureRecognizer(downSwipe)
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Swipes
+    // -------------------------------
+    
+    func leftSwipe() {
+        println("Left")
+    }
+    
+    func rightSwipe() {
+        println("Right")
+    }
+    
+    func upSwipe() {
+        println("Up")
+    }
+    
+    func downSwipe() {
+        println("Down")
     }
     
     
