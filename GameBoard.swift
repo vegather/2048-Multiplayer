@@ -65,56 +65,82 @@ class GameBoard<T: Evolvable> {
         var actions = [MoveAction<T>]()
         
         for row in 0..<self.dimension {
-            var firstCol:  Int? //Used to temporary store a column index to check for potential merging
+            var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for col in 0..<self.dimension {
                 if let currentTile: T = self.board[row][col] {
                     println("Moving left and found a tile at x: \(col), y: \(row)")
                     
-                    if let first = firstCol {
-                        if currentTile == self.board[row][first] {
+                    if let temp = tempCol {
+                        if currentTile == self.board[row][temp] {
                             // Merge
                             
                             // Find the leftmost available position
-                            var leftmostCol = first - 1
-                            while leftmostCol >= 0 && self.board[row][leftmostCol] != nil {
+                            var leftmostCol = temp - 1
+                            while leftmostCol >= 0 && self.board[row][leftmostCol] == nil {
+                                println("decrementing leftmostCol from \(leftmostCol)")
                                 leftmostCol--
                             }
                             leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
                             
-                            // Create a MoveAction.Merge that have sources [row][first] and [row][col] and ends up in [row][leftmost]
+                            
+                            println("Doing a merge from \(Coordinate(x: temp, y: row)) and \(Coordinate(x: col,   y: row)). leftmostCol: \(leftmostCol)")
+                            
+                            // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
                             if let newValue = currentTile.evolve() {
                                 let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: leftmostCol, y: row))
-                                actions.append(MoveAction.Merge(from: Coordinate(x: first, y: row),
+                                actions.append(MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                                              andFrom: Coordinate(x: col,   y: row),
                                                          toGamePiece: newPiece))
                             }
                             
                             // Update board
                             self.board[row][leftmostCol] = self.board[row][col]?.evolve()
-                            self.board[row][col]   = nil
-                            self.board[row][first] = nil
+                            self.board[row][col]  = nil
+                            
+                            // If we are on the leftmost edge, we don't want to set this to 
+                            // nil because we just set it to the evolved value
+                            if leftmostCol != temp {
+                                self.board[row][temp] = nil
+                            }
+                            
+                            tempCol = nil
                             
                         } else {
-                            // tempCol should now move as far left as possible
-                            var leftmostCol = first - 1
-                            while leftmostCol >= 0 && self.board[row][leftmostCol] != nil {
-                                leftmostCol--
+                            println("No merge")
+                            
+                            
+//                            // tempCol should now move as far left as possible
+//                            var leftmostCol = temp - 1
+//                            while leftmostCol >= 0 && self.board[row][leftmostCol] == nil {
+//                                leftmostCol--
+//                            }
+//                            leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
+//                            
+//                            if leftmostCol != temp { // If it could even move
+//                                actions.append(MoveAction.Move(from: Coordinate(x: temp,       y: row),
+//                                                                 to: Coordinate(x: leftmostCol, y: row)))
+//                            }
+//                            
+//                            // Update board
+//                            self.board[row][leftmostCol] = self.board[row][temp]
+//                            self.board[row][temp] = nil
+                            
+                            if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: temp, y: row)) {
+                                actions.append(moveAction)
                             }
-                            leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
                             
-                            if leftmostCol != first { // If it could even move
-                                actions.append(MoveAction.Move(from: Coordinate(x: first,       y: row),
-                                                                 to: Coordinate(x: leftmostCol, y: row)))
-                            }
-                            
-                            // Update board
-                            self.board[row][leftmostCol] = self.board[row][first]
-                            self.board[row][first] = nil
-                            
-                            firstCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            println("1 - Setting tempCol to \(tempCol)")
                         }
                     } else {
-                        firstCol = col
+                        tempCol = col
+                        println("2 - Setting tempCol to \(tempCol)")
+                    }
+                } else if let temp = tempCol {
+                    // Hit the edge while searching for a piece to merge with
+                    
+                    if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: temp, y: row)) {
+                        actions.append(moveAction)
                     }
                 }
             }
@@ -123,29 +149,53 @@ class GameBoard<T: Evolvable> {
         return (0, actions)
     }
     
+    private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
+        
+        var returnValue: MoveAction<T>? = nil
+        
+        var leftmostCol = fromCoordinate.x - 1
+        while leftmostCol >= 0 && self.board[fromCoordinate.y][leftmostCol] == nil {
+            leftmostCol--
+        }
+        leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
+        
+        if leftmostCol != fromCoordinate.x { // If it could even move
+            println("MOVING")
+            
+            returnValue = MoveAction.Move(from: fromCoordinate,
+                                            to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
+            
+            // Update board
+            self.board[fromCoordinate.y][leftmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+        }
+        
+        return returnValue
+    }
+    
     private func moveRight() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         
         for row in 0..<self.dimension {
-            var firstCol:  Int? //Used to temporary store a column index to check for potential merging
+            var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for col in self.dimension-1...0 {
                 if let currentTile: T = self.board[row][col] {
                     
-                    if let first = firstCol {
-                        if currentTile == self.board[row][first] {
+                    if let temp = tempCol {
+                        if currentTile == self.board[row][temp] {
                             // Merge
                             
                             // Find the rightmost available position
-                            var rightmostCol = first + 1
+                            var rightmostCol = temp + 1
                             while rightmostCol < self.dimension && self.board[row][rightmostCol] != nil {
                                 rightmostCol++
                             }
                             rightmostCol-- // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
                             
-                            // Create a MoveAction.Merge that have sources [row][first] and [row][col] and ends up in [row][leftmost]
+                            // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
                             if let newValue = currentTile.evolve() {
                                 let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: rightmostCol, y: row))
-                                actions.append(MoveAction.Merge(from: Coordinate(x: first, y: row),
+                                actions.append(MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                                              andFrom: Coordinate(x: col,   y: row),
                                                          toGamePiece: newPiece))
                             }
@@ -153,29 +203,30 @@ class GameBoard<T: Evolvable> {
                             // Update board
                             self.board[row][rightmostCol] = self.board[row][col]?.evolve()
                             self.board[row][col]   = nil
-                            self.board[row][first] = nil
+                            self.board[row][temp] = nil
                             
                         } else {
+                            
                             // Find the rightmost available position
-                            var rightmostCol = first + 1
+                            var rightmostCol = temp + 1
                             while rightmostCol < self.dimension && self.board[row][rightmostCol] != nil {
                                 rightmostCol++
                             }
                             rightmostCol-- // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
                             
-                            if rightmostCol != first { // If it could even move
-                                actions.append(MoveAction.Move(from: Coordinate(x: first,        y: row),
+                            if rightmostCol != temp { // If it could even move
+                                actions.append(MoveAction.Move(from: Coordinate(x: temp,        y: row),
                                                                  to: Coordinate(x: rightmostCol, y: row)))
                             }
                             
                             // Update board
-                            self.board[row][rightmostCol] = self.board[row][first]
-                            self.board[row][first] = nil
+                            self.board[row][rightmostCol] = self.board[row][temp]
+                            self.board[row][temp] = nil
                             
-                            firstCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
                         }
                     } else {
-                        firstCol = col
+                        tempCol = col
                     }
                     
                 }
