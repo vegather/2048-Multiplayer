@@ -68,7 +68,7 @@ enum TileValue: Int, Evolvable {
     
     var description: String {
         get {
-            return "\(self)"
+            return "\(self.rawValue)"
         }
     }
 }
