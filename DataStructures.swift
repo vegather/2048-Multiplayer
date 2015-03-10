@@ -8,11 +8,26 @@
 
 import Foundation
 
-enum MoveDirection {
+enum MoveDirection: Printable {
     case Up
     case Down
     case Left
     case Right
+    
+    var description: String {
+        get {
+            switch self {
+            case .Up:
+                return "Up"
+            case .Down:
+                return "Down"
+            case .Left:
+                return "Left"
+            case .Right:
+                return "Right"
+            }
+        }
+    }
 }
 
 protocol Evolvable: Equatable, Printable {
