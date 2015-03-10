@@ -66,32 +66,39 @@ class GameBoard<T: Evolvable> {
 //        self.delegate?.updateScoreBy(scoreIncrease)
     }
     
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Move Left
+    // -------------------------------
+    
     private func moveLeft() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         var score: Int = 0
         
         for row in 0..<self.dimension {
-            var tempCol:  Int? //Used to temporary store a column index to check for potential merging
+            var tempCol: Int? //Used to temporary store a column index to check for potential merging
             for col in 0..<self.dimension {
-                if let currentTile: T = self.board[row][col] { // If there is a pice at this position
-                    if let temp = tempCol { // If we have a temporory index stored
-                        if currentTile == self.board[row][temp] {
+                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                    if let temp = tempCol { // If we have a temporary index stored
+                        if currentPiece == self.board[row][temp] {
                             // Merge
                             
-                            let leftmostCol = self.findLeftMostColToTheRightOf(Coordinate(x: temp, y: row))
+                            let leftmostCol = self.findLeftmostColToTheRightOf(Coordinate(x: temp, y: row))
                             
                             // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
-                            if let newValue = currentTile.evolve() {
+                            if let newValue = currentPiece.evolve() {
                                 let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: leftmostCol, y: row))
                                 actions.append(MoveAction.Merge(from: Coordinate(x: temp, y: row),
-                                    andFrom: Coordinate(x: col,   y: row),
-                                    toGamePiece: newPiece))
+                                                             andFrom: Coordinate(x: col,   y: row),
+                                                         toGamePiece: newPiece))
                                 score += newValue.scoreValue
                             }
                             
                             // Update board
                             self.board[row][leftmostCol] = self.board[row][col]?.evolve()
-                            self.board[row][col]  = nil
+                            self.board[row][col] = nil
                             
                             // If we are on the leftmost edge, we don't want to set this to
                             // nil because we just set it to the evolved value
@@ -133,6 +140,38 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
+    private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
+        var returnValue: MoveAction<T>? = nil
+        let leftmostCol = self.findLeftmostColToTheRightOf(fromCoordinate)
+        
+        if leftmostCol != fromCoordinate.x { // If it could even move
+            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
+            
+            // Update board
+            self.board[fromCoordinate.y][leftmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+        }
+        
+        return returnValue
+    }
+    
+    private func findLeftmostColToTheRightOf(start: Coordinate) -> Int {
+        var leftmostCol = start.x - 1
+        while leftmostCol >= 0 && self.board[start.y][leftmostCol] == nil {
+            leftmostCol--
+        }
+        leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
+        
+        return leftmostCol
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Move Right
+    // -------------------------------
+    
     private func moveRight() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         var score: Int = 0
@@ -140,15 +179,15 @@ class GameBoard<T: Evolvable> {
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for var col = self.dimension - 1; col >= 0; col-- {
-                if let currentTile: T = self.board[row][col] { // If there is a pice at this position
+                if let currentPiece: T = self.board[row][col] { // If there is a pice at this position
                     if let temp = tempCol { // If we have a temporory index stored
-                        if currentTile == self.board[row][temp] {
+                        if currentPiece == self.board[row][temp] {
                             // Merge
                             
-                            let rightmostCol = self.findRightMostColToTheRightOf(Coordinate(x: temp, y: row))
+                            let rightmostCol = self.findRightmostColToTheRightOf(Coordinate(x: temp, y: row))
                             
                             // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
-                            if let newValue = currentTile.evolve() {
+                            if let newValue = currentPiece.evolve() {
                                 let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: rightmostCol, y: row))
                                 let merge = MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                     andFrom: Coordinate(x: col,   y: row),
@@ -198,19 +237,137 @@ class GameBoard<T: Evolvable> {
                 }
             }
         }
-
         
         return (score, actions)
     }
+    
+    private func movePieceAsFarRightAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
+        var returnValue: MoveAction<T>? = nil
+        let rightmostCol = self.findRightmostColToTheRightOf(fromCoordinate)
+        
+        if rightmostCol != fromCoordinate.x { // If it could even move
+            returnValue = MoveAction.Move(from: fromCoordinate,
+                to: Coordinate(x: rightmostCol, y: fromCoordinate.y))
+            
+            // Update board
+            self.board[fromCoordinate.y][rightmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+        }
+        
+        return returnValue
+    }
+    
+    private func findRightmostColToTheRightOf(start: Coordinate) -> Int {
+        var rightmostCol = start.x + 1
+        while rightmostCol < self.dimension && self.board[start.y][rightmostCol] == nil {
+            rightmostCol++
+        }
+        rightmostCol-- // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
+        
+        return rightmostCol
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Move Up
+    // -------------------------------
     
     private func moveUp() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
         var score: Int = 0
         
-        
+        for col in 0..<self.dimension {
+            var tempRow: Int?
+            for row in 0..<self.dimension {
+                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                    if let temp = tempRow { // If we have a temporary index stored
+                        if currentPiece == self.board[temp][col] {
+                            // Merge
+                            
+                            let upmostRow = self.findUpmostRowUpwardsFrom(Coordinate(x: col, y: temp))
+                            
+                            if let newValue = currentPiece.evolve() {
+                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: col, y: upmostRow))
+                                actions.append(MoveAction.Merge(from: Coordinate(x: col, y: temp),
+                                                             andFrom: Coordinate(x: col, y: row),
+                                                         toGamePiece: newPiece))
+                                score += newValue.scoreValue
+                            }
+                            
+                            // Update board
+                            self.board[upmostRow][col] = self.board[row][col]?.evolve()
+                            self.board[row][col] = nil
+                            
+                            if upmostRow != temp {
+                                self.board[temp][col] = nil
+                            }
+                            
+                            tempRow = nil
+                            
+                        } else {
+                            if let moveAction = self.movePieceAsFarUpAsPossibleFrom(Coordinate(x: col, y: temp)) {
+                                actions.append(moveAction)
+                            }
+                            
+                            tempRow = row
+                        }
+                    } else {
+                        if row == self.dimension - 1 {
+                            // Currently on the bottom edge. No need to store this to check for merging. Can just move it
+                            if let moveAction = self.movePieceAsFarUpAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                actions.append(moveAction)
+                            }
+                        } else {
+                            tempRow = row
+                        }
+                    }
+                } else if let temp = tempRow {
+                    if row == self.dimension - 1 {
+                        // Hit the bottom edge while searching for a piece to merge with
+                        if let moveAction = self.movePieceAsFarUpAsPossibleFrom(Coordinate(x: col, y: temp)) {
+                            actions.append(moveAction)
+                        }
+                    }
+                }
+            }
+        }
         
         return (score, actions)
     }
+    
+    private func movePieceAsFarUpAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
+        var returnValue: MoveAction<T>? = nil
+        let upmostRow = self.findUpmostRowUpwardsFrom(fromCoordinate)
+        
+        if upmostRow != fromCoordinate.y { // If it could even move
+            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: upmostRow))
+            
+            // Update board
+            self.board[upmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
+            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+        }
+        
+        return returnValue
+    }
+    
+    private func findUpmostRowUpwardsFrom(start: Coordinate) -> Int {
+        var upmostRow = start.y - 1
+        while upmostRow >= 0 && self.board[upmostRow][start.x] == nil {
+            upmostRow--
+        }
+        upmostRow++
+        
+        return upmostRow
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Move Down
+    // -------------------------------
     
     private func moveDown() -> (Int, [MoveAction<T>]) {
         var actions = [MoveAction<T>]()
@@ -221,63 +378,29 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
-    
-    
-    
-    // -------------------------------
-    // MARK: Move Helper Methods
-    // -------------------------------
-    
-    private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
+    private func movePieceAsFarDownAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
         var returnValue: MoveAction<T>? = nil
-        let leftmostCol = self.findLeftMostColToTheRightOf(fromCoordinate)
+        let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
         
-        if leftmostCol != fromCoordinate.x { // If it could even move
-            returnValue = MoveAction.Move(from: fromCoordinate,
-                                            to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
+        if downmostRow != fromCoordinate.y {
+            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: downmostRow))
             
             // Update board
-            self.board[fromCoordinate.y][leftmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+            self.board[downmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
             self.board[fromCoordinate.y][fromCoordinate.x] = nil
         }
         
         return returnValue
     }
     
-    private func movePieceAsFarRightAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
-        var returnValue: MoveAction<T>? = nil
-        let rightmostCol = self.findRightMostColToTheRightOf(fromCoordinate)
-        
-        if rightmostCol != fromCoordinate.x { // If it could even move
-            returnValue = MoveAction.Move(from: fromCoordinate,
-                                            to: Coordinate(x: rightmostCol, y: fromCoordinate.y))
-            
-            // Update board
-            self.board[fromCoordinate.y][rightmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
-            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+    private func findDownmostRowDownwardsFrom(start: Coordinate) -> Int {
+        var downmostRow = start.y + 1
+        while downmostRow < self.dimension && self.board[downmostRow][start.x] == nil {
+            downmostRow++
         }
+        downmostRow--
         
-        return returnValue
-    }
-    
-    private func findLeftMostColToTheRightOf(start: Coordinate) -> Int {
-        var leftmostCol = start.x - 1
-        while leftmostCol >= 0 && self.board[start.y][leftmostCol] == nil {
-            leftmostCol--
-        }
-        leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
-        
-        return leftmostCol
-    }
-    
-    private func findRightMostColToTheRightOf(start: Coordinate) -> Int {
-        var rightmostCol = start.x + 1
-        while rightmostCol < self.dimension && self.board[start.y][rightmostCol] == nil {
-            rightmostCol++
-        }
-        rightmostCol-- // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
-        
-        return rightmostCol
+        return downmostRow
     }
 
     
