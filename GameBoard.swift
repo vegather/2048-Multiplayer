@@ -212,11 +212,12 @@ class GameBoard<T: Evolvable> {
     func spawnNewGamePieceAtRandomPosition() {
         var emptySpots = [Coordinate]()
         
-        for row in 0..<self.dimension {
-            for col in 0..<self.dimension {
+        for row in Range(start: 0, end: self.dimension) {
+            for col in Range(start: 0, end: self.dimension) {
                 if self.board[row][col] == nil {
                     let spot = Coordinate(x: col, y: row)
-                    emptySpots.append(spot)
+                    println("spot: \(spot)")
+                    emptySpots.insert(spot, atIndex: emptySpots.count)
                 }
             }
         }

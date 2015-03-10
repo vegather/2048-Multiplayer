@@ -49,6 +49,8 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        
+        self.gameBoard?.moveInDirection(MoveDirection.Left)
     } 
     
     func moveInDirection(direction: MoveDirection) {
