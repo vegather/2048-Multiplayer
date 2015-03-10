@@ -55,7 +55,7 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Up)
+        self.gameBoard?.moveInDirection(MoveDirection.Down)
         
         
         
@@ -72,7 +72,7 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Up)
+        self.gameBoard?.moveInDirection(MoveDirection.Down)
         
         
         
@@ -88,7 +88,7 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Up)
+        self.gameBoard?.moveInDirection(MoveDirection.Down)
         
         
         
@@ -104,7 +104,7 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Up)
+        self.gameBoard?.moveInDirection(MoveDirection.Down)
         
         
         
@@ -116,7 +116,7 @@ class GameBrain: GameBoardDelegate {
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         self.gameBoard?.spawnNewGamePieceAtRandomPosition()
         
-        self.gameBoard?.moveInDirection(MoveDirection.Up)
+        self.gameBoard?.moveInDirection(MoveDirection.Down)
     } 
     
     func moveInDirection(direction: MoveDirection) {

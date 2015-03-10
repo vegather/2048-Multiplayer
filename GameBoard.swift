@@ -62,8 +62,8 @@ class GameBoard<T: Evolvable> {
         
         println("Score increase: \(scoreIncrease)\n\n\n\n")
         
-//        self.delegate?.performedActions(moves)
-//        self.delegate?.updateScoreBy(scoreIncrease)
+        self.delegate?.performedActions(moves)
+        self.delegate?.updateScoreBy(scoreIncrease)
     }
     
     
@@ -179,8 +179,8 @@ class GameBoard<T: Evolvable> {
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for var col = self.dimension - 1; col >= 0; col-- {
-                if let currentPiece: T = self.board[row][col] { // If there is a pice at this position
-                    if let temp = tempCol { // If we have a temporory index stored
+                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                    if let temp = tempCol { // If we have a temporary index stored
                         if currentPiece == self.board[row][temp] {
                             // Merge
                             
@@ -190,8 +190,8 @@ class GameBoard<T: Evolvable> {
                             if let newValue = currentPiece.evolve() {
                                 let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: rightmostCol, y: row))
                                 let merge = MoveAction.Merge(from: Coordinate(x: temp, y: row),
-                                    andFrom: Coordinate(x: col,   y: row),
-                                    toGamePiece: newPiece)
+                                                          andFrom: Coordinate(x: col,   y: row),
+                                                      toGamePiece: newPiece)
                                 actions.append(merge)
                                 
                                 score += newValue.scoreValue
@@ -199,7 +199,7 @@ class GameBoard<T: Evolvable> {
                             
                             // Update board
                             self.board[row][rightmostCol] = self.board[row][col]?.evolve()
-                            self.board[row][col]  = nil
+                            self.board[row][col] = nil
                             
                             // If we are on the leftmost edge, we don't want to set this to
                             // nil because we just set it to the evolved value
@@ -279,7 +279,7 @@ class GameBoard<T: Evolvable> {
         var score: Int = 0
         
         for col in 0..<self.dimension {
-            var tempRow: Int?
+            var tempRow: Int? //Used to temporary store a row index to check for potential merging
             for row in 0..<self.dimension {
                 if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempRow { // If we have a temporary index stored
@@ -373,7 +373,64 @@ class GameBoard<T: Evolvable> {
         var actions = [MoveAction<T>]()
         var score: Int = 0
         
-        
+        for col in 0..<self.dimension {
+            var tempRow: Int? //Used to temporary store a row index to check for potential merging
+            for var row = self.dimension - 1; row >= 0; row-- {
+                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                    if let temp = tempRow { // If we have a temporary index stored
+                        if currentPiece == self.board[temp][col] {
+                            // Merge
+                            
+                            let downmostRow = self.findDownmostRowDownwardsFrom(Coordinate(x: col, y: temp))
+                            
+                            if let newValue = currentPiece.evolve() {
+                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: col, y: downmostRow))
+                                let merge = MoveAction.Merge(from: Coordinate(x: col, y: temp),
+                                                          andFrom: Coordinate(x: col, y: row),
+                                                      toGamePiece: newPiece)
+                                actions.append(merge)
+                                
+                                score += newValue.scoreValue
+                            }
+                            
+                            // Update board
+                            self.board[downmostRow][col] = self.board[row][col]?.evolve()
+                            self.board[row][col] = nil
+                            
+                            if downmostRow != temp {
+                                self.board[temp][col] = nil
+                            }
+                            
+                            tempRow = nil
+                            
+                        } else {
+                            if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: temp)) {
+                                actions.append(moveAction)
+                            }
+                            
+                            tempRow = row // Whatever was tempRow previously did not result in a merge. Trying again with the current row.
+                        }
+                    } else {
+                        if row == 0 {
+                            // Currently on the bottom edge. No need to store this to check for merging. Can just move it
+                            if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                actions.append(moveAction)
+                            }
+                        } else {
+                            tempRow = row
+                        }
+                    }
+                } else if let temp = tempRow {
+                    if row == 0 {
+                        // Hit the top edge while searching for a piece to merge with
+                        
+                        if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: temp)) {
+                            actions.append(moveAction)
+                        }
+                    }
+                }
+            }
+        }
         
         return (score, actions)
     }
