@@ -232,7 +232,18 @@ class GameBoard<T: Evolvable> {
     
     
     
+    // -------------------------------
+    // MARK: Private Helper Methods
+    // -------------------------------
     
+    private func printBoard() {
+        for row in 0..<self.dimension {
+            for col in 0..<self.dimension {
+                print("\(self.board[row][col]) ")
+            }
+            println()
+        }
+    }
     
 }
 
