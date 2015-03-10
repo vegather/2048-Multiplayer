@@ -246,7 +246,11 @@ class GameBoard<T: Evolvable> {
     private func printBoard() {
         for row in 0..<self.dimension {
             for col in 0..<self.dimension {
-                print("\(self.board[row][col]) ")
+                if let value = self.board[row][col] {
+                    print("\(value) ")
+                } else {
+                    print("0 ")
+                }
             }
             println()
         }
