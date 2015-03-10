@@ -54,6 +54,9 @@ class GameBoard<T: Evolvable> {
             println("GameBoard - Move: \(action)")
         }
         
+        println("Board after the move in direction \(direction)")
+        self.printBoard()
+        
         self.delegate?.performedActions(moves)
         self.delegate?.updateScoreBy(scoreIncrease)
     }
@@ -225,6 +228,9 @@ class GameBoard<T: Evolvable> {
         println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
         
         self.board[spot.y][spot.x] = value
+        
+        println("Board after spawn:")
+        self.printBoard()
         
         self.delegate?.spawnedGamePiece(position: spot, value: value)
     }
