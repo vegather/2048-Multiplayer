@@ -215,7 +215,8 @@ class GameBoard<T: Evolvable> {
         for row in 0..<self.dimension {
             for col in 0..<self.dimension {
                 if self.board[row][col] == nil {
-                    emptySpots.append(Coordinate(x: col, y: row))
+                    let spot = Coordinate(x: col, y: row)
+                    emptySpots.append(spot)
                 }
             }
         }
