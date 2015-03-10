@@ -79,8 +79,8 @@ func ==(lhs: TileValue, rhs: TileValue) -> Bool {
 }
 
 struct Coordinate: Printable {
-    let x: Int;
-    let y: Int;
+    let x: Int
+    let y: Int
     
     var description: String {
         get {
