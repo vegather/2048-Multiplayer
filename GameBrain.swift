@@ -43,6 +43,12 @@ class GameBrain: GameBoardDelegate {
     init(delegate: GameBrainDelegate, dimension: Int) {
         self.delegate = delegate
         self.gameBoard = GameBoard<TileValue>(delegate: self, dimension: dimension)
+        
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
+        self.gameBoard?.spawnNewGamePieceAtRandomPosition()
     } 
     
     func moveInDirection(direction: MoveDirection) {
