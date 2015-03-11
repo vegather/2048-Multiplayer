@@ -10,8 +10,7 @@ import UIKit
 import Foundation
 
 
-// Specific class for tiles containing a TileValue
-class TileView: UIView {
+class TileView: EvolvableView {
     
     private let EVOLVE_ANIMATION_DURATION = 0.3
     private let EVOLVE_ANIMATION_SCALE_AMOUNT: CGFloat = 1.2
@@ -26,8 +25,8 @@ class TileView: UIView {
     
     private var valueLabel: UILabel
     
-    init(frame: CGRect, value: TileValue) {
-        self.value = value // Will not invoke property observer
+    override init(frame: CGRect) {
+        self.value = TileValue.getBaseValue() // Will not invoke property observer
         
         self.valueLabel = UILabel(frame: frame)
         self.valueLabel.text = "\(value)"
@@ -41,7 +40,7 @@ class TileView: UIView {
         self.addSubview(self.valueLabel)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required override init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
@@ -85,6 +84,12 @@ class TileView: UIView {
             return UIColor.whiteColor()
         }
     }
+    
+    override func evolve() {
+        if let evolvedValue = self.value.evolve() {
+            self.value = evolvedValue
+        }
+    }
 
     func animateGettingBiggerAndSmaller() {
         UIView.animateWithDuration(self.EVOLVE_ANIMATION_DURATION / 2.0,
@@ -107,5 +112,5 @@ class TileView: UIView {
             }
         )
     }
-
+    
 }

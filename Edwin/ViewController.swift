@@ -10,12 +10,13 @@ import UIKit
 
 class ViewController: UIViewController, GameBrainDelegate {
 
-    var gameBrain: GameBrain!
+    var gameBrain: GameBrain<TileValue>!
+    var gameView:  BoardView<TileView>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.gameBrain = GameBrain(delegate: self, dimension: 4)
+        self.gameBrain = GameBrain<TileValue>(delegate: self, dimension: 4)
         
         self.setupSwipes()
     }
@@ -40,6 +41,19 @@ class ViewController: UIViewController, GameBrainDelegate {
         downSwipe.numberOfTouchesRequired = 1
         downSwipe.direction = UISwipeGestureRecognizerDirection.Down
         view.addGestureRecognizer(downSwipe)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let gameBoardFrame = CGRectMake(0,
+            self.view.frame.size.height - self.view.frame.size.width,
+            self.view.frame.size.width,
+            self.view.frame.size.width)
+        
+        self.gameView = BoardView<TileView>(frame: gameBoardFrame, dimension: 4)
+        
+        self.gameBrain.startGame()
     }
     
     
@@ -76,8 +90,8 @@ class ViewController: UIViewController, GameBrainDelegate {
     // MARK: Game Brain Delegate Methods
     // -------------------------------
 
-    func performActions<T: Evolvable>(actions: [MoveAction<T>]) {
-        
+    func performActions<TileValue>(actions: [MoveAction<TileValue>]) {
+        self.gameView.performMoveActions(actions)
     }
     
     func userHasNewScore(newUserScore: Int) {
