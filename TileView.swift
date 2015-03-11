@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 
-
+// Specific class for tiles containing a TileValue
 class TileView: UIView {
     
     private let EVOLVE_ANIMATION_DURATION = 0.3
@@ -18,19 +18,19 @@ class TileView: UIView {
     
     var value: TileValue {
         didSet {
-            self.backgroundColor = self.getColorForValue(self.value)
-            self.valueLabel.text = "\(value.rawValue)"
+            self.backgroundColor = self.getColorForValue(value)
+            self.valueLabel.text = "\(value)"
             self.animateGettingBiggerAndSmaller()
         }
     }
     
-    var valueLabel: UILabel
+    private var valueLabel: UILabel
     
     init(frame: CGRect, value: TileValue) {
         self.value = value // Will not invoke property observer
         
         self.valueLabel = UILabel(frame: frame)
-        self.valueLabel.text = "\(value.rawValue)"
+        self.valueLabel.text = "\(value)"
         self.valueLabel.adjustsFontSizeToFitWidth = true
         self.valueLabel.font = UIFont(name: "HelveticaNeue-Light", size: 50)
         self.valueLabel.textColor = UIColor.whiteColor()
