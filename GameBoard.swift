@@ -145,11 +145,13 @@ class GameBoard<T: Evolvable> {
         let leftmostCol = self.findLeftmostColToTheRightOf(fromCoordinate)
         
         if leftmostCol != fromCoordinate.x { // If it could even move
-            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
-            
-            // Update board
-            self.board[fromCoordinate.y][leftmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
-            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+                returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
+                
+                // Update board
+                self.board[fromCoordinate.y][leftmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+                self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            }
         }
         
         return returnValue
@@ -246,12 +248,14 @@ class GameBoard<T: Evolvable> {
         let rightmostCol = self.findRightmostColToTheRightOf(fromCoordinate)
         
         if rightmostCol != fromCoordinate.x { // If it could even move
-            returnValue = MoveAction.Move(from: fromCoordinate,
-                to: Coordinate(x: rightmostCol, y: fromCoordinate.y))
-            
-            // Update board
-            self.board[fromCoordinate.y][rightmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
-            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+                returnValue = MoveAction.Move(from: fromCoordinate,
+                    to: Coordinate(x: rightmostCol, y: fromCoordinate.y))
+                
+                // Update board
+                self.board[fromCoordinate.y][rightmostCol] = self.board[fromCoordinate.y][fromCoordinate.x]
+                self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            }
         }
         
         return returnValue
@@ -342,11 +346,13 @@ class GameBoard<T: Evolvable> {
         let upmostRow = self.findUpmostRowUpwardsFrom(fromCoordinate)
         
         if upmostRow != fromCoordinate.y { // If it could even move
-            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: upmostRow))
-            
-            // Update board
-            self.board[upmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
-            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+                returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: upmostRow))
+                
+                // Update board
+                self.board[upmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
+                self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            }
         }
         
         return returnValue
@@ -440,11 +446,13 @@ class GameBoard<T: Evolvable> {
         let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
         
         if downmostRow != fromCoordinate.y {
-            returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: downmostRow))
-            
-            // Update board
-            self.board[downmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
-            self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+                returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: downmostRow))
+                
+                // Update board
+                self.board[downmostRow][fromCoordinate.x] = self.board[fromCoordinate.y][fromCoordinate.x]
+                self.board[fromCoordinate.y][fromCoordinate.x] = nil
+            }
         }
         
         return returnValue
