@@ -474,6 +474,7 @@ class GameBoard<T: Evolvable> {
         for row in 0..<self.dimension {
             for col in 0..<self.dimension {
                 if self.board[row][col] == nil {
+                    // Crashes when the board is full
                     emptySpots.append(Coordinate(x: col, y: row))
                 }
             }

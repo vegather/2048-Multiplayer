@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import SpriteKit
 
 class ViewController: UIViewController, GameBrainDelegate {
 
     var gameBrain: GameBrain<TileValue>!
-    var gameView:  BoardView<TileView>!
+    var gameView:  SKView?
+    var gameBoardScene: BoardView<TwosPowerView>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,37 +27,51 @@ class ViewController: UIViewController, GameBrainDelegate {
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("leftSwipe"))
         leftSwipe.numberOfTouchesRequired = 1
         leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
-        view.addGestureRecognizer(leftSwipe)
+        if let gestureView = self.gameView {
+            gestureView.addGestureRecognizer(leftSwipe)
+        }
         
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("rightSwipe"))
         rightSwipe.numberOfTouchesRequired = 1
         rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
-        view.addGestureRecognizer(rightSwipe)
+        if let gestureView = self.gameView {
+            gestureView.addGestureRecognizer(rightSwipe)
+        }
         
         let upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("upSwipe"))
         upSwipe.numberOfTouchesRequired = 1
         upSwipe.direction = UISwipeGestureRecognizerDirection.Up
-        view.addGestureRecognizer(upSwipe)
+        if let gestureView = self.gameView {
+            gestureView.addGestureRecognizer(upSwipe)
+        }
         
         let downSwipe = UISwipeGestureRecognizer(target: self, action: Selector("downSwipe"))
         downSwipe.numberOfTouchesRequired = 1
         downSwipe.direction = UISwipeGestureRecognizerDirection.Down
-        view.addGestureRecognizer(downSwipe)
+        if let gestureView = self.gameView {
+            gestureView.addGestureRecognizer(downSwipe)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        let gameBoardFrame = CGRectMake(0,
+        let gameViewFrame = CGRectMake(0,
             self.view.frame.size.height - self.view.frame.size.width,
             self.view.frame.size.width,
             self.view.frame.size.width)
-        
-        self.gameView = BoardView<TileView>(frame: gameBoardFrame, dimension: 4)
-        
-        self.gameBrain.startGame()
+
+        if self.gameView == nil {
+            self.gameView = SKView(frame: gameViewFrame)
+            self.view.addSubview(self.gameView!)
+            
+            self.gameBoardScene = BoardView<TwosPowerView>(size: gameViewFrame.size, dimension: 4)
+            self.gameView?.presentScene(self.gameBoardScene)
+            
+            self.gameBrain.startGame()
+        }
     }
-    
+
     
     
     
@@ -91,7 +107,9 @@ class ViewController: UIViewController, GameBrainDelegate {
     // -------------------------------
 
     func performActions<TileValue>(actions: [MoveAction<TileValue>]) {
-        self.gameView.performMoveActions(actions)
+        if let gameScene = self.gameBoardScene {
+            gameScene.performMoveActions(actions)
+        }
     }
     
     func userHasNewScore(newUserScore: Int) {
@@ -109,7 +127,6 @@ class ViewController: UIViewController, GameBrainDelegate {
     func opponentsTurn() {
         
     }
-
 
 }
 

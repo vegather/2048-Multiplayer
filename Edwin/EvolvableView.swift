@@ -8,10 +8,20 @@
 
 import UIKit
 
-class EvolvableView: UIView {
+//class EvolvableViewType: UIView {
+//    func evolve() {
+//        println("evolve needs implementation")
+//    }
+//}
 
-    func evolve() {
-        println("evolve() needs implementation")
-    }
 
+protocol EvolvableViewType {
+    func evolve()
+}
+
+protocol GameBoardViewType {
+    init(frame: CGRect, dimension: Int)
+    func performMoveActions<E: Evolvable>(actions: [MoveAction<E>])
+    
+    typealias TileViewType
 }
