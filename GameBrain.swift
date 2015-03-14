@@ -59,7 +59,7 @@ class GameBrain<T: Evolvable>: GameBoardDelegate {
     // MARK: Game Board Delegate Methods
     // -------------------------------
     
-    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateActions actions: [MoveAction<T>]) {
+    func gameBoard<T: Evolvable>(board: GameBoard<T>, didPerformActions actions: [MoveAction<T>]) {
         self.delegate?.performActions(actions)
     }
     
