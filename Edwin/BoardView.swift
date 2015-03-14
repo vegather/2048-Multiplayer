@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-// Generic board that takes any type that is a subclass of SKNode as 
+// Generic board that takes any type that is a subclass of SKNode as
 // well as implements the EvolvableViewType protocol
 class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
     
@@ -37,9 +37,9 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
 }
 
 //
-//// This class should really be a generic, but as Swift is not completely done yet
+//// This class should really be a generic, but as Swift is not completely done yet,
 //// the compiler crashes when adding a variable to this class. So until Apple updates
-//// Swift, this typealias will have to do
+//// Swift, a typealias will have to do
 //
 //protocol BoardViewDataSource {
 //    func getTileView() -> EvolvableViewType
