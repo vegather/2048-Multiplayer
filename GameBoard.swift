@@ -503,7 +503,9 @@ class GameBoard<T: Evolvable> {
 //        self.printBoard()
         
 //        self.delegate?.spawnedGamePiece(position: spot, value: value)
-        self.delegate?.performedActions([MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))])
+//        self.delegate?.performedActions([MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))])
+        let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
+        self.delegate?.gameBoard(self, didPerformActions: spawnAction)
     }
     
     
