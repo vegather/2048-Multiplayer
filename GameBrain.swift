@@ -59,18 +59,33 @@ class GameBrain<T: Evolvable>: GameBoardDelegate {
     // MARK: Game Board Delegate Methods
     // -------------------------------
     
-    func performedActions<T: Evolvable>(actions: [MoveAction<T>]) {
+    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateActions actions: [MoveAction<T>]) {
         self.delegate?.performActions(actions)
     }
     
-    func updateScoreBy(scoreIncrement: Int) {
+    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateScoreIncrease scoreIncrease: Int) {
         switch self.currentPlayer {
         case .User:
-            self.userScore += scoreIncrement
+            self.userScore += scoreIncrease
             self.delegate?.userHasNewScore(self.userScore)
         case .Opponent:
-            self.opponentScore += scoreIncrement
+            self.opponentScore += scoreIncrease
             self.delegate?.opponentHasNewScore(self.opponentScore)
         }
     }
+    
+//    func performedActions<T: Evolvable>(actions: [MoveAction<T>]) {
+//        self.delegate?.performActions(actions)
+//    }
+//    
+//    func updateScoreBy(scoreIncrement: Int) {
+//        switch self.currentPlayer {
+//        case .User:
+//            self.userScore += scoreIncrement
+//            self.delegate?.userHasNewScore(self.userScore)
+//        case .Opponent:
+//            self.opponentScore += scoreIncrement
+//            self.delegate?.opponentHasNewScore(self.opponentScore)
+//        }
+//    }
 }

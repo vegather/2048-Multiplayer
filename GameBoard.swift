@@ -10,8 +10,8 @@ import Foundation
 
 protocol GameBoardDelegate: class {
 //    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
-    func performedActions<T: Evolvable>(actions: [MoveAction<T>])
-    func updateScoreBy(scoreIncrement: Int)
+    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateActions actions: [MoveAction<T>])
+    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateScoreIncrease scoreIncrease: Int)
 }
 
 class GameBoard<T: Evolvable> {
@@ -62,8 +62,10 @@ class GameBoard<T: Evolvable> {
         
         println("Score increase: \(scoreIncrease)\n\n\n\n")
         
-        self.delegate?.performedActions(moves)
-        self.delegate?.updateScoreBy(scoreIncrease)
+//        self.delegate?.performedActions(moves)
+        self.delegate?.gameBoard(self, didCalculateActions: moves)
+//        self.delegate?.updateScoreBy(scoreIncrease)
+        self.delegate?.gameBoard(self, didCalculateScoreIncrease: scoreIncrease)
     }
     
     
