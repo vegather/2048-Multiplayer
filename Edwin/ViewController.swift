@@ -22,8 +22,6 @@ class ViewController: UIViewController, GameBrainDelegate {
         
         self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
         
-//        self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
-        
         self.setupSwipes()
     }
     
@@ -126,30 +124,5 @@ class ViewController: UIViewController, GameBrainDelegate {
         
     }
     
-    
-    
-    
-//    func performActions<TileValue>(actions: [MoveAction<TileValue>]) {
-//        if let gameScene = self.gameBoardScene {
-//            gameScene.performMoveActions(actions)
-//        }
-//    }
-//    
-//    func userHasNewScore(newUserScore: Int) {
-//        
-//    }
-//    
-//    func opponentHasNewScore(newOpponentScore: Int) {
-//        
-//    }
-//    
-//    func usersTurn() {
-//        
-//    }
-//    
-//    func opponentsTurn() {
-//        
-//    }
-
 }
 

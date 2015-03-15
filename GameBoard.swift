@@ -9,30 +9,19 @@
 import Foundation
 
 protocol GameBoardDelegate: class {
-//    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
-    
     typealias A: Evolvable
     
     func gameBoardDidPerformActions(actions: [MoveAction<A>])
     func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int)
-
-//    func gameBoard(board: GameBoard<E>, didPerformActions actions: [MoveAction<E>])
-//    func gameBoard(board: GameBoard<E>, didCalculateScoreIncrease scoreIncrease: Int)
-    
-//    func gameBoard(board: @autoclosure() -> GameBoard<E, Self>, didPerformActions actions: [MoveAction<E>])
-//    func gameBoard(board: @autoclosure() -> GameBoard<E, Self>, didCalculateScoreIncrease scoreIncrease: Int)
 }
 
 class GameBoard<B: GameBoardDelegate> {
-//class GameBoard<T: Evolvable, DelegateType: GameBoardDelegate where T == DelegateType.E> {
-    
-//    typealias E = GameBoardDelegateType.GameBoardDelegateEvolvableType
 
     typealias C = B.A
     
     private var board: Array<Array<C?>>
     private let dimension: Int
-    weak var delegate: B?//GameBoardDelegate?
+    weak var delegate: B?
     
     init(dimension: Int) {
         self.dimension = dimension
@@ -65,22 +54,13 @@ class GameBoard<B: GameBoardDelegate> {
         
         let (scoreIncrease, moves) = resultFromMove
         println()
-
-//        for action: MoveAction<T> in moves {
-//            println("GameBoard - Action: \(action)")
-//        }
         
         println("Board after the move in direction \(direction)")
         self.printBoard()
         
         println("Score increase: \(scoreIncrease)\n\n\n\n")
         
-//        self.delegate?.performedActions(moves)
-//        self.delegate?.gameBoard(self, didPerformActions: moves)
         self.delegate?.gameBoardDidPerformActions(moves)
-        
-//        self.delegate?.updateScoreBy(scoreIncrease)
-//        self.delegate?.gameBoard(self, didCalculateScoreIncrease: scoreIncrease)
         self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
     }
     
@@ -511,17 +491,9 @@ class GameBoard<B: GameBoardDelegate> {
         let spot = emptySpots[indexOfSpot]
         let value = C.getBaseValue()
         
-//        println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
-        
         self.board[spot.y][spot.x] = value
         
-//        println("Board after spawn:")
-//        self.printBoard()
-        
-//        self.delegate?.spawnedGamePiece(position: spot, value: value)
-//        self.delegate?.performedActions([MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))])
         let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
-//        self.delegate?.gameBoard(self, didPerformActions: spawnAction)
         self.delegate?.gameBoardDidPerformActions(spawnAction)
     }
     

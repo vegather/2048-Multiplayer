@@ -16,20 +16,9 @@ protocol GameBrainDelegate: class {
     
     typealias D: Evolvable
     
-//    func gameBrain<T: Evolvable>(gameBrain: GameBrain<T>, didPerformActions actions: [MoveAction<T>])
-//    func performActions<T: Evolvable>(actions: [MoveAction<T>])
     func gameBrainDidPerformActions(actions: [MoveAction<D>])
-
-//    func gameBrain<T: Evolvable>(gameBrain: GameBrain<T>, userHasNewScore newScore: Int)
-//    func gameBrain<T: Evolvable>(gameBrain: GameBrain<T>, oppenentHasNewScore newScore: Int)
-//    func userHasNewScore(newUserScore: Int)
-//    func opponentHasNewScore(newOpponentScore: Int)
     func gameBrainUserHasNewScore(newUserScore: Int)
     func gameBrainOpponentHasNewScore(newOpponentScore: Int)
-    
-//    func gameBrain<T: Evolvable>(gameBrain: GameBrain<T>, didChangeTurnTo currentTurn: Turn)
-//    func usersTurn()
-//    func opponentsTurn()
     func gameBrainDidChangeTurnTo(currentTurn: Turn)
 
 }
@@ -39,13 +28,7 @@ enum Turn {
     case Opponent
 }
 
-
-
-//class GameBrain<EvolvableType: Evolvable>: GameBoardDelegate {
 class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
-
-//    typealias GameBoardDelegateEvolvableType = GameBrainDelegateType.GameBrainDelegateEvolvableType
-//    typealias E = GameBrainDelegateType.GameBrainDelegateEvolvableType
 
     typealias F = E.D
     typealias A = F
@@ -57,8 +40,6 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     
     private(set) var currentPlayer: Turn = Turn.User {
         didSet {
-            
-//            self.delegate?.gameBrain(self, didChangeTurnTo: currentPlayer)
             self.delegate?.gameBrainDidChangeTurnTo(self.currentPlayer)
         }
     }
@@ -88,41 +69,19 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     // MARK: Game Board Delegate Methods
     // -------------------------------
     
-//    func gameBoard(board: GameBoard<T>, didPerformActions actions: [MoveAction<T>]) {
     func gameBoardDidPerformActions(actions: [MoveAction<F>]) {
-//        self.delegate?.performActions(actions)
-//        self.delegate?.gameBrain(self, didPerformActions: actions)
         self.delegate?.gameBrainDidPerformActions(actions)
     }
     
-//    func gameBoardl(board: GameBoard<T>, didCalculateScoreIncrease scoreIncrease: Int) {
     func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int) {
         switch self.currentPlayer {
         case .User:
             self.userScore += scoreIncrease
-//            self.delegate?.userHasNewScore(self.userScore)
-//            self.delegate?.gameBrain(self, userHasNewScore: self.userScore)
             self.delegate?.gameBrainUserHasNewScore(self.userScore)
         case .Opponent:
             self.opponentScore += scoreIncrease
-//            self.delegate?.opponentHasNewScore(self.opponentScore)
-//            self.delegate?.gameBrain(self, oppenentHasNewScore: self.opponentScore)
             self.delegate?.gameBrainOpponentHasNewScore(self.opponentScore)
         }
     }
-    
-//    func performedActions<T: Evolvable>(actions: [MoveAction<T>]) {
-//        self.delegate?.performActions(actions)
-//    }
-//    
-//    func updateScoreBy(scoreIncrement: Int) {
-//        switch self.currentPlayer {
-//        case .User:
-//            self.userScore += scoreIncrement
-//            self.delegate?.userHasNewScore(self.userScore)
-//        case .Opponent:
-//            self.opponentScore += scoreIncrement
-//            self.delegate?.opponentHasNewScore(self.opponentScore)
-//        }
-//    }
+
 }
