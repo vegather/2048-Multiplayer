@@ -19,6 +19,8 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
         self.dimension = dimension
         
         super.init(size: size)
+        
+        self.backgroundColor = UIColor.greenColor()
     }
 
     required init?(coder aDecoder: NSCoder) {
