@@ -34,7 +34,16 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
     // -------------------------------
     
     func performMoveActions<E: Evolvable>(actions: [MoveAction<E>]) {
-        
+        for action in actions {
+            switch action {
+            case let .Spawn(gamePiece):
+                println()
+            case let .Move(from, to):
+                println()
+            case let .Merge(from, andFrom, newPiece):
+                println()
+            }
+        }
     }
 }
 
