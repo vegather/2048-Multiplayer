@@ -21,8 +21,6 @@ class ViewController: UIViewController, GameBrainDelegate {
         super.viewDidLoad()
         
         self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
-        
-        self.setupSwipes()
     }
     
     func setupSwipes() {
@@ -69,6 +67,8 @@ class ViewController: UIViewController, GameBrainDelegate {
             
             self.gameBoardScene = BoardView<TwosPowerView>(size: gameViewFrame.size, dimension: 4)
             self.gameView?.presentScene(self.gameBoardScene)
+            
+            self.setupSwipes()
             
             self.gameBrain.startGame()
         }
