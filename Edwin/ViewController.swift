@@ -24,31 +24,31 @@ class ViewController: UIViewController, GameBrainDelegate {
     }
     
     func setupSwipes() {
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("leftSwipe"))
-        leftSwipe.numberOfTouchesRequired = 1
-        leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
         if let gestureView = self.gameView {
+            let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("leftSwipe"))
+            leftSwipe.numberOfTouchesRequired = 1
+            leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
             gestureView.addGestureRecognizer(leftSwipe)
         }
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("rightSwipe"))
-        rightSwipe.numberOfTouchesRequired = 1
-        rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
         if let gestureView = self.gameView {
+            let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("rightSwipe"))
+            rightSwipe.numberOfTouchesRequired = 1
+            rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
             gestureView.addGestureRecognizer(rightSwipe)
         }
         
-        let upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("upSwipe"))
-        upSwipe.numberOfTouchesRequired = 1
-        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
         if let gestureView = self.gameView {
+            let upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("upSwipe"))
+            upSwipe.numberOfTouchesRequired = 1
+            upSwipe.direction = UISwipeGestureRecognizerDirection.Up
             gestureView.addGestureRecognizer(upSwipe)
         }
         
-        let downSwipe = UISwipeGestureRecognizer(target: self, action: Selector("downSwipe"))
-        downSwipe.numberOfTouchesRequired = 1
-        downSwipe.direction = UISwipeGestureRecognizerDirection.Down
         if let gestureView = self.gameView {
+            let downSwipe = UISwipeGestureRecognizer(target: self, action: Selector("downSwipe"))
+            downSwipe.numberOfTouchesRequired = 1
+            downSwipe.direction = UISwipeGestureRecognizerDirection.Down
             gestureView.addGestureRecognizer(downSwipe)
         }
     }
