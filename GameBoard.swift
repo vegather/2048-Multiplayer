@@ -10,21 +10,34 @@ import Foundation
 
 protocol GameBoardDelegate: class {
 //    func spawnedGamePiece<T: Evolvable>(#position: Coordinate, value: T)
-    func gameBoard<T: Evolvable>(board: GameBoard<T>, didPerformActions actions: [MoveAction<T>])
-    func gameBoard<T: Evolvable>(board: GameBoard<T>, didCalculateScoreIncrease scoreIncrease: Int)
+    
+    typealias A: Evolvable
+    
+    func gameBoardDidPerformActions(actions: [MoveAction<A>])
+    func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int)
+
+//    func gameBoard(board: GameBoard<E>, didPerformActions actions: [MoveAction<E>])
+//    func gameBoard(board: GameBoard<E>, didCalculateScoreIncrease scoreIncrease: Int)
+    
+//    func gameBoard(board: @autoclosure() -> GameBoard<E, Self>, didPerformActions actions: [MoveAction<E>])
+//    func gameBoard(board: @autoclosure() -> GameBoard<E, Self>, didCalculateScoreIncrease scoreIncrease: Int)
 }
 
-class GameBoard<T: Evolvable> {
+class GameBoard<B: GameBoardDelegate> {
+//class GameBoard<T: Evolvable, DelegateType: GameBoardDelegate where T == DelegateType.E> {
     
-    private var board: Array<Array<T?>>
+//    typealias E = GameBoardDelegateType.GameBoardDelegateEvolvableType
+
+    typealias C = B.A
+    
+    private var board: Array<Array<C?>>
     private let dimension: Int
-    weak private var delegate: GameBoardDelegate?
+    weak var delegate: B?//GameBoardDelegate?
     
-    init(delegate: GameBoardDelegate, dimension: Int) {
-        self.delegate = delegate
+    init(dimension: Int) {
         self.dimension = dimension
         
-        self.board = [[T?]](count: dimension, repeatedValue: [T?](count: dimension, repeatedValue: nil))
+        self.board = [[C?]](count: dimension, repeatedValue: [C?](count: dimension, repeatedValue: nil))
     }
     
     
@@ -34,7 +47,7 @@ class GameBoard<T: Evolvable> {
     // -------------------------------
     
     func moveInDirection(direction: MoveDirection) {
-        var resultFromMove:(Int, [MoveAction<T>])
+        var resultFromMove:(Int, [MoveAction<C>])
         
         println("Board before moving")
         self.printBoard()
@@ -63,9 +76,12 @@ class GameBoard<T: Evolvable> {
         println("Score increase: \(scoreIncrease)\n\n\n\n")
         
 //        self.delegate?.performedActions(moves)
-        self.delegate?.gameBoard(self, didPerformActions: moves)
+//        self.delegate?.gameBoard(self, didPerformActions: moves)
+        self.delegate?.gameBoardDidPerformActions(moves)
+        
 //        self.delegate?.updateScoreBy(scoreIncrease)
-        self.delegate?.gameBoard(self, didCalculateScoreIncrease: scoreIncrease)
+//        self.delegate?.gameBoard(self, didCalculateScoreIncrease: scoreIncrease)
+        self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
     }
     
     
@@ -75,14 +91,14 @@ class GameBoard<T: Evolvable> {
     // MARK: Private Move Left
     // -------------------------------
     
-    private func moveLeft() -> (Int, [MoveAction<T>]) {
-        var actions = [MoveAction<T>]()
+    private func moveLeft() -> (Int, [MoveAction<C>]) {
+        var actions = [MoveAction<C>]()
         var score: Int = 0
         
         for row in 0..<self.dimension {
             var tempCol: Int? //Used to temporary store a column index to check for potential merging
             for col in 0..<self.dimension {
-                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempCol { // If we have a temporary index stored
                         if currentPiece == self.board[row][temp] {
                             // Merge
@@ -91,7 +107,7 @@ class GameBoard<T: Evolvable> {
                             
                             // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
                             if let newValue = currentPiece.evolve() {
-                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: leftmostCol, y: row))
+                                let newPiece = GamePiece<C>(value: newValue, position: Coordinate(x: leftmostCol, y: row))
                                 actions.append(MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                                              andFrom: Coordinate(x: col,   y: row),
                                                          toGamePiece: newPiece))
@@ -142,8 +158,8 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
-    private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
-        var returnValue: MoveAction<T>? = nil
+    private func movePieceAsFarLeftAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<C>? {
+        var returnValue: MoveAction<C>? = nil
         let leftmostCol = self.findLeftmostColToTheRightOf(fromCoordinate)
         
         if leftmostCol != fromCoordinate.x { // If it could even move
@@ -176,14 +192,14 @@ class GameBoard<T: Evolvable> {
     // MARK: Private Move Right
     // -------------------------------
     
-    private func moveRight() -> (Int, [MoveAction<T>]) {
-        var actions = [MoveAction<T>]()
+    private func moveRight() -> (Int, [MoveAction<C>]) {
+        var actions = [MoveAction<C>]()
         var score: Int = 0
         
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
             for var col = self.dimension - 1; col >= 0; col-- {
-                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempCol { // If we have a temporary index stored
                         if currentPiece == self.board[row][temp] {
                             // Merge
@@ -192,7 +208,7 @@ class GameBoard<T: Evolvable> {
                             
                             // Create a MoveAction.Merge that have sources [row][temp] and [row][col] and ends up in [row][leftmost]
                             if let newValue = currentPiece.evolve() {
-                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: rightmostCol, y: row))
+                                let newPiece = GamePiece<C>(value: newValue, position: Coordinate(x: rightmostCol, y: row))
                                 let merge = MoveAction.Merge(from: Coordinate(x: temp, y: row),
                                                           andFrom: Coordinate(x: col,   y: row),
                                                       toGamePiece: newPiece)
@@ -245,8 +261,8 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
-    private func movePieceAsFarRightAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
-        var returnValue: MoveAction<T>? = nil
+    private func movePieceAsFarRightAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<C>? {
+        var returnValue: MoveAction<C>? = nil
         let rightmostCol = self.findRightmostColToTheRightOf(fromCoordinate)
         
         if rightmostCol != fromCoordinate.x { // If it could even move
@@ -280,14 +296,14 @@ class GameBoard<T: Evolvable> {
     // MARK: Private Move Up
     // -------------------------------
     
-    private func moveUp() -> (Int, [MoveAction<T>]) {
-        var actions = [MoveAction<T>]()
+    private func moveUp() -> (Int, [MoveAction<C>]) {
+        var actions = [MoveAction<C>]()
         var score: Int = 0
         
         for col in 0..<self.dimension {
             var tempRow: Int? //Used to temporary store a row index to check for potential merging
             for row in 0..<self.dimension {
-                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempRow { // If we have a temporary index stored
                         if currentPiece == self.board[temp][col] {
                             // Merge
@@ -295,7 +311,7 @@ class GameBoard<T: Evolvable> {
                             let upmostRow = self.findUpmostRowUpwardsFrom(Coordinate(x: col, y: temp))
                             
                             if let newValue = currentPiece.evolve() {
-                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: col, y: upmostRow))
+                                let newPiece = GamePiece<C>(value: newValue, position: Coordinate(x: col, y: upmostRow))
                                 actions.append(MoveAction.Merge(from: Coordinate(x: col, y: temp),
                                                              andFrom: Coordinate(x: col, y: row),
                                                          toGamePiece: newPiece))
@@ -343,8 +359,8 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
-    private func movePieceAsFarUpAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
-        var returnValue: MoveAction<T>? = nil
+    private func movePieceAsFarUpAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<C>? {
+        var returnValue: MoveAction<C>? = nil
         let upmostRow = self.findUpmostRowUpwardsFrom(fromCoordinate)
         
         if upmostRow != fromCoordinate.y { // If it could even move
@@ -377,14 +393,14 @@ class GameBoard<T: Evolvable> {
     // MARK: Private Move Down
     // -------------------------------
     
-    private func moveDown() -> (Int, [MoveAction<T>]) {
-        var actions = [MoveAction<T>]()
+    private func moveDown() -> (Int, [MoveAction<C>]) {
+        var actions = [MoveAction<C>]()
         var score: Int = 0
         
         for col in 0..<self.dimension {
             var tempRow: Int? //Used to temporary store a row index to check for potential merging
             for var row = self.dimension - 1; row >= 0; row-- {
-                if let currentPiece: T = self.board[row][col] { // If there is a piece at this position
+                if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempRow { // If we have a temporary index stored
                         if currentPiece == self.board[temp][col] {
                             // Merge
@@ -392,7 +408,7 @@ class GameBoard<T: Evolvable> {
                             let downmostRow = self.findDownmostRowDownwardsFrom(Coordinate(x: col, y: temp))
                             
                             if let newValue = currentPiece.evolve() {
-                                let newPiece = GamePiece<T>(value: newValue, position: Coordinate(x: col, y: downmostRow))
+                                let newPiece = GamePiece<C>(value: newValue, position: Coordinate(x: col, y: downmostRow))
                                 let merge = MoveAction.Merge(from: Coordinate(x: col, y: temp),
                                                           andFrom: Coordinate(x: col, y: row),
                                                       toGamePiece: newPiece)
@@ -443,8 +459,8 @@ class GameBoard<T: Evolvable> {
         return (score, actions)
     }
     
-    private func movePieceAsFarDownAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<T>? {
-        var returnValue: MoveAction<T>? = nil
+    private func movePieceAsFarDownAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<C>? {
+        var returnValue: MoveAction<C>? = nil
         let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
         
         if downmostRow != fromCoordinate.y {
@@ -493,7 +509,7 @@ class GameBoard<T: Evolvable> {
         let indexOfSpot = Int(arc4random()) % emptySpots.count
         
         let spot = emptySpots[indexOfSpot]
-        let value = T.getBaseValue()
+        let value = C.getBaseValue()
         
 //        println("GameBoard - Spawning piece of value: \(value) to spot \(spot)")
         
@@ -505,7 +521,8 @@ class GameBoard<T: Evolvable> {
 //        self.delegate?.spawnedGamePiece(position: spot, value: value)
 //        self.delegate?.performedActions([MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))])
         let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
-        self.delegate?.gameBoard(self, didPerformActions: spawnAction)
+//        self.delegate?.gameBoard(self, didPerformActions: spawnAction)
+        self.delegate?.gameBoardDidPerformActions(spawnAction)
     }
     
     

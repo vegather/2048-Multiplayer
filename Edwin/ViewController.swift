@@ -11,14 +11,18 @@ import SpriteKit
 
 class ViewController: UIViewController, GameBrainDelegate {
 
-    var gameBrain: GameBrain<TileValue>!
+    typealias D = TileValue
+    
+    var gameBrain: GameBrain<ViewController>!
     var gameView:  SKView?
     var gameBoardScene: BoardView<TwosPowerView>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.gameBrain = GameBrain<TileValue>(delegate: self, dimension: 4)
+        self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
+        
+//        self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
         
         self.setupSwipes()
     }
@@ -106,27 +110,46 @@ class ViewController: UIViewController, GameBrainDelegate {
     // MARK: Game Brain Delegate Methods
     // -------------------------------
 
-    func performActions<TileValue>(actions: [MoveAction<TileValue>]) {
-        if let gameScene = self.gameBoardScene {
-            gameScene.performMoveActions(actions)
-        }
-    }
-    
-    func userHasNewScore(newUserScore: Int) {
+    func gameBrainDidPerformActions(actions: [MoveAction<D>]) {
         
     }
     
-    func opponentHasNewScore(newOpponentScore: Int) {
+    func gameBrainUserHasNewScore(newUserScore: Int) {
         
     }
     
-    func usersTurn() {
+    func gameBrainOpponentHasNewScore(newOpponentScore: Int) {
         
     }
     
-    func opponentsTurn() {
+    func gameBrainDidChangeTurnTo(currentTurn: Turn) {
         
     }
+    
+    
+    
+    
+//    func performActions<TileValue>(actions: [MoveAction<TileValue>]) {
+//        if let gameScene = self.gameBoardScene {
+//            gameScene.performMoveActions(actions)
+//        }
+//    }
+//    
+//    func userHasNewScore(newUserScore: Int) {
+//        
+//    }
+//    
+//    func opponentHasNewScore(newOpponentScore: Int) {
+//        
+//    }
+//    
+//    func usersTurn() {
+//        
+//    }
+//    
+//    func opponentsTurn() {
+//        
+//    }
 
 }
 

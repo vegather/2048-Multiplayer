@@ -32,7 +32,7 @@ enum MoveDirection: Printable {
 
 protocol Evolvable: Equatable, Printable {
     func evolve() -> Self?
-    class func getBaseValue() -> Self
+    class func getBaseValue() -> Self  // Gets the lowest value
     var scoreValue: Int { get } // The score increase that this piece should amount to
 }
 
