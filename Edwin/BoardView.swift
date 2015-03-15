@@ -38,6 +38,8 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
             switch action {
             case let .Spawn(gamePiece):
                 println()
+                // Create new node of type T
+                // Add node to board
             case let .Move(from, to):
                 println()
             case let .Merge(from, andFrom, newPiece):
