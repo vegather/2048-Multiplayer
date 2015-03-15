@@ -56,6 +56,8 @@ class ViewController: UIViewController, GameBrainDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Geometry is set inside here
+        
         let gameViewFrame = CGRectMake(0,
             self.view.frame.size.height - self.view.frame.size.width,
             self.view.frame.size.width,
@@ -109,7 +111,7 @@ class ViewController: UIViewController, GameBrainDelegate {
     // -------------------------------
 
     func gameBrainDidPerformActions(actions: [MoveAction<D>]) {
-        
+        self.gameBoardScene?.performMoveActions(actions)
     }
     
     func gameBrainUserHasNewScore(newUserScore: Int) {
