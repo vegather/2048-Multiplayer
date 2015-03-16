@@ -47,6 +47,31 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
             }
         }
     }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Helper Methods
+    // -------------------------------
+    
+    func stringForCoordinate(coordinate: Coordinate) -> String {
+        return "\(coordinate.x),\(coordinate.y)"
+    }
+    
+    func coordinateForString(string: String) -> Coordinate? {
+        let elements = string.componentsSeparatedByString(",")
+        if elements.count == 2 {
+            if let xValue = elements[0].toInt() {
+                if let yValue = elements[1].toInt() {
+                    return Coordinate(x: xValue, y: yValue)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
 }
 
 //
