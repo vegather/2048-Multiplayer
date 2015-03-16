@@ -9,6 +9,11 @@
 import UIKit
 import SpriteKit
 
+
+// This class always keeps the name of its child nodes up to date based on the 
+// location of the tile the nodes represents. It doesn't need an internal
+// structure to do this. It just updates the names.
+
 // Generic board that takes any type that is a subclass of SKNode as
 // well as implements the EvolvableViewType protocol
 class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
