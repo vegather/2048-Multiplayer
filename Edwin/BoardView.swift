@@ -17,6 +17,12 @@ class BoardView: SKScene {
     
     let dimension: Int
     
+    private var actionsToPerform = [MoveAction<TileValue>]() {
+        didSet {
+            self.performRemainingMoveActions()
+        }
+    }
+    
     // Having problems to use the .name of .childNodeWithName functionality to
     // refer to nodes as they are a generic, and not simply a subclass of
     // SKSpriteNode. Will have to keep this board up to date instead...
@@ -148,6 +154,10 @@ class BoardView: SKScene {
             self.evolveNodes(toEvolve)
             self.removeNodes(toRemove)
         }
+    }
+    
+    private func performRemainingMoveActions() {
+        
     }
     
     
