@@ -17,7 +17,8 @@ class BoardView: SKScene {
     
     let dimension: Int
     
-    private var actionsToPerform = [MoveAction<TileValue>]() {
+    private var isCurrentlyInProcessOfMovingNodes = false
+    private var actionsToPerform: [MoveAction<TileValue>] = [MoveAction<TileValue>]() {
         didSet {
             self.performRemainingMoveActions()
         }
@@ -77,7 +78,6 @@ class BoardView: SKScene {
         }
         
         self.moveNodes(toMove) { (done: String) in
-            println("DONE MOVING, WILL START REST OF ANIMATIONS MESSAGE: \(done)")
             self.spawnNodes(toSpawn)
             self.evolveNodes(toEvolve)
             self.removeNodes(toRemove)
@@ -96,19 +96,14 @@ class BoardView: SKScene {
     // -------------------------------
     
     private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)], completionHandler: (done: String) -> Void) {
-        println("Number of nodes to move: \(nodesToMove.count)")
         if nodesToMove.count > 0 {
-            println("Will move nodes")
             for var i = 0; i < nodesToMove.count; i++ {
                 
                 let (node, from, to) = nodesToMove[i]
                 
-                println("WILL MOVE NODE")
-                
                 let destinationPoint = self.positionForCoordinate(to)
                 let moveAction = SKAction.moveTo(destinationPoint, duration: 1.0)
                 node.runAction(moveAction, completion: { () -> Void in
-                    println("DONE MOVING")
                     if i == nodesToMove.count - 1 {
                         // Just finished animating the last node
                         completionHandler(done: "Did finish moving")
@@ -123,7 +118,6 @@ class BoardView: SKScene {
                 self.setNode(node, forCoordinate: to)
             }
         } else {
-            println("Will NOT move nodes")
             completionHandler(done: "Nothing to move")
         }
     }
@@ -173,7 +167,7 @@ class BoardView: SKScene {
     }
     
     private func positionForCoordinate(coordinate: Coordinate) -> CGPoint {
-        let tileSize = self.sizeForTile()        
+        let tileSize = self.sizeForTile()
         let reversedY = CGFloat((4 - 1) - coordinate.y)
         
         return CGPoint(x: CGFloat(coordinate.x) * tileSize.width  + (tileSize.width  / 2.0),
