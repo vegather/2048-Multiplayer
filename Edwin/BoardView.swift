@@ -13,15 +13,15 @@ import SpriteKit
 
 // Generic board that takes any type that is a subclass of SKNode as
 // well as implements the EvolvableViewType protocol
-class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKScene {
+class BoardView: SKScene {
     
-//    var dimension: Int = 4
+    let dimension: Int
     
     // Having problems to use the .name of .childNodeWithName functionality to
     // refer to nodes as they are a generic, and not simply a subclass of
     // SKSpriteNode. Will have to keep this board up to date instead...
     
-    private var board: Array<Array<G?>>?
+    private var board: Array<Array<TwosPowerView?>>
     
 //    typealias F = G.C
     
@@ -35,8 +35,9 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
 ////        self.backgroundColor = UIColor.lightGrayColor()
 //    }
     
-    init(sizeOfBoard: CGSize) {
-//        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
+    init(sizeOfBoard: CGSize, dimension: Int) {
+        self.board = [[TwosPowerView?]](count: 4, repeatedValue: [TwosPowerView?](count: 4, repeatedValue: nil))
+        self.dimension = dimension
         
 //        for var x = 0; x < 4; x++ {
 //            for var y = 0; y < 4; y++ {
@@ -89,9 +90,9 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
     }
     
     
-    func setup() {
-        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
-    }
+//    func setup() {
+//        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
+//    }
     
 //    - (void)cleanUpChildrenAndRemove {
 //    for (SKNode *child in self.children) {
@@ -113,11 +114,11 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
     // MARK: Public API
     // -------------------------------
     
-    func performMoveActions(actions: [MoveAction<E>]) {
-        var toMove   = [(G, Coordinate, Coordinate)]() // View, from, to
+    func performMoveActions(actions: [MoveAction<TileValue>]) {
+        var toMove   = [(TwosPowerView, Coordinate, Coordinate)]() // View, from, to
         var toSpawn  = [Coordinate]()
-        var toEvolve = [G]()
-        var toRemove = [G, Coordinate]() // Need the coordinate to remove it from self.board
+        var toEvolve = [TwosPowerView]()
+        var toRemove = [TwosPowerView, Coordinate]() // Need the coordinate to remove it from self.board
 
         
         for action in actions {
@@ -164,7 +165,7 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
     // MARK: Private Animation Helpers
     // -------------------------------
     
-    private func moveNodes(nodesToMove: [(G, Coordinate, Coordinate)], completionHandler: () -> ()) {
+    private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)], completionHandler: () -> ()) {
         if nodesToMove.count > 0 {
             for var i = 0; i < nodesToMove.count; i++ {
                 
@@ -195,7 +196,7 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
         for coordinate in coordinatesForNodesToSpawn {
             // Might add some animations to this later
             
-            let nodeToAdd = G()
+            let nodeToAdd = TwosPowerView()
             nodeToAdd.size = self.sizeForTile()
             nodeToAdd.position = self.positionForCoordinate(coordinate)
 //            nodeToAdd.name = self.stringForCoordinate(coordinate)
@@ -205,7 +206,7 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
         }
     }
     
-    private func evolveNodes(nodesToEvolve: [G]) {
+    private func evolveNodes(nodesToEvolve: [TwosPowerView]) {
         
         println("BoardView viewsToEvolve: \(nodesToEvolve)")
         
@@ -214,7 +215,7 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
         }
     }
     
-    private func removeNodes(nodesToRemove: [(G, Coordinate)]) {
+    private func removeNodes(nodesToRemove: [(TwosPowerView, Coordinate)]) {
         for (node, coordinate) in nodesToRemove {
             node.removeFromParent()
             self.setNode(nil, forCoordinate: coordinate)
@@ -229,20 +230,14 @@ class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKSc
     // MARK: Private Helper Methods
     // -------------------------------
     
-    private func setNode(node: G?, forCoordinate coordinate: Coordinate) {
+    private func setNode(node: TwosPowerView?, forCoordinate coordinate: Coordinate) {
         if let node = node {
-            if self.board != nil {
-                self.board![coordinate.y][coordinate.x] = node
-            }
+            self.board[coordinate.y][coordinate.x] = node
         }
     }
     
-    private func getNodeForCoordinate(coordinate: Coordinate) -> G? {
-        if self.board != nil {
-            return self.board![coordinate.y][coordinate.x]
-        } else {
-            return nil
-        }
+    private func getNodeForCoordinate(coordinate: Coordinate) -> TwosPowerView? {
+        return self.board[coordinate.y][coordinate.x]
     }
     
     private func positionForCoordinate(coordinate: Coordinate) -> CGPoint {
