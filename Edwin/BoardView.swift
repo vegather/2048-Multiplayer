@@ -126,18 +126,9 @@ class BoardView: SKScene {
             case let .Spawn(gamePiece):
                 toSpawn.append(gamePiece.gamePiece.position)
             case let .Move(from, to):
-//                let nodeName = self.stringForCoordinate(from)
-//                if let myNode = self.childNodeWithName(nodeName) as? SKSpriteNode {
-//                    toMove.append((myNode, from, to))
-//                }
-//                if let node = self.childNodeWithName(nodeName) {
-//                    toMove.append((node as G, from, to))
-//                }
                 if let nodeToMove = self.getNodeForCoordinate(from) {
-                    toMove.append((nodeToMove, to, from))
+                    toMove.append((nodeToMove, from, to))
                 }
-                
-                println()
             case let .Merge(from, andFrom, newPiece):
                 if let firstNode = self.getNodeForCoordinate(from) {
                     if let secondNode = self.getNodeForCoordinate(andFrom) {
@@ -151,11 +142,12 @@ class BoardView: SKScene {
             }
         }
         
-        self.moveNodes(toMove, completionHandler: { () -> () in
+        self.moveNodes(toMove) { (done: String) in
+            println("DONE MOVING, WILL START REST OF ANIMATIONS MESSAGE: \(done)")
             self.spawnNodes(toSpawn)
             self.evolveNodes(toEvolve)
             self.removeNodes(toRemove)
-        })
+        }
     }
     
     
@@ -165,18 +157,23 @@ class BoardView: SKScene {
     // MARK: Private Animation Helpers
     // -------------------------------
     
-    private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)], completionHandler: () -> ()) {
+    private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)], completionHandler: (done: String) -> Void) {
+        println("Number of nodes to move: \(nodesToMove.count)")
         if nodesToMove.count > 0 {
+            println("Will move nodes")
             for var i = 0; i < nodesToMove.count; i++ {
                 
                 let (node, from, to) = nodesToMove[i]
                 
+                println("WILL MOVE NODE")
+                
                 let destinationPoint = self.positionForCoordinate(to)
-                let moveAction = SKAction.moveTo(destinationPoint, duration: 0.2)
+                let moveAction = SKAction.moveTo(destinationPoint, duration: 1.0)
                 node.runAction(moveAction, completion: { () -> Void in
+                    println("DONE MOVING")
                     if i == nodesToMove.count - 1 {
                         // Just finished animating the last node
-                        completionHandler()
+                        completionHandler(done: "Did finish moving")
                     }
                 })
                 
@@ -188,7 +185,8 @@ class BoardView: SKScene {
                 self.setNode(node, forCoordinate: to)
             }
         } else {
-            completionHandler()
+            println("Will NOT move nodes")
+            completionHandler(done: "Nothing to move")
         }
     }
     
@@ -208,7 +206,7 @@ class BoardView: SKScene {
     
     private func evolveNodes(nodesToEvolve: [TwosPowerView]) {
         
-        println("BoardView viewsToEvolve: \(nodesToEvolve)")
+//        println("BoardView viewsToEvolve: \(nodesToEvolve)")
         
         for node in nodesToEvolve {
             node.evolve()
@@ -242,8 +240,8 @@ class BoardView: SKScene {
     
     private func positionForCoordinate(coordinate: Coordinate) -> CGPoint {
         let tileSize = self.sizeForTile()
-        println("self.size: \(self.size)")
-        println("Dimension: \(4)")
+//        println("self.size: \(self.size)")
+//        println("Dimension: \(4)")
         
         let reversedY = CGFloat((4 - 1) - coordinate.y)
         
