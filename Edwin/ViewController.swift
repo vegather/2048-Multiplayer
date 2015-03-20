@@ -15,7 +15,7 @@ class ViewController: UIViewController, GameBrainDelegate {
     
     var gameBrain: GameBrain<ViewController>!
     var gameView:  SKView?
-    var gameBoardScene: BoardView<TwosPowerView>?
+    var gameBoardScene: BoardView<TwosPowerView, TileValue>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +66,17 @@ class ViewController: UIViewController, GameBrainDelegate {
         if self.gameView == nil {
             self.gameView = SKView(frame: gameViewFrame)
             self.view.addSubview(self.gameView!)
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let gameView = self.gameView {
+            self.gameBoardScene = BoardView<TwosPowerView, TileValue>(sizeOfBoard: gameView.frame.size)
+            self.gameBoardScene?.setup()
             
-            self.gameBoardScene = BoardView<TwosPowerView>(size: gameViewFrame.size, dimension: 4)
+//            self.gameBoardScene?.cleanUpChildrenAndRemove()
             self.gameView?.presentScene(self.gameBoardScene)
             
             self.setupSwipes()

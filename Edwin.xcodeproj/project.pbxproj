@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
+		9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9C31B31AB8AA0500ED5A41 /* GameView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		9A9C31B31AB8AA0500ED5A41 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +95,7 @@
 			children = (
 				9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */,
 				9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */,
+				9A9C31B31AB8AA0500ED5A41 /* GameView.swift */,
 				9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */,
 				9A76B6091AAFA6CF0042B378 /* BoardView.swift */,
 				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
@@ -261,6 +264,7 @@
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */,
+				9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */,
 				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
 				9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */,
 				9ADD7CCE1AA22E4300BDCFA8 /* TileView.swift in Sources */,

@@ -10,22 +10,78 @@ import UIKit
 import SpriteKit
 
 
-// This class always keeps the name of its child nodes up to date based on the 
-// location of the tile the nodes represents. It doesn't need an internal
-// structure to do this. It just updates the names.
 
 // Generic board that takes any type that is a subclass of SKNode as
 // well as implements the EvolvableViewType protocol
-class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
+class BoardView<G, E: Evolvable where G:EvolvableViewType, G:SKSpriteNode>: SKScene {
     
-    let dimension: Int
+//    var dimension: Int = 4
     
-    init(size: CGSize, dimension: Int) {
-        self.dimension = dimension
+    // Having problems to use the .name of .childNodeWithName functionality to
+    // refer to nodes as they are a generic, and not simply a subclass of
+    // SKSpriteNode. Will have to keep this board up to date instead...
+    
+    private var board: Array<Array<G?>>?
+    
+//    typealias F = G.C
+    
+//    override init(size: CGSize) {
+////        self.dimension = dimension
+//        
+//        super.init(size: size)
+//        
+////        self.dimension = dimension
+//        
+////        self.backgroundColor = UIColor.lightGrayColor()
+//    }
+    
+    init(sizeOfBoard: CGSize) {
+//        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
         
-        super.init(size: size)
+//        for var x = 0; x < 4; x++ {
+//            for var y = 0; y < 4; y++ {
+//                if let node = self.board[y][x] {
+//                    print("x")
+//                } else {
+//                    print("-")
+//                }
+//            }
+//            println()
+//        }
+//        println()
         
-        self.backgroundColor = UIColor.greenColor()
+        super.init(size: sizeOfBoard)
+        
+//        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
+//        
+//        for var x = 0; x < 4; x++ {
+//            for var y = 0; y < 4; y++ {
+//                if let node = self.board[y][x] {
+//                    print("x")
+//                } else {
+//                    print("-")
+//                }
+//            }
+//            println()
+//        }
+//        println()
+//        
+//        self.board[1][1] = G()
+////        self.setNode(G(), forCoordinate: Coordinate(x: 0, y: 0))
+//        
+//        for var x = 0; x < 4; x++ {
+//            for var y = 0; y < 4; y++ {
+//                if let node = self.board[y][x] {
+//                    print("x")
+//                } else {
+//                    print("-")
+//                }
+//            }
+//            println()
+//        }
+//        println()
+        
+        self.backgroundColor = UIColor.lightGrayColor()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -33,25 +89,138 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
     }
     
     
+    func setup() {
+        self.board = [[G?]](count: 4, repeatedValue: [G?](count: 4, repeatedValue: nil))
+    }
+    
+//    - (void)cleanUpChildrenAndRemove {
+//    for (SKNode *child in self.children) {
+//    [child removeFromParent];
+//    }
+//    [self removeFromParent];
+//    }
+
+    
+//    func cleanUpChildrenAndRemove() {
+//        for child in self.children as [SKNode] {
+//            child.removeFromParent()
+//        }
+//        
+//        self.removeFromParent()
+//    }
     
     // -------------------------------
     // MARK: Public API
     // -------------------------------
     
-    func performMoveActions<E: Evolvable>(actions: [MoveAction<E>]) {
+    func performMoveActions(actions: [MoveAction<E>]) {
+        var toMove   = [(G, Coordinate, Coordinate)]() // View, from, to
+        var toSpawn  = [Coordinate]()
+        var toEvolve = [G]()
+        var toRemove = [G, Coordinate]() // Need the coordinate to remove it from self.board
+
+        
         for action in actions {
             switch action {
             case let .Spawn(gamePiece):
-                println()
-                // Create new node of type T
-                // Add node to board
+                toSpawn.append(gamePiece.gamePiece.position)
             case let .Move(from, to):
+//                let nodeName = self.stringForCoordinate(from)
+//                if let myNode = self.childNodeWithName(nodeName) as? SKSpriteNode {
+//                    toMove.append((myNode, from, to))
+//                }
+//                if let node = self.childNodeWithName(nodeName) {
+//                    toMove.append((node as G, from, to))
+//                }
+                if let nodeToMove = self.getNodeForCoordinate(from) {
+                    toMove.append((nodeToMove, to, from))
+                }
+                
                 println()
             case let .Merge(from, andFrom, newPiece):
-                println()
+                if let firstNode = self.getNodeForCoordinate(from) {
+                    if let secondNode = self.getNodeForCoordinate(andFrom) {
+                        toMove.append((firstNode,  from,    newPiece.position))
+                        toMove.append((secondNode, andFrom, newPiece.position))
+                        
+                        toEvolve.append(firstNode)
+                        toRemove.append(secondNode, newPiece.position)
+                    }
+                }
             }
         }
+        
+        self.moveNodes(toMove, completionHandler: { () -> () in
+            self.spawnNodes(toSpawn)
+            self.evolveNodes(toEvolve)
+            self.removeNodes(toRemove)
+        })
     }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Animation Helpers
+    // -------------------------------
+    
+    private func moveNodes(nodesToMove: [(G, Coordinate, Coordinate)], completionHandler: () -> ()) {
+        if nodesToMove.count > 0 {
+            for var i = 0; i < nodesToMove.count; i++ {
+                
+                let (node, from, to) = nodesToMove[i]
+                
+                let destinationPoint = self.positionForCoordinate(to)
+                let moveAction = SKAction.moveTo(destinationPoint, duration: 0.2)
+                node.runAction(moveAction, completion: { () -> Void in
+                    if i == nodesToMove.count - 1 {
+                        // Just finished animating the last node
+                        completionHandler()
+                    }
+                })
+                
+                // If there is NOT a new node in the position we came from. Set that to nil
+                if self.getNodeForCoordinate(from) == node {
+                    self.setNode(nil, forCoordinate: from)
+                }
+                
+                self.setNode(node, forCoordinate: to)
+            }
+        } else {
+            completionHandler()
+        }
+    }
+    
+    private func spawnNodes(coordinatesForNodesToSpawn: [Coordinate]) {
+        for coordinate in coordinatesForNodesToSpawn {
+            // Might add some animations to this later
+            
+            let nodeToAdd = G()
+            nodeToAdd.size = self.sizeForTile()
+            nodeToAdd.position = self.positionForCoordinate(coordinate)
+//            nodeToAdd.name = self.stringForCoordinate(coordinate)
+            self.setNode(nodeToAdd, forCoordinate: coordinate)
+            
+            self.addChild(nodeToAdd)
+        }
+    }
+    
+    private func evolveNodes(nodesToEvolve: [G]) {
+        
+        println("BoardView viewsToEvolve: \(nodesToEvolve)")
+        
+        for node in nodesToEvolve {
+            node.evolve()
+        }
+    }
+    
+    private func removeNodes(nodesToRemove: [(G, Coordinate)]) {
+        for (node, coordinate) in nodesToRemove {
+            node.removeFromParent()
+            self.setNode(nil, forCoordinate: coordinate)
+        }
+    }
+
     
     
     
@@ -60,24 +229,81 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
     // MARK: Private Helper Methods
     // -------------------------------
     
-    func stringForCoordinate(coordinate: Coordinate) -> String {
-        return "\(coordinate.x),\(coordinate.y)"
-    }
-    
-    func coordinateForString(string: String) -> Coordinate? {
-        let elements = string.componentsSeparatedByString(",")
-        if elements.count == 2 {
-            if let xValue = elements[0].toInt() {
-                if let yValue = elements[1].toInt() {
-                    return Coordinate(x: xValue, y: yValue)
-                }
+    private func setNode(node: G?, forCoordinate coordinate: Coordinate) {
+        if let node = node {
+            if self.board != nil {
+                self.board![coordinate.y][coordinate.x] = node
             }
         }
-        
-        return nil
     }
     
+    private func getNodeForCoordinate(coordinate: Coordinate) -> G? {
+        if self.board != nil {
+            return self.board![coordinate.y][coordinate.x]
+        } else {
+            return nil
+        }
+    }
+    
+    private func positionForCoordinate(coordinate: Coordinate) -> CGPoint {
+        let tileSize = self.sizeForTile()
+        println("self.size: \(self.size)")
+        println("Dimension: \(4)")
+        
+        let reversedY = CGFloat((4 - 1) - coordinate.y)
+        
+        return CGPoint(x: CGFloat(coordinate.x) * tileSize.width  + (tileSize.width  / 2.0),
+                       y: reversedY             * tileSize.height + (tileSize.height / 2.0))
+    }
+    
+    private func sizeForTile() -> CGSize {
+        return CGSize(width: self.size.width  / CGFloat(4),
+                     height: self.size.height / CGFloat(4))
+    }
+    
+//    private func stringForCoordinate(coordinate: Coordinate) -> String {
+//        return "\(coordinate.x),\(coordinate.y)"
+//    }
+//    
+//    private func coordinateForString(string: String) -> Coordinate? {
+//        let elements = string.componentsSeparatedByString(",")
+//        if elements.count == 2 {
+//            if let xValue = elements[0].toInt() {
+//                if let yValue = elements[1].toInt() {
+//                    return Coordinate(x: xValue, y: yValue)
+//                }
+//            }
+//        }
+//        
+//        return nil
+//    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //
 //// This class should really be a generic, but as Swift is not completely done yet,
@@ -123,7 +349,7 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
 //        var toSpawn  = [EvolvableViewType]()
 //        var toEvolve = [EvolvableViewType]()
 //        var toRemove = [EvolvableViewType]()
-//        
+//
 //        for action in actions {
 //            switch action {
 //            case let .Spawn(gamePiece):
@@ -221,7 +447,7 @@ class BoardView<T where T:EvolvableViewType, T:SKNode>: SKScene {
 //            view.removeFromSuperview()
 //        }
 //    }
-//    
+//
 //    
 //    
 //    // -------------------------------

@@ -14,14 +14,18 @@ import SpriteKit
 // and a a SKLabelNode as a child.
 class TwosPowerView: SKSpriteNode, EvolvableViewType {
     
+    typealias C = TileValue
+    
     var value: TileValue
     var label: SKLabelNode
     
-    init(value: TileValue, size: CGSize) {
-        self.value = value
+//    required init(size: CGSize) {
+    override init() {
+        self.value = TileValue.getBaseValue()
         self.label = SKLabelNode(fontNamed: "HelveticaNeue")
         
-        super.init(texture: nil, color: TwosPowerView.getColorForValue(value), size: size)
+//        super.init(texture: nil, color: TwosPowerView.getColorForValue(value), size: size)
+        super.init(texture: nil, color: TwosPowerView.getColorForValue(self.value), size: CGSizeZero)
         
         self.label.text = "\(self.value)"  // TileValue conforms to Printable
         self.label.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame)) // Position to center of parent
