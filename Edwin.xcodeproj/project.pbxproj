@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
+		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9C31B31AB8AA0500ED5A41 /* GameView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
+		9A61D0281ACB7EC900D741E2 /* MWLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MWLogger.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9A9C31B31AB8AA0500ED5A41 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 		9ADD7C9C1AA2212800BDCFA8 /* Edwin */ = {
 			isa = PBXGroup;
 			children = (
+				9A61D0281ACB7EC900D741E2 /* MWLogger.swift */,
 				9A5582F91AAE690B004F0C2D /* Views */,
 				9A5582F81AAE6902004F0C2D /* Controllers */,
 				9A5582F71AAE68E6004F0C2D /* Model */,
@@ -262,6 +265,7 @@
 			files = (
 				9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
+				9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */,
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */,
 				9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */,
@@ -394,9 +398,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -404,9 +411,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};

@@ -38,7 +38,7 @@ class GameBoard<B: GameBoardDelegate> {
     func moveInDirection(direction: MoveDirection) {
         var resultFromMove:(Int, [MoveAction<C>])
         
-        println("Board before moving")
+        MWLog("Board before moving")
         self.printBoard()
         
         switch direction {
@@ -53,12 +53,12 @@ class GameBoard<B: GameBoardDelegate> {
         }
         
         let (scoreIncrease, moves) = resultFromMove
-        println()
+        MWLog()
         
-        println("Board after the move in direction \(direction)")
+        MWLog("Board after the move in direction \(direction)")
         self.printBoard()
         
-        println("Score increase: \(scoreIncrease)\n\n\n\n")
+        MWLog("Score increase: \(scoreIncrease)\n\n\n\n")
         
         self.delegate?.gameBoardDidPerformActions(moves)
         self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
@@ -493,6 +493,9 @@ class GameBoard<B: GameBoardDelegate> {
         
         self.board[spot.y][spot.x] = value
         
+        MWLog("Gameboard after spawn")
+        printBoard()
+        
         let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
         self.delegate?.gameBoardDidPerformActions(spawnAction)
     }
@@ -506,14 +509,17 @@ class GameBoard<B: GameBoardDelegate> {
     
     private func printBoard() {
         for row in 0..<self.dimension {
+            var rowString = ""
             for col in 0..<self.dimension {
                 if let value = self.board[row][col] {
-                    print("\(value) ")
+//                    print("\(value) ")
+                    rowString += "\(value) "
                 } else {
-                    print("- ")
+//                    print("- ")
+                    rowString += "- "
                 }
             }
-            println()
+            MWLog(rowString)
         }
     }
     

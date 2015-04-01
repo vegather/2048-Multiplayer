@@ -32,7 +32,7 @@ import Foundation
 //    private var valueLabel: UILabel
 //    
 //    override init(frame: CGRect) {
-//        println("TileView init(frame: \(frame))")
+//        MWLog("TileView init(frame: \(frame))")
 //        
 //        self.value = TileValue.getBaseValue() // Will not invoke property observer
 //        
@@ -101,10 +101,10 @@ import Foundation
 //    
 //    override func evolve() {
 //        if let evolvedValue = self.value.evolve() {
-//            println("TileView evolved to \(evolvedValue)")
+//            MWLog("TileView evolved to \(evolvedValue)")
 //            self.value = evolvedValue
 //        } else {
-//            println("TileView could not evolve from \(self.value)")
+//            MWLog("TileView could not evolve from \(self.value)")
 //        }
 //    }
 //

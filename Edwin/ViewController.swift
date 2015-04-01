@@ -93,22 +93,22 @@ class ViewController: UIViewController, GameBrainDelegate {
     // -------------------------------
     
     func leftSwipe() {
-        println("Left")
+        MWLog()
         self.gameBrain.moveInDirection(MoveDirection.Left)
     }
     
     func rightSwipe() {
-        println("Right")
+        MWLog()
         self.gameBrain.moveInDirection(MoveDirection.Right)
     }
     
     func upSwipe() {
-        println("Up")
+        MWLog()
         self.gameBrain.moveInDirection(MoveDirection.Up)
     }
     
     func downSwipe() {
-        println("Down")
+        MWLog()
         self.gameBrain.moveInDirection(MoveDirection.Down)
     }
     
