@@ -90,7 +90,7 @@ enum TileValue: Int, Evolvable {
     
     var description: String {
         get {
-            return "\(self.rawValue)"
+            return "TileValue(\(self.rawValue))"
         }
     }
 }
@@ -100,7 +100,7 @@ func ==(lhs: TileValue, rhs: TileValue) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }
 
-struct Coordinate: Printable {
+struct Coordinate: Printable, Equatable {
     let x: Int
     let y: Int
     
@@ -109,6 +109,11 @@ struct Coordinate: Printable {
             return "Coordinate(x: \(x), y: \(y))"
         }
     }
+}
+
+// Operator from the Equatable protocol which Coordinate conforms to has to be defined globally
+func ==(lhs: Coordinate, rhs: Coordinate) -> Bool {
+    return lhs.x == rhs.x && lhs.y == rhs.y
 }
 
 // This class should preferable by a struct, but Swift currently can't handle generic enums (see MoveAction)

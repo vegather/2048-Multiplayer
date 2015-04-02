@@ -20,7 +20,7 @@ class BoardView: SKScene {
     var toMove   = [(TwosPowerView, Coordinate, Coordinate)]() // View, from, to
     var toSpawn  = [Coordinate]()
     var toEvolve = [TwosPowerView]()
-    var toRemove = [TwosPowerView, Coordinate]() // Need the coordinate to remove it from self.board
+    var toRemove = [TwosPowerView]() // Need the coordinate to remove it from self.board
     
     let ANIMATION_DURATION = 1.5
     
@@ -32,7 +32,11 @@ class BoardView: SKScene {
     // Having problems to use the .name of .childNodeWithName functionality to
     // refer to nodes as they are a generic, and not simply a subclass of
     // SKSpriteNode. Will have to keep this board up to date instead...
-    private var board: Array<Array<TwosPowerView?>>
+    private var board: Array<Array<TwosPowerView?>> {
+        didSet {
+            printBoardView()
+        }
+    }
     
     init(sizeOfBoard: CGSize, dimension: Int) {
         self.board = [[TwosPowerView?]](count: 4, repeatedValue: [TwosPowerView?](count: 4, repeatedValue: nil))
@@ -79,7 +83,7 @@ class BoardView: SKScene {
                         MWLog("Adding evolve action")
                         self.toEvolve.append(firstNode)
                         MWLog("Adding remove action")
-                        self.toRemove.append(secondNode, newPiece.position)
+                        self.toRemove.append(secondNode)
                     }
                 }
             }
@@ -213,8 +217,15 @@ class BoardView: SKScene {
                 })
                 
                 // If there is NOT a new node in the position we came from. Set that to nil
-                if self.getNodeForCoordinate(from) == node {
-                    self.setNode(nil, forCoordinate: from)
+                if let tileFromSorce = self.getNodeForCoordinate(from) {
+                    if tileFromSorce == node && from != to {
+                        MWLog("Will set source \(from) to nil")
+                        self.setNode(nil, forCoordinate: from)
+                    } else {
+                        MWLog("\(tileFromSorce) and \(node) are NOT equal or from \(from) and to \(to) ARE equal ")
+                    }
+                } else {
+                    MWLog("The node at the source \(from) is nil")
                 }
                 
                 self.setNode(node, forCoordinate: to)
@@ -246,11 +257,10 @@ class BoardView: SKScene {
         }
     }
     
-    private func removeNodes(nodesToRemove: [(TwosPowerView, Coordinate)]) {
+    private func removeNodes(nodesToRemove: [TwosPowerView]) {
         MWLog("nodesToRemove: \(nodesToRemove)")
-        for (node, coordinate) in nodesToRemove {
+        for (node) in nodesToRemove {
             node.removeFromParent()
-            self.setNode(nil, forCoordinate: coordinate)
         }
     }
 
@@ -263,9 +273,9 @@ class BoardView: SKScene {
     // -------------------------------
     
     private func setNode(node: TwosPowerView?, forCoordinate coordinate: Coordinate) {
-        if let node = node {
+//        if let node = node {
             self.board[coordinate.y][coordinate.x] = node
-        }
+//        }
     }
     
     private func getNodeForCoordinate(coordinate: Coordinate) -> TwosPowerView? {
@@ -283,6 +293,21 @@ class BoardView: SKScene {
     private func sizeForTile() -> CGSize {
         return CGSize(width: self.size.width  / CGFloat(4),
                      height: self.size.height / CGFloat(4))
+    }
+    
+    private func printBoardView() {
+        for row in self.board {
+            var rowString = ""
+            for tile in row {
+                if let tile = tile {
+                    rowString += "\(tile.value.scoreValue) "
+                } else {
+                    rowString += "- "
+                }
+            }
+            MWLog(rowString)
+        }
+        MWLog()
     }
 }
 

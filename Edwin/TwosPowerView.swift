@@ -12,7 +12,7 @@ import SpriteKit
 // This should be a SKLabelNode, but those do not have a backgroundColor property.
 // Most straightforward solution as therefore to subclass SKSpriteNode,
 // and a a SKLabelNode as a child.
-class TwosPowerView: SKSpriteNode, EvolvableViewType {
+class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
     
     typealias C = TileValue
     
@@ -27,7 +27,7 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType {
 //        super.init(texture: nil, color: TwosPowerView.getColorForValue(value), size: size)
         super.init(texture: nil, color: TwosPowerView.getColorForValue(self.value), size: CGSizeZero)
         
-        self.label.text = "\(self.value)"  // TileValue conforms to Printable
+        self.label.text = "\(self.value.scoreValue)"  // TileValue conforms to Printable
         self.label.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame)) // Position to center of parent
         
         self.addChild(self.label)
@@ -38,7 +38,11 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType {
     }
     
     func evolve() {
-        
+        if let newValue = self.value.evolve() {
+            self.value = newValue
+            self.label.text = "\(newValue.scoreValue)"
+            self.color = TwosPowerView.getColorForValue(newValue)
+        }
     }
     
     
@@ -88,5 +92,10 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType {
             return UIColor.whiteColor()
         }
     }
-
+    
+    override var description: String {
+        get {
+            return "TwosPowerView(value: \(self.value.scoreValue) label.text: \(self.label.text) position: \(self.frame))"
+        }
+    }
 }
