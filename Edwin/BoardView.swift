@@ -22,7 +22,7 @@ class BoardView: SKScene {
     var toEvolve = [TwosPowerView, Coordinate]()
     var toRemove = [TwosPowerView]()
     
-    let ANIMATION_DURATION = 1.5
+    let ANIMATION_DURATION = 0.2
     
     // Will be increased every time a batch of moveActions start, and decremented when batches are done
     var numberOfNodesInTheProcessOfMoving = 0

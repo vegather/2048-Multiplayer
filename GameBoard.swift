@@ -133,6 +133,7 @@ class GameBoard<B: GameBoardDelegate> {
                     }
                 }
             }
+            tempCol = nil
         }
         
         return (score, actions)
@@ -236,6 +237,7 @@ class GameBoard<B: GameBoardDelegate> {
                     }
                 }
             }
+            tempCol = nil
         }
         
         return (score, actions)
@@ -334,6 +336,7 @@ class GameBoard<B: GameBoardDelegate> {
                     }
                 }
             }
+            tempRow = nil
         }
         
         return (score, actions)
@@ -416,7 +419,7 @@ class GameBoard<B: GameBoardDelegate> {
                         }
                     } else {
                         if row == 0 {
-                            // Currently on the bottom edge. No need to store this to check for merging. Can just move it
+                            // Currently on the top edge. No need to store this to check for merging. Can just move it
                             if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: row)) {
                                 actions.append(moveAction)
                             }
@@ -434,6 +437,7 @@ class GameBoard<B: GameBoardDelegate> {
                     }
                 }
             }
+            tempRow = nil
         }
         
         return (score, actions)
@@ -442,6 +446,8 @@ class GameBoard<B: GameBoardDelegate> {
     private func movePieceAsFarDownAsPossibleFrom(fromCoordinate: Coordinate) -> MoveAction<C>? {
         var returnValue: MoveAction<C>? = nil
         let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
+        
+        MWLog("Will move from \(fromCoordinate) to downmostRow \(downmostRow)")
         
         if downmostRow != fromCoordinate.y {
             if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
