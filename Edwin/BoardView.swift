@@ -17,10 +17,10 @@ class BoardView: SKScene {
     
     let dimension: Int
     
-    var toMove   = [(TwosPowerView, Coordinate, Coordinate)]() // View, from, to
+    var toMove   = [TwosPowerView, Coordinate, Coordinate]() // View, from, to
     var toSpawn  = [Coordinate]()
-    var toEvolve = [TwosPowerView]()
-    var toRemove = [TwosPowerView]() // Need the coordinate to remove it from self.board
+    var toEvolve = [TwosPowerView, Coordinate]()
+    var toRemove = [TwosPowerView]()
     
     let ANIMATION_DURATION = 1.5
     
@@ -81,7 +81,7 @@ class BoardView: SKScene {
                         self.toMove.append((secondNode, andFrom, newPiece.position))
                         
                         MWLog("Adding evolve action")
-                        self.toEvolve.append(firstNode)
+                        self.toEvolve.append(firstNode, newPiece.position)
                         MWLog("Adding remove action")
                         self.toRemove.append(secondNode)
                     }
@@ -250,10 +250,11 @@ class BoardView: SKScene {
         }
     }
     
-    private func evolveNodes(nodesToEvolve: [TwosPowerView]) {
+    private func evolveNodes(nodesToEvolve: [(TwosPowerView, Coordinate)]) {
         MWLog("nodesToEvolve: \(nodesToEvolve)")
-        for node in nodesToEvolve {
+        for (node, coordinate) in nodesToEvolve {
             node.evolve()
+            self.setNode(node, forCoordinate: coordinate)
         }
     }
     

@@ -95,7 +95,7 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
     
     override var description: String {
         get {
-            return "TwosPowerView(value: \(self.value.scoreValue) label.text: \(self.label.text) position: \(self.frame))"
+            return "TwosPowerView(value: \(self.value.scoreValue) label.text: \(self.label.text) position: \(self.position))"
         }
     }
 }

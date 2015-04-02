@@ -58,7 +58,7 @@ class GameBoard<B: GameBoardDelegate> {
         MWLog("Board after the move in direction \(direction)")
         self.printBoard()
         
-        MWLog("Score increase: \(scoreIncrease)\n\n\n\n")
+        MWLog("Score increase: \(scoreIncrease)")
         
         self.delegate?.gameBoardDidPerformActions(moves)
         self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
@@ -513,7 +513,7 @@ class GameBoard<B: GameBoardDelegate> {
             for col in 0..<self.dimension {
                 if let value = self.board[row][col] {
 //                    print("\(value) ")
-                    rowString += "\(value) "
+                    rowString += "\(value.scoreValue) "
                 } else {
 //                    print("- ")
                     rowString += "- "
