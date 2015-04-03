@@ -11,7 +11,10 @@ import Foundation
 protocol GameBoardDelegate: class {
     typealias A: Evolvable
     
-    func gameBoardDidPerformActions(actions: [MoveAction<A>])
+    // Need to separate spawn actions from the rest of the actions here so that
+    // I can call spawnNewGamePieceAtRandomPosition only if any actions were produced
+    func gameBoardDidProduceActionsFromMoveInDirection(actions: [MoveAction<A>])
+    func gameBoardDidSpawnNodesWithActions(spawnActions: [MoveAction<A>])
     func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int)
 }
 
@@ -60,7 +63,7 @@ class GameBoard<B: GameBoardDelegate> {
         
         MWLog("Score increase: \(scoreIncrease)")
         
-        self.delegate?.gameBoardDidPerformActions(moves)
+        self.delegate?.gameBoardDidProduceActionsFromMoveInDirection(moves)
         self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
     }
     
@@ -107,11 +110,19 @@ class GameBoard<B: GameBoardDelegate> {
                             tempCol = nil
                             
                         } else {
+                            // No merge. Move the piece from tempCol left instead
                             if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: temp, y: row)) {
                                 actions.append(moveAction)
                             }
                             
-                            tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            if col < self.dimension - 1 {
+                                tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            } else {
+                                // No more pieces to try to merge with. Just move the last piece left
+                                if let moveAction = self.movePieceAsFarLeftAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                    actions.append(moveAction)
+                                }
+                            }
                         }
                     } else {
                         if col == self.dimension - 1 {
@@ -211,11 +222,19 @@ class GameBoard<B: GameBoardDelegate> {
                             tempCol = nil
                             
                         } else {
+                            // No merge. Move the piece from tempCol right instead
                             if let moveAction = self.movePieceAsFarRightAsPossibleFrom(Coordinate(x: temp, y: row)) {
                                 actions.append(moveAction)
                             }
                             
-                            tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            if col > 0 {
+                                tempCol = col // Whatever was tempCol previously did not result in a merge. Trying again with the current col.
+                            } else {
+                                // No more pieces to try to merge with. Just move the last piece right
+                                if let moveAction = self.movePieceAsFarRightAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                    actions.append(moveAction)
+                                }
+                            }
                         }
                     } else {
                         if col == 0 {
@@ -311,11 +330,19 @@ class GameBoard<B: GameBoardDelegate> {
                             tempRow = nil
                             
                         } else {
+                            // No merge. Move the piece from tempRow up instead
                             if let moveAction = self.movePieceAsFarUpAsPossibleFrom(Coordinate(x: col, y: temp)) {
                                 actions.append(moveAction)
                             }
                             
-                            tempRow = row
+                            if row < self.dimension - 1 {
+                                tempRow = row
+                            } else {
+                                // No more pieces to try to merge with. Just move the last piece up
+                                if let moveAction = self.movePieceAsFarUpAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                    actions.append(moveAction)
+                                }
+                            }
                         }
                     } else {
                         if row == self.dimension - 1 {
@@ -411,11 +438,19 @@ class GameBoard<B: GameBoardDelegate> {
                             tempRow = nil
                             
                         } else {
+                            // No merge. Move the piece from tempRow down instead
                             if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: temp)) {
                                 actions.append(moveAction)
                             }
                             
-                            tempRow = row // Whatever was tempRow previously did not result in a merge. Trying again with the current row.
+                            if row > 0 {
+                                tempRow = row // Whatever was tempRow previously did not result in a merge. Trying again with the current row.
+                            } else {
+                                // No more pieces to try to merge with. Just move the last piece down
+                                if let moveAction = self.movePieceAsFarDownAsPossibleFrom(Coordinate(x: col, y: row)) {
+                                    actions.append(moveAction)
+                                }
+                            }
                         }
                     } else {
                         if row == 0 {
@@ -437,6 +472,9 @@ class GameBoard<B: GameBoardDelegate> {
                     }
                 }
             }
+            
+            
+            
             tempRow = nil
         }
         
@@ -503,7 +541,7 @@ class GameBoard<B: GameBoardDelegate> {
         printBoard()
         
         let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
-        self.delegate?.gameBoardDidPerformActions(spawnAction)
+        self.delegate?.gameBoardDidSpawnNodesWithActions(spawnAction)
     }
     
     

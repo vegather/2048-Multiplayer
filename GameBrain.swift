@@ -16,7 +16,7 @@ protocol GameBrainDelegate: class {
     
     typealias D: Evolvable
     
-    func gameBrainDidPerformActions(actions: [MoveAction<D>])
+    func gameBrainDidProduceActions(actions: [MoveAction<D>])
     func gameBrainUserHasNewScore(newUserScore: Int)
     func gameBrainOpponentHasNewScore(newOpponentScore: Int)
     func gameBrainDidChangeTurnTo(currentTurn: Turn)
@@ -59,7 +59,6 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     
     func moveInDirection(direction: MoveDirection) {
         self.gameBoard.moveInDirection(direction)
-        self.gameBoard.spawnNewGamePieceAtRandomPosition()
     }
     
     
@@ -69,8 +68,17 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     // MARK: Game Board Delegate Methods
     // -------------------------------
     
-    func gameBoardDidPerformActions(actions: [MoveAction<F>]) {
-        self.delegate?.gameBrainDidPerformActions(actions)
+    func gameBoardDidProduceActionsFromMoveInDirection(actions: [MoveAction<F>]) {
+        if actions.count > 0 {
+            self.delegate?.gameBrainDidProduceActions(actions)
+            self.gameBoard.spawnNewGamePieceAtRandomPosition()
+        }
+    }
+    
+    func gameBoardDidSpawnNodesWithActions(spawnActions: [MoveAction<A>]) {
+        if spawnActions.count > 0 {
+            self.delegate?.gameBrainDidProduceActions(spawnActions)
+        }
     }
     
     func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int) {

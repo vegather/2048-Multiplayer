@@ -119,7 +119,7 @@ class ViewController: UIViewController, GameBrainDelegate {
     // MARK: Game Brain Delegate Methods
     // -------------------------------
 
-    func gameBrainDidPerformActions(actions: [MoveAction<D>]) {
+    func gameBrainDidProduceActions(actions: [MoveAction<D>]) {
         self.gameBoardScene?.performMoveActions(actions)
     }
     
