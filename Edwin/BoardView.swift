@@ -10,24 +10,30 @@ import UIKit
 import SpriteKit
 
 
+protocol BoardViewDelegate {
+    func boardViewDidFinishAnimating()
+}
+
 
 // Generic board that takes any type that is a subclass of SKNode as
 // well as implements the EvolvableViewType protocol
 class BoardView: SKScene {
     
+    var gameViewDelegate: BoardViewDelegate?
+    
     let dimension: Int
     
     var toMove   = [TwosPowerView, Coordinate, Coordinate]() // View, from, to
     var toSpawn  = [Coordinate]()
-    var toEvolve = [TwosPowerView, Coordinate]()
+    var toEvolve = [TwosPowerView, Coordinate]() // Need this to add it back to self.board
     var toRemove = [TwosPowerView]()
     
-    let ANIMATION_DURATION = 0.2
+    let ANIMATION_DURATION = 0.15
     
     // Will be increased every time a batch of moveActions start, and decremented when batches are done
     var numberOfNodesInTheProcessOfMoving = 0
+    var hasNotifiedDelegateAboutBeingDoneAnimating = false
     
-
     
     // Having problems to use the .name of .childNodeWithName functionality to
     // refer to nodes as they are a generic, and not simply a subclass of
@@ -59,8 +65,7 @@ class BoardView: SKScene {
     // -------------------------------
     
     func performMoveActions(actions: [MoveAction<TileValue>]) {
-//        self.queuedActions += actions
-//        self.performRemainingActions()
+        self.hasNotifiedDelegateAboutBeingDoneAnimating = false
         
         for action in actions {
             
@@ -109,64 +114,24 @@ class BoardView: SKScene {
             removeNodes(toRemove)
             MWLog("Will clear toRemove buffer")
             self.toRemove.removeAll(keepCapacity: false)
+            
+            if self.isDoneAnimating() && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
+                MWLog("Is done animating, and will let the delegate know about it")
+                self.hasNotifiedDelegateAboutBeingDoneAnimating = true
+                self.gameViewDelegate?.boardViewDidFinishAnimating()
+            } else {
+                MWLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
+            }
         }
     }
-
     
-//    private func performRemainingActions() {
-//        if self.queuedActions.count > 0 {
-//            for action in self.queuedActions {
-//                
-//                switch action {
-//                case let .Spawn(gamePiece):
-//                    MWLog("performRemainingActions - Adding spawn action")
-//                    toSpawn.append(gamePiece.gamePiece.position)
-//                case let .Move(from, to):
-//                    if let nodeToMove = self.getNodeForCoordinate(from) {
-//                        MWLog("performRemainingActions - Adding move action")
-//                        toMove.append((nodeToMove, from, to))
-//                    }
-//                case let .Merge(from, andFrom, newPiece):
-//                    if let firstNode = self.getNodeForCoordinate(from) {
-//                        if let secondNode = self.getNodeForCoordinate(andFrom) {
-//                            MWLog("performRemainingActions - Adding move actions for merge")
-//                            toMove.append((firstNode,  from,    newPiece.position))
-//                            toMove.append((secondNode, andFrom, newPiece.position))
-//                            
-//                            MWLog("performRemainingActions - Adding evolve action")
-//                            toEvolve.append(firstNode)
-//                            MWLog("performRemainingActions - Adding remove action")
-//                            toRemove.append(secondNode, newPiece.position)
-//                        }
-//                    }
-//                }
-//            }
-//            
-//            MWLog("Number of nodes to process: move: \(toMove.count), spawn: \(toSpawn.count), evolve: \(toEvolve.count), remove: \(toRemove.count)")
-//            
-//            self.queuedActions.removeAll(keepCapacity: true)
-//            
-//            if toMove.count > 0 {
-//                MWLog("Will move...")
-//                
-//                // Since we're moving, we should add back the rest of the actions
-//    //            self.queuedActions += 
-//                
-//                moveNodes(toMove, completionHandler: { (done) -> Void in
-//                    MWLog("Done moving node views")
-//                    self.performRemainingActions()
-//                })
-//            } else {
-//                if self.numberOfNodesInTheProcessOfMoving == 0 {
-//                    MWLog("Will do other actions...")
-//                    
-//                    spawnNodes(toSpawn)
-//                    evolveNodes(toEvolve)
-//                    removeNodes(toRemove)
-//                }
-//            }
-//        }
-//    }
+    func isDoneAnimating() -> Bool {
+        return self.toMove.count   == 0 &&
+            self.toEvolve.count == 0 &&
+            self.toSpawn.count  == 0 &&
+            self.toRemove.count == 0 &&
+            self.numberOfNodesInTheProcessOfMoving == 0
+    }
     
     
     
@@ -175,7 +140,7 @@ class BoardView: SKScene {
     // MARK: Private Animation Helpers
     // -------------------------------
     
-    private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)]) { //, completionHandler: (done: String) -> Void) {
+    private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)]) {
         
         if nodesToMove.count > 0 {
             for var i = 0; i < nodesToMove.count; i++ {
@@ -184,8 +149,9 @@ class BoardView: SKScene {
                 
                 self.numberOfNodesInTheProcessOfMoving += 1
                 
-                let destinationPoint = self.positionForCoordinate(to)
-                let moveAction = SKAction.moveTo(destinationPoint, duration: ANIMATION_DURATION)
+                let destination = self.positionForCoordinate(to)
+                
+                let moveAction = SKAction.moveTo(destination, duration: ANIMATION_DURATION)
                 node.runAction(moveAction, completion: { () -> Void in
                     
                     self.numberOfNodesInTheProcessOfMoving -= 1
@@ -207,13 +173,15 @@ class BoardView: SKScene {
                         self.removeNodes(self.toRemove)
                         MWLog("Will clear toRemove buffer")
                         self.toRemove.removeAll(keepCapacity: false)
+                        
+                        if self.isDoneAnimating() && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
+                            MWLog("Is done animating, and will let the delegate know about it")
+                            self.hasNotifiedDelegateAboutBeingDoneAnimating = true
+                            self.gameViewDelegate?.boardViewDidFinishAnimating()
+                        } else {
+                            MWLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
+                        }
                     }
-                    
-//                    // i will be equal to the nodesToMove.count
-//                    if i == nodesToMove.count - 1 {
-//                        // Just finished animating the last node
-//                        completionHandler(done: "Did finish moving")
-//                    }
                 })
                 
                 // If there is NOT a new node in the position we came from. Set that to nil
@@ -232,21 +200,26 @@ class BoardView: SKScene {
             }
         } else {
             MWLog("No nodes to move")
-//            completionHandler(done: "Nothing to move")
         }
     }
     
     private func spawnNodes(coordinatesForNodesToSpawn: [Coordinate]) {
         MWLog("coordinatesForNodesToSpawn: \(coordinatesForNodesToSpawn)")
         for coordinate in coordinatesForNodesToSpawn {
-            // Might add some animations to this later
-            
             let nodeToAdd = TwosPowerView()
             nodeToAdd.size = self.sizeForTile()
             nodeToAdd.position = self.positionForCoordinate(coordinate)
             self.setNode(nodeToAdd, forCoordinate: coordinate)
             
             self.addChild(nodeToAdd)
+            
+            nodeToAdd.setScale(0.2)
+            
+            let firstPopAction = SKAction.scaleTo(1.2, duration: 0.1)
+            let secondPopAction = SKAction.scaleTo(1.0, duration: 0.05)
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction])
+            
+            nodeToAdd.runAction(popAction)
         }
     }
     
@@ -255,6 +228,12 @@ class BoardView: SKScene {
         for (node, coordinate) in nodesToEvolve {
             node.evolve()
             self.setNode(node, forCoordinate: coordinate)
+            
+            let firstPopAction = SKAction.scaleTo(1.5, duration: 0.06)
+            let secondPopAction = SKAction.scaleTo(0.9, duration: 0.07)
+            let thirdPopAction = SKAction.scaleTo(1.0, duration: 0.05)
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction, thirdPopAction])
+            node.runAction(popAction)
         }
     }
     
@@ -274,9 +253,7 @@ class BoardView: SKScene {
     // -------------------------------
     
     private func setNode(node: TwosPowerView?, forCoordinate coordinate: Coordinate) {
-//        if let node = node {
             self.board[coordinate.y][coordinate.x] = node
-//        }
     }
     
     private func getNodeForCoordinate(coordinate: Coordinate) -> TwosPowerView? {
@@ -310,103 +287,50 @@ class BoardView: SKScene {
         }
         MWLog()
     }
+    
+//    private func getMoveSequenceForMove(#from: Coordinate, to: Coordinate) -> SKAction {
+//        let destinationPoint = self.positionForCoordinate(to)
+//        let sourcePoint = self.positionForCoordinate(from)
+//        
+//        let firstOvershootPercentage = 6
+//        let secondOvershootPercentage = 2
+//        
+//        var moveAndBounceSequence: SKAction
+//        
+//        if from.y == to.y {
+//            // Going horisontally
+//            let distanceToDestination = abs(destinationPoint.x - sourcePoint.x)
+//            let firstOvershootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
+//            let secondOvershootDistance = distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0)
+//            
+//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
+//            
+//            let firstOvershootDuration = speed * firstOvershootDistance
+//            let secondOvershootDuration = speed * secondOvershootDistance
+//            
+//            if from.x > to.x {
+//                // Going left
+//                let firstMove = SKAction.moveToX(destinationPoint.x - firstOvershootDistance, duration: 1.0)
+//            } else {
+//                // Going right
+//                
+//            }
+//        } else {
+//            // Going vertically
+//            let distanceToDestination = abs(destinationPoint.y - sourcePoint.y)
+//            let firstOverShootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
+//            let secondOverShootDistance = firstOverShootDistance + (distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0))
+//            
+//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
+//            
+//            if from.y > to.y {
+//                // Going up
+//                
+//            } else {
+//                // Going down
+//                
+//            }
+//        }
+//    }
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-//    var queuedActions: [MoveAction<TileValue>] = [MoveAction<TileValue>]() {
-//        didSet {
-//            MWLog("BoardView - Queueing action: \(queuedActions.last)")
-////            self.performRemainingActions()
-//        }
-//    }
-
-//    private var isCurrentlyInProcessOfMovingNodes = false
-//    private var actionsToPerform: [MoveAction<TileValue>] = [MoveAction<TileValue>]() {
-//        didSet {
-//            self.performRemainingMoveActions()
-//        }
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        var toMove   = [(TwosPowerView, Coordinate, Coordinate)]() // View, from, to
-//        var toSpawn  = [Coordinate]()
-//        var toEvolve = [TwosPowerView]()
-//        var toRemove = [TwosPowerView, Coordinate]() // Need the coordinate to remove it from self.board
-
-
-// Want to do all the move actions first, and then all the rest of them.
-
-//        var moveActions  = [MoveAction<TileValue>]()
-//        var otherActions = [MoveAction<TileValue>]()
-
-//        var additionsToActionQueue = [MoveAction<TileValue>]()
-
-//        for action in actions {
-//
-//            MWLog("BoardView received action: \(action)")
-//
-//            self.queuedActions.append(action)
-//
-//        }
-//            switch action {
-//            case let .Spawn(_):
-//                toSpawn.append(gamePiece.gamePiece.position)
-//            case let .Move(_, _):
-//                if let nodeToMove = self.getNodeForCoordinate(from) {
-//                    toMove.append((nodeToMove, from, to))
-//                }
-//            case let .Merge(_, _, _):
-//                if let firstNode = self.getNodeForCoordinate(from) {
-//                    if let secondNode = self.getNodeForCoordinate(andFrom) {
-//                        toMove.append((firstNode,  from,    newPiece.position))
-//                        toMove.append((secondNode, andFrom, newPiece.position))
-//
-//                        toEvolve.append(firstNode)
-//                        toRemove.append(secondNode, newPiece.position)
-//                    }
-//                }
-//            }
-
-//            switch action {
-//            case let .Move(_, _):
-////                // Not sure if Swift will let me insert an item to an array when there are zero items
-////                // Doing append if there are zero items.
-////                if additionsToActionQueue.count == 0 {
-////                    additionsToActionQueue.append(action)
-////                } else {
-////                    additionsToActionQueue.insert(action, atIndex: 0)
-////                }
-//                moveActions.append(action)
-//            default:
-//                otherActions.append(action)
-//            }
-//        }
-
-//        self.performRemainingActions()
-
-//        self.moveNodes(toMove) { (done: String) in
-//            self.spawnNodes(toSpawn)
-//            self.evolveNodes(toEvolve)
-//            self.removeNodes(toRemove)
-//        }
-//    }

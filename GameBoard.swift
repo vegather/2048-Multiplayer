@@ -485,8 +485,6 @@ class GameBoard<B: GameBoardDelegate> {
         var returnValue: MoveAction<C>? = nil
         let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
         
-        MWLog("Will move from \(fromCoordinate) to downmostRow \(downmostRow)")
-        
         if downmostRow != fromCoordinate.y {
             if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
                 returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: downmostRow))

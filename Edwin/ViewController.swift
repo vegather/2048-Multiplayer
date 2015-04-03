@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class ViewController: UIViewController, GameBrainDelegate {
+class ViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
 
     typealias D = TileValue
     
@@ -74,9 +74,8 @@ class ViewController: UIViewController, GameBrainDelegate {
         
         if let gameView = self.gameView {
             self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: 4)
-//            self.gameBoardScene?.setup()
-            
-//            self.gameBoardScene?.cleanUpChildrenAndRemove()
+            self.gameBoardScene?.gameViewDelegate = self
+
             self.gameView?.presentScene(self.gameBoardScene)
             
             self.setupSwipes()
@@ -93,23 +92,58 @@ class ViewController: UIViewController, GameBrainDelegate {
     // -------------------------------
     
     func leftSwipe() {
-        MWLog()
-        self.gameBrain.moveInDirection(MoveDirection.Left)
+        if let gameBoardScene = self.gameBoardScene {
+            if (gameBoardScene.isDoneAnimating()) {
+                MWLog("Done animating so ready to accept new swipe")
+                self.gameBrain.moveInDirection(MoveDirection.Left)
+            } else {
+                MWLog("Not done animating yet")
+            }
+        }
     }
     
     func rightSwipe() {
-        MWLog()
-        self.gameBrain.moveInDirection(MoveDirection.Right)
+        if let gameBoardScene = self.gameBoardScene {
+            if (gameBoardScene.isDoneAnimating()) {
+                MWLog("Done animating so ready to accept new swipe")
+                self.gameBrain.moveInDirection(MoveDirection.Right)
+            } else {
+                MWLog("Not done animating yet")
+            }
+        }
     }
     
     func upSwipe() {
-        MWLog()
-        self.gameBrain.moveInDirection(MoveDirection.Up)
+        if let gameBoardScene = self.gameBoardScene {
+            if (gameBoardScene.isDoneAnimating()) {
+                MWLog("Done animating so ready to accept new swipe")
+                self.gameBrain.moveInDirection(MoveDirection.Up)
+            } else {
+                MWLog("Not done animating yet")
+            }
+        }
     }
     
     func downSwipe() {
-        MWLog()
-        self.gameBrain.moveInDirection(MoveDirection.Down)
+        if let gameBoardScene = self.gameBoardScene {
+            if (gameBoardScene.isDoneAnimating()) {
+                MWLog("Done animating so ready to accept new swipe")
+                self.gameBrain.moveInDirection(MoveDirection.Down)
+            } else {
+                MWLog("Not done animating yet")
+            }
+        }
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Board View Delegate
+    // -------------------------------
+    
+    func boardViewDidFinishAnimating() {
+        MWLog("Setting userInteractionEnabled to true")
     }
     
     
@@ -120,6 +154,7 @@ class ViewController: UIViewController, GameBrainDelegate {
     // -------------------------------
 
     func gameBrainDidProduceActions(actions: [MoveAction<D>]) {
+        MWLog("actions: \(actions)")
         self.gameBoardScene?.performMoveActions(actions)
     }
     
