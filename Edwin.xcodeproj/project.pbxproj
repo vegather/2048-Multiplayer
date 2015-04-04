@@ -10,12 +10,18 @@
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */; };
+		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
+		9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0341AD021ED00D741E2 /* PushSegue.swift */; };
+		9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0361AD021F900D741E2 /* PopSegue.swift */; };
+		9A61D0391AD0259100D741E2 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */; };
+		9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */; };
+		9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9C31B31AB8AA0500ED5A41 /* GameView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
-		9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */; };
+		9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */; };
 		9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */; };
 		9ADD7CA71AA2212800BDCFA8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */; };
 		9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */; };
@@ -39,6 +45,12 @@
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
 		9A61D0281ACB7EC900D741E2 /* MWLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MWLogger.swift; sourceTree = "<group>"; };
 		9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpriteKit+Spring.swift"; sourceTree = "<group>"; };
+		9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9A61D0341AD021ED00D741E2 /* PushSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSegue.swift; sourceTree = "<group>"; };
+		9A61D0361AD021F900D741E2 /* PopSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopSegue.swift; sourceTree = "<group>"; };
+		9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
+		9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueIdentifiers.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9A9C31B31AB8AA0500ED5A41 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
@@ -46,7 +58,7 @@
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADD7C9E1AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		9ADD7CA41AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9ADD7CA91AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -86,14 +98,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		9A5582F81AAE6902004F0C2D /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				9ADD7CA11AA2212800BDCFA8 /* ViewController.swift */,
-			);
-			name = Controllers;
-			sourceTree = "<group>";
-		};
 		9A5582F91AAE690B004F0C2D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +109,27 @@
 				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		9A61D0301AD0095600D741E2 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */,
+				9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */,
+				9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */,
+				9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */,
+				9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		9A61D0331AD021C100D741E2 /* Custom Storyboard Segue */ = {
+			isa = PBXGroup;
+			children = (
+				9A61D0341AD021ED00D741E2 /* PushSegue.swift */,
+				9A61D0361AD021F900D741E2 /* PopSegue.swift */,
+			);
+			name = "Custom Storyboard Segue";
 			sourceTree = "<group>";
 		};
 		9ADD7C911AA2212800BDCFA8 = {
@@ -130,8 +155,9 @@
 			children = (
 				9A61D0281ACB7EC900D741E2 /* MWLogger.swift */,
 				9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */,
+				9A61D0331AD021C100D741E2 /* Custom Storyboard Segue */,
 				9A5582F91AAE690B004F0C2D /* Views */,
-				9A5582F81AAE6902004F0C2D /* Controllers */,
+				9A61D0301AD0095600D741E2 /* View Controllers */,
 				9A5582F71AAE68E6004F0C2D /* Model */,
 				9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */,
 			);
@@ -267,16 +293,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */,
+				9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
 				9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */,
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
-				9ADD7CA21AA2212800BDCFA8 /* ViewController.swift in Sources */,
+				9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */,
+				9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */,
 				9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */,
 				9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */,
 				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
 				9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */,
+				9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */,
+				9A61D0391AD0259100D741E2 /* MainMenuViewController.swift in Sources */,
 				9ADD7CCE1AA22E4300BDCFA8 /* TileView.swift in Sources */,
 				9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */,
+				9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */,
+				9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */,
 				9ADD7CD01AA233E300BDCFA8 /* GameBrain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
