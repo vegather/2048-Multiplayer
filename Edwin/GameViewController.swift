@@ -9,18 +9,18 @@
 import UIKit
 import SpriteKit
 
-class ViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
+class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
 
     typealias D = TileValue
     
-    var gameBrain: GameBrain<ViewController>!
+    var gameBrain: GameBrain<GameViewController>!
     var gameView:  SKView?
     var gameBoardScene: BoardView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.gameBrain = GameBrain<ViewController>(delegate: self, dimension: 4)
+        self.gameBrain = GameBrain<GameViewController>(delegate: self, dimension: 4)
     }
     
     func setupSwipes() {
