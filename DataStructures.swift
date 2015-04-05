@@ -79,7 +79,7 @@ enum TileValue: Int, Evolvable {
     }
     
     static func getBaseValue() -> TileValue {
-        return TileValue.Two
+        return TileValue.EightThousandOneHundredAndNinetyTwo
     }
     
     var scoreValue: Int {

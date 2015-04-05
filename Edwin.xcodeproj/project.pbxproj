@@ -22,7 +22,9 @@
 		9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */; };
 		9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0481AD0CCCF00D741E2 /* Security.framework */; };
 		9A61D04B1AD0CCCF00D741E2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
-		9A61D0511AD14AA900D741E2 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
+		9A61D0521AD17E7100D741E2 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
+		9A61D0541AD1C1AD00D741E2 /* UserServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0531AD1C1AD00D741E2 /* UserServerManager.swift */; };
+		9A61D0561AD1C1BF00D741E2 /* GameServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0551AD1C1BF00D741E2 /* GameServerManager.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
@@ -64,6 +66,8 @@
 		9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A61D04C1AD0CD2200D741E2 /* Edwin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Edwin-Bridging-Header.h"; sourceTree = "<group>"; };
 		9A61D0501AD14AA900D741E2 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../../../../Programming/iOS/Frameworks/Firebase.framework; sourceTree = "<group>"; };
+		9A61D0531AD1C1AD00D741E2 /* UserServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserServerManager.swift; sourceTree = "<group>"; };
+		9A61D0551AD1C1BF00D741E2 /* GameServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameServerManager.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
@@ -86,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A61D0511AD14AA900D741E2 /* Firebase.framework in Frameworks */,
+				9A61D0521AD17E7100D741E2 /* Firebase.framework in Frameworks */,
 				9A61D04B1AD0CCCF00D741E2 /* SystemConfiguration.framework in Frameworks */,
 				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
 				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
@@ -109,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				9A61D03E1AD0CB2500D741E2 /* ServerManager.swift */,
+				9A61D0531AD1C1AD00D741E2 /* UserServerManager.swift */,
+				9A61D0551AD1C1BF00D741E2 /* GameServerManager.swift */,
 				9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */,
 				9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */,
 				9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */,
@@ -319,6 +325,7 @@
 				9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */,
 				9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
+				9A61D0561AD1C1BF00D741E2 /* GameServerManager.swift in Sources */,
 				9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */,
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */,
@@ -332,6 +339,7 @@
 				9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */,
 				9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */,
 				9ADD7CD01AA233E300BDCFA8 /* GameBrain.swift in Sources */,
+				9A61D0541AD1C1AD00D741E2 /* UserServerManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +473,8 @@
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -481,6 +491,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,

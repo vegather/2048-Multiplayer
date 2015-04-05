@@ -212,7 +212,7 @@ class BoardView: SKScene {
     private func spawnNodes(coordinatesForNodesToSpawn: [Coordinate]) {
         MWLog("coordinatesForNodesToSpawn: \(coordinatesForNodesToSpawn)")
         for coordinate in coordinatesForNodesToSpawn {
-            let nodeToAdd = TwosPowerView()
+            let nodeToAdd = TwosPowerView(size: self.sizeForTile())
             nodeToAdd.size = self.sizeForTile()
             nodeToAdd.position = self.positionForCoordinate(coordinate)
             self.setNode(nodeToAdd, forCoordinate: coordinate)

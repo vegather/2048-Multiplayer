@@ -22,7 +22,7 @@ class MainMenuViewController: UIViewController {
         
         if segue.identifier == SegueIdentifier.PopFromMainMenu {
             // Prepare logout
-            ServerManager.logout()
+            UserServerManager.logout()
             MWLog("Will exit main menu")
         }
     }

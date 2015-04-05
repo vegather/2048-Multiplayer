@@ -34,6 +34,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         usernameTextField.delegate = self
         passwordTextField.delegate = self
         spinner.hidden = true
+        
+        usernameTextField.text = ""
+        passwordTextField.text = ""
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -51,6 +54,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         initialOverEdwinLabelConstraintConstant = overEdwinLabelConstraint.constant
         initialUnderLoginConstraintConstant = underLoginConstraint.constant
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if UserServerManager.isLoggedIn {
+            self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
+        }
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -156,7 +167,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             MWLog("Will ask serverManager to login user")
             
-            ServerManager.loginWithEmail(usernameTextField.text, password: passwordTextField.text, completionHandler: { (errorMessage: String?) -> () in
+            UserServerManager.loginWithEmail(usernameTextField.text, password: passwordTextField.text, completionHandler: { (errorMessage: String?) -> () in
                 self.spinner.stopAnimating()
                 
                 if let error = errorMessage {
@@ -182,7 +193,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if identifier == SegueIdentifier.PushMainMenuFromLogin {
             MWLog("Should perform the PushMainMenu segue")
             
-            if ServerManager.isLoggedIn {
+            if UserServerManager.isLoggedIn {
                 return true
             } else {
                 loginUser()
