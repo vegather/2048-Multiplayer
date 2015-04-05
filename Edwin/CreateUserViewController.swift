@@ -35,6 +35,9 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         firstPasswordLabel.delegate = self
         secondPasswordLabel.delegate = self
         spinner.hidden = true
+        
+        // We certainly do NOT want a user to be logged in at this point
+        ServerManager.logout()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -80,9 +83,9 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     // MARK: Keyboard Animation Handling
     // -------------------------------
     
-    let DONE_BUTTON_MIN_DISTANCE_FROM_KEYBOARD:  CGFloat = 16
-//    let TEXT_FIELD_MIN_DISTANCE_FROM_EDWIN_LABEL: CGFloat = 20
+    private let DONE_BUTTON_MIN_DISTANCE_FROM_KEYBOARD:  CGFloat = 16
     
+    // Need to be public unfortunately
     func keyboardWillShow(notification: NSNotification) {
         // Would prefer to do this with UIKeyboardAnimationCurveUserInfoKey, but can't get it working
         var animationCurve = UIViewAnimationCurve.EaseInOut
@@ -96,16 +99,6 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         
         if distanceToMoveButton > 0 {
             // Should move
-//            let movedTopOfUsernameFieldWithSpace = self.usernameTextField.frame.origin.y - distanceToMoveButton - TEXT_FIELD_MIN_DISTANCE_FROM_EDWIN_LABEL
-//            let bottomOfEdwinLabel = edwinLabel.frame.origin.y + edwinLabel.frame.size.height
-//            let edwinLabelShouldMoveIfPositive = bottomOfEdwinLabel - movedTopOfUsernameFieldWithSpace
-//            
-//            if edwinLabelShouldMoveIfPositive > 0 {
-//                let newMiddleOfEdwinLabel = movedTopOfUsernameFieldWithSpace / 2.0
-//                let newOverEdwinLabelConstraintConstant = newMiddleOfEdwinLabel - (edwinLabel.frame.size.height / 2.0)
-//                overEdwinLabelConstraint.constant = newOverEdwinLabelConstraintConstant
-//            }
-            
             underDoneButtonConstraint.constant += (distanceToMoveButton * underDoneButtonConstraint.multiplier)
             view.setNeedsUpdateConstraints()
             
@@ -118,6 +111,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Need to be public unfortunately
     func keyboardWillHide(notification: NSNotification) {
         // Would prefer to do this with UIKeyboardAnimationCurveUserInfoKey, but can't get it working
         var animationCurve = UIViewAnimationCurve.EaseInOut
@@ -126,7 +120,6 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
         
         underDoneButtonConstraint.constant = initialUnderDoneButtonConstraintConstant
-//        overEdwinLabelConstraint.constant = initialOverEdwinLabelConstraintConstant
         view.setNeedsUpdateConstraints()
         
         UIView.beginAnimations(nil, context: nil)
@@ -142,13 +135,68 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     
     
     // -------------------------------
+    // MARK: Logging in
+    // -------------------------------
+    
+    private func createUser() {
+        userNameLabel.resignFirstResponder()
+        firstPasswordLabel.resignFirstResponder()
+        secondPasswordLabel.resignFirstResponder()
+        
+        if countElements(userNameLabel.text) > 0 &&
+           countElements(firstPasswordLabel.text) > 0 &&
+           countElements(secondPasswordLabel.text) > 0
+        {
+            if firstPasswordLabel.text == secondPasswordLabel.text {
+                // Create user
+                spinner.hidden = false
+                spinner.startAnimating()
+                
+                MWLog("Will ask ServerManager to create user")
+                
+                ServerManager.createUserWithEmail(userNameLabel.text, password: firstPasswordLabel.text, profilePicture: nil, completionHandler: { (errorMessage: String?) -> () in
+                    self.spinner.stopAnimating()
+                    if let error = errorMessage {
+                        // Got error
+                        self.showAlertWithTitle("Could not create user", andMessage: error)
+                    } else {
+                        // Success
+                        self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromCreateUser, sender: self)
+                    }
+                })
+            } else {
+                // Non-matching password fields
+                showAlertWithTitle("Passwords not matching", andMessage: "The two passwords you entered should match. They don't right now.")
+            }
+        } else {
+            // Show error
+            showAlertWithTitle("Empty fields", andMessage: "You need to fill in all the fields to create a user")
+        }
+    }
+    
+    
+    
+    
+    // -------------------------------
     // MARK: Segue Management
     // -------------------------------
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+        if identifier == SegueIdentifier.PopFromCreateUser {
+            return true
+        } else if identifier == SegueIdentifier.PushMainMenuFromCreateUser {
+            if ServerManager.isLoggedIn {
+                return true
+            } else {
+                createUser()
+            }
+        }
         
+        // Otherwise
+        return false
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         userNameLabel.resignFirstResponder()
         firstPasswordLabel.resignFirstResponder()
         secondPasswordLabel.resignFirstResponder()
@@ -156,7 +204,23 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         if segue.identifier == SegueIdentifier.PopFromCreateUser {
             // Prepare logout
             MWLog("Will exit Create user")
+        } else if segue.identifier == SegueIdentifier.PushMainMenuFromCreateUser {
+            
         }
     }
 
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Show error alert
+    // -------------------------------
+    
+    private func showAlertWithTitle(title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let doneAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(doneAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
 }

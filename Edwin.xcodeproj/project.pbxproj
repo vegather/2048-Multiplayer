@@ -16,6 +16,13 @@
 		9A61D0391AD0259100D741E2 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */; };
 		9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */; };
 		9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */; };
+		9A61D03F1AD0CB2500D741E2 /* ServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03E1AD0CB2500D741E2 /* ServerManager.swift */; };
+		9A61D0431AD0CCAD00D741E2 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0421AD0CCAD00D741E2 /* libicucore.dylib */; };
+		9A61D0451AD0CCBB00D741E2 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0441AD0CCBB00D741E2 /* libc++.dylib */; };
+		9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */; };
+		9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0481AD0CCCF00D741E2 /* Security.framework */; };
+		9A61D04B1AD0CCCF00D741E2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
+		9A61D0511AD14AA900D741E2 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
@@ -49,6 +56,14 @@
 		9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
 		9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueIdentifiers.swift; sourceTree = "<group>"; };
+		9A61D03E1AD0CB2500D741E2 /* ServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerManager.swift; sourceTree = "<group>"; };
+		9A61D0421AD0CCAD00D741E2 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		9A61D0441AD0CCBB00D741E2 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		9A61D0481AD0CCCF00D741E2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9A61D04C1AD0CD2200D741E2 /* Edwin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Edwin-Bridging-Header.h"; sourceTree = "<group>"; };
+		9A61D0501AD14AA900D741E2 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../../../../Programming/iOS/Frameworks/Firebase.framework; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
@@ -71,6 +86,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A61D0511AD14AA900D741E2 /* Firebase.framework in Frameworks */,
+				9A61D04B1AD0CCCF00D741E2 /* SystemConfiguration.framework in Frameworks */,
+				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
+				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
+				9A61D0451AD0CCBB00D741E2 /* libc++.dylib in Frameworks */,
+				9A61D0431AD0CCAD00D741E2 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +108,7 @@
 		9A5582F71AAE68E6004F0C2D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9A61D03E1AD0CB2500D741E2 /* ServerManager.swift */,
 				9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */,
 				9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */,
 				9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */,
@@ -129,9 +151,16 @@
 		9ADD7C911AA2212800BDCFA8 = {
 			isa = PBXGroup;
 			children = (
+				9A61D0501AD14AA900D741E2 /* Firebase.framework */,
+				9A61D0481AD0CCCF00D741E2 /* Security.framework */,
+				9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */,
+				9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */,
+				9A61D0441AD0CCBB00D741E2 /* libc++.dylib */,
+				9A61D0421AD0CCAD00D741E2 /* libicucore.dylib */,
 				9ADD7C9C1AA2212800BDCFA8 /* Edwin */,
 				9ADD7CB21AA2212800BDCFA8 /* EdwinTests */,
 				9ADD7C9B1AA2212800BDCFA8 /* Products */,
+				9A61D04C1AD0CD2200D741E2 /* Edwin-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -286,6 +315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A61D03F1AD0CB2500D741E2 /* ServerManager.swift in Sources */,
 				9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */,
 				9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
@@ -380,6 +410,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -416,6 +447,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -427,10 +459,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -440,10 +479,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
 			};
 			name = Release;
 		};

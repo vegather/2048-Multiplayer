@@ -25,7 +25,7 @@
                                     <constraint firstAttribute="height" constant="55" id="LYS-Pa-O70"/>
                                     <constraint firstAttribute="width" constant="400" id="kas-mE-61p"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Done">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,7 +51,7 @@
                                     <constraint firstAttribute="height" constant="55" id="2gG-Mo-H6i"/>
                                     <constraint firstAttribute="width" constant="400" id="boo-f8-WEz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Cancel">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -70,12 +70,12 @@
                                     <segue destination="ifL-mN-xj7" kind="unwind" identifier="Pop From Create User" unwindAction="returnFromSegueActions:" id="KeT-A9-MzM"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Retype password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="1FJ-8o-dhG">
-                                <rect key="frame" x="16" y="386" width="568" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Retype your password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="1FJ-8o-dhG">
+                                <rect key="frame" x="145" y="386" width="439" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="Vz0-ei-hpm"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -88,31 +88,13 @@
                                     </mask>
                                 </variation>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4cb-IJ-57H">
-                                <rect key="frame" x="16" y="348" width="568" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="400" id="xcT-yP-ulQ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="xcT-yP-ulQ"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="xcT-yP-ulQ"/>
-                                    </mask>
-                                </variation>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-vK-3xL">
-                                <rect key="frame" x="16" y="310" width="568" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="e0d-vK-3xL">
+                                <rect key="frame" x="145" y="310" width="439" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="Knl-w6-tIK"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Knl-w6-tIK"/>
@@ -143,8 +125,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNH-JQ-vzT">
                                 <rect key="frame" x="16" y="140" width="568" height="79"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="esJ-Nd-1p8">
-                                        <rect key="frame" x="274" y="9" width="20" height="20"/>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="esJ-Nd-1p8">
+                                        <rect key="frame" x="274" y="30" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <constraints>
@@ -153,31 +135,82 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="uQm-89-6rN"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3i6-X5-gg0">
+                                <rect key="frame" x="16" y="313" width="43" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="43" id="2WN-ch-Zee"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmv-b7-crG">
+                                <rect key="frame" x="16" y="350" width="73" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="73" id="t9x-bP-qo2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verify Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFr-2r-rOg">
+                                <rect key="frame" x="16" y="386" width="121" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="121" id="77E-Eu-wSb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose a password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4cb-IJ-57H">
+                                <rect key="frame" x="145" y="348" width="439" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="400" id="xcT-yP-ulQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="xcT-yP-ulQ"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="xcT-yP-ulQ"/>
+                                    </mask>
+                                </variation>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="3i6-X5-gg0" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="2Cg-fN-lAJ"/>
                             <constraint firstItem="uQp-sa-z3T" firstAttribute="top" secondItem="iRF-LT-JWe" secondAttribute="bottom" multiplier="3" priority="500" constant="20" id="453-hv-qXr"/>
-                            <constraint firstItem="1FJ-8o-dhG" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="93w-Lt-A5b"/>
                             <constraint firstItem="x00-dp-FYU" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="ARC-dS-f6h"/>
                             <constraint firstItem="uQp-sa-z3T" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="BLg-73-HpG"/>
                             <constraint firstItem="fNH-JQ-vzT" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="COs-dL-mE7"/>
                             <constraint firstItem="VEv-ns-6Ke" firstAttribute="top" secondItem="x00-dp-FYU" secondAttribute="bottom" constant="16" id="DQS-fp-V3A"/>
                             <constraint firstItem="VEv-ns-6Ke" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="DzY-AS-ziq"/>
                             <constraint firstItem="e0d-vK-3xL" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="L2b-Xy-YeS"/>
+                            <constraint firstItem="1FJ-8o-dhG" firstAttribute="baseline" secondItem="IFr-2r-rOg" secondAttribute="baseline" constant="2" id="Rg8-va-dTD"/>
                             <constraint firstItem="1FJ-8o-dhG" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="UHE-jk-Rxa"/>
                             <constraint firstItem="vWe-nC-qdY" firstAttribute="top" secondItem="x00-dp-FYU" secondAttribute="bottom" multiplier="1.4" constant="-70" id="VS5-41-g3w"/>
                             <constraint firstItem="VEv-ns-6Ke" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="Vw2-G4-cAt"/>
                             <constraint firstItem="uQp-sa-z3T" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="Xub-Rb-xJe"/>
+                            <constraint firstItem="4cb-IJ-57H" firstAttribute="leading" secondItem="fmv-b7-crG" secondAttribute="trailing" constant="56" id="a23-ye-2qg"/>
+                            <constraint firstItem="fmv-b7-crG" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="aVI-4k-oZi"/>
+                            <constraint firstItem="1FJ-8o-dhG" firstAttribute="leading" secondItem="IFr-2r-rOg" secondAttribute="trailing" constant="8" id="eTh-md-ISs"/>
                             <constraint firstAttribute="centerX" secondItem="dkv-iv-ImA" secondAttribute="centerX" constant="-0.5" id="eV3-Pr-CXP"/>
-                            <constraint firstItem="4cb-IJ-57H" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="gg8-Li-KLH"/>
+                            <constraint firstItem="IFr-2r-rOg" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="iCj-pH-rYW"/>
+                            <constraint firstItem="4cb-IJ-57H" firstAttribute="baseline" secondItem="fmv-b7-crG" secondAttribute="baseline" id="iom-9Q-0zW"/>
                             <constraint firstItem="4cb-IJ-57H" firstAttribute="trailing" secondItem="Kwb-EZ-h2Q" secondAttribute="trailingMargin" id="jg6-fp-ZfP"/>
                             <constraint firstItem="dkv-iv-ImA" firstAttribute="top" secondItem="fNH-JQ-vzT" secondAttribute="bottom" id="p8f-rZ-fSp"/>
+                            <constraint firstItem="e0d-vK-3xL" firstAttribute="leading" secondItem="3i6-X5-gg0" secondAttribute="trailing" constant="86" id="qBd-i0-VYB"/>
                             <constraint firstItem="e0d-vK-3xL" firstAttribute="top" secondItem="dkv-iv-ImA" secondAttribute="bottom" constant="16" id="r7T-00-6Q6"/>
                             <constraint firstItem="x00-dp-FYU" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="tSf-Kh-yc1"/>
                             <constraint firstItem="1FJ-8o-dhG" firstAttribute="top" secondItem="4cb-IJ-57H" secondAttribute="bottom" constant="8" id="uIk-7H-HFj"/>
                             <constraint firstItem="fNH-JQ-vzT" firstAttribute="top" secondItem="uQp-sa-z3T" secondAttribute="bottom" id="vWl-Y1-DDW"/>
+                            <constraint firstItem="e0d-vK-3xL" firstAttribute="baseline" secondItem="3i6-X5-gg0" secondAttribute="baseline" constant="-1" id="vaa-9O-opK"/>
                             <constraint firstItem="x00-dp-FYU" firstAttribute="top" secondItem="1FJ-8o-dhG" secondAttribute="bottom" constant="8" id="vzT-oR-0eT"/>
-                            <constraint firstItem="e0d-vK-3xL" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="wUX-xi-TxK"/>
                             <constraint firstItem="fNH-JQ-vzT" firstAttribute="leading" secondItem="Kwb-EZ-h2Q" secondAttribute="leadingMargin" id="xmx-HP-lba"/>
                             <constraint firstItem="4cb-IJ-57H" firstAttribute="top" secondItem="e0d-vK-3xL" secondAttribute="bottom" constant="8" id="ymO-kR-TMO"/>
                         </constraints>
@@ -229,12 +262,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iBf-TZ-xsh">
-                                <rect key="frame" x="16" y="269" width="568" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iBf-TZ-xsh">
+                                <rect key="frame" x="104" y="269" width="480" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="aD6-CL-sQC"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" keyboardAppearance="light" returnKeyType="done"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -248,11 +281,11 @@
                                 </variation>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GWW-Y6-wKO">
-                                <rect key="frame" x="16" y="307" width="568" height="30"/>
+                                <rect key="frame" x="104" y="307" width="480" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="jwh-qk-hKH"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -272,7 +305,7 @@
                                     <constraint firstAttribute="width" constant="400" id="J7G-Ay-uDs"/>
                                     <constraint firstAttribute="height" constant="55" id="bpb-36-78S"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Log In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -294,7 +327,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XJd-9a-FwS">
                                 <rect key="frame" x="0.0" y="130" width="600" height="139"/>
                                 <subviews>
-                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Udn-eu-eKa">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Udn-eu-eKa">
                                         <rect key="frame" x="290" y="60" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
@@ -319,7 +352,7 @@
                                     <constraint firstAttribute="height" constant="55" id="HKN-3x-aHs"/>
                                     <constraint firstAttribute="width" constant="400" id="c1W-DK-T5t"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Create User">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -338,6 +371,24 @@
                                     <segue destination="m81-6f-M62" kind="custom" identifier="Push Create User" customClass="PushSegue" customModule="Edwin" customModuleProvider="target" id="aE6-Na-bIQ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBt-du-TYM">
+                                <rect key="frame" x="16" y="309" width="73" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="73" id="Lfr-Er-Qd5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eZf-9o-B8g">
+                                <rect key="frame" x="16" y="271" width="80" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="uQE-wN-2st"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -345,14 +396,16 @@
                             <constraint firstItem="GWW-Y6-wKO" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="1ZN-uH-zJl"/>
                             <constraint firstItem="Efo-wW-mDw" firstAttribute="top" secondItem="GWW-Y6-wKO" secondAttribute="bottom" constant="8" id="2IG-5a-iTA"/>
                             <constraint firstItem="iBf-TZ-xsh" firstAttribute="trailing" secondItem="U1W-hC-GNJ" secondAttribute="trailingMargin" id="3c7-Iy-NNw"/>
+                            <constraint firstItem="bBt-du-TYM" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="4eh-8b-c46"/>
                             <constraint firstAttribute="centerX" secondItem="iBf-TZ-xsh" secondAttribute="centerX" id="6nj-vH-Wp7"/>
                             <constraint firstItem="4ka-1d-kWS" firstAttribute="top" secondItem="VH9-nR-Azd" secondAttribute="bottom" constant="50" id="8qz-NS-q21"/>
                             <constraint firstItem="XJd-9a-FwS" firstAttribute="top" secondItem="4ka-1d-kWS" secondAttribute="bottom" id="CLB-Cp-UGI"/>
+                            <constraint firstItem="eZf-9o-B8g" firstAttribute="baseline" secondItem="iBf-TZ-xsh" secondAttribute="baseline" id="CUk-7S-a2Q"/>
                             <constraint firstItem="GWW-Y6-wKO" firstAttribute="trailing" secondItem="U1W-hC-GNJ" secondAttribute="trailingMargin" id="E26-7J-Dfq"/>
-                            <constraint firstItem="iBf-TZ-xsh" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="Ftl-DD-wy3"/>
+                            <constraint firstItem="eZf-9o-B8g" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="Jxo-gQ-V4u"/>
                             <constraint firstItem="GWW-Y6-wKO" firstAttribute="trailing" secondItem="U1W-hC-GNJ" secondAttribute="trailingMargin" id="KMG-XC-Qcm"/>
-                            <constraint firstItem="GWW-Y6-wKO" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="MIy-dH-4kn"/>
                             <constraint firstAttribute="centerX" secondItem="Efo-wW-mDw" secondAttribute="centerX" id="OUC-wV-ynP"/>
+                            <constraint firstItem="iBf-TZ-xsh" firstAttribute="leading" secondItem="eZf-9o-B8g" secondAttribute="trailing" constant="8" id="PFm-mk-sPJ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="XJd-9a-FwS" secondAttribute="trailing" constant="-16" id="Q0H-Ye-Pbc"/>
                             <constraint firstItem="H3F-ta-FKt" firstAttribute="top" secondItem="Efo-wW-mDw" secondAttribute="bottom" multiplier="2" constant="-200" id="Qmj-JE-EA8"/>
                             <constraint firstItem="Xsr-rv-9ou" firstAttribute="top" secondItem="Efo-wW-mDw" secondAttribute="bottom" constant="25" id="RqF-AL-zG8"/>
@@ -362,10 +415,12 @@
                             <constraint firstItem="iBf-TZ-xsh" firstAttribute="top" secondItem="XJd-9a-FwS" secondAttribute="bottom" id="eBW-4S-j8G"/>
                             <constraint firstItem="Efo-wW-mDw" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="ftq-K3-x5j"/>
                             <constraint firstItem="XJd-9a-FwS" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" constant="-16" id="ieQ-Z6-sc1"/>
+                            <constraint firstItem="GWW-Y6-wKO" firstAttribute="leading" secondItem="bBt-du-TYM" secondAttribute="trailing" constant="15" id="nDg-P0-QTv"/>
                             <constraint firstItem="iBf-TZ-xsh" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="nbL-aS-P2j"/>
                             <constraint firstItem="Efo-wW-mDw" firstAttribute="trailing" secondItem="U1W-hC-GNJ" secondAttribute="trailingMargin" id="puJ-Wa-NWg"/>
                             <constraint firstItem="4ka-1d-kWS" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="qD7-uV-OVg"/>
                             <constraint firstItem="Efo-wW-mDw" firstAttribute="top" secondItem="GWW-Y6-wKO" secondAttribute="bottom" constant="27" id="qqx-Ia-VWr"/>
+                            <constraint firstItem="bBt-du-TYM" firstAttribute="baseline" secondItem="GWW-Y6-wKO" secondAttribute="baseline" id="sir-9f-ge3"/>
                             <constraint firstItem="Xsr-rv-9ou" firstAttribute="leading" secondItem="U1W-hC-GNJ" secondAttribute="leadingMargin" id="tDa-eN-3Zr"/>
                             <constraint firstAttribute="centerX" secondItem="GWW-Y6-wKO" secondAttribute="centerX" id="uhz-Bv-8Ji"/>
                             <constraint firstItem="GWW-Y6-wKO" firstAttribute="top" secondItem="iBf-TZ-xsh" secondAttribute="bottom" constant="8" id="xek-am-APy"/>
@@ -434,7 +489,7 @@
                                     <constraint firstAttribute="width" constant="400" id="aqg-K1-lcq"/>
                                     <constraint firstAttribute="height" constant="55" id="oJV-B0-tq4"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Join Game">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -457,7 +512,7 @@
                                     <constraint firstAttribute="height" constant="55" id="21g-jv-hmq"/>
                                     <constraint firstAttribute="width" constant="400" id="Jp0-sD-4Wl"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Log Out">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -483,7 +538,7 @@
                                     <constraint firstAttribute="width" constant="400" id="a2d-6b-Sas"/>
                                     <constraint firstAttribute="height" constant="55" id="poN-OF-2My"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Edit Account">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -506,7 +561,7 @@
                                     <constraint firstAttribute="height" constant="55" id="13b-ih-HSQ"/>
                                     <constraint firstAttribute="width" constant="400" id="TYb-Qa-j6Z"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <state key="normal" title="Create Game">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
