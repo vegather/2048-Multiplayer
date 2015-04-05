@@ -141,15 +141,53 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     // -------------------------------
+    // MARK: Login User
+    // -------------------------------
+    
+    private func loginUser() {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        
+        if countElements(usernameTextField.text) > 0 &&
+           countElements(passwordTextField.text) > 0
+        {
+            spinner.hidden = false
+            spinner.startAnimating()
+            
+            MWLog("Will ask serverManager to login user")
+            
+            ServerManager.loginWithEmail(usernameTextField.text, password: passwordTextField.text, completionHandler: { (errorMessage: String?) -> () in
+                self.spinner.stopAnimating()
+                
+                if let error = errorMessage {
+                    // Got error
+                    self.showAlertWithTitle("Could not log in", andMessage: error)
+                } else {
+                    // Successfully logged in
+                    self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
+                }
+            })
+        } else {
+            showAlertWithTitle("Missing fields", andMessage: "You need to fill in both the email field, and the password to log in")
+        }
+    }
+    
+    
+    
+    // -------------------------------
     // MARK: Custom Segue Management
     // -------------------------------
     
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
         if identifier == SegueIdentifier.PushMainMenuFromLogin {
             MWLog("Should perform the PushMainMenu segue")
-            usernameTextField.resignFirstResponder()
-            passwordTextField.resignFirstResponder()
-            return true
+            
+            if ServerManager.isLoggedIn {
+                return true
+            } else {
+                loginUser()
+                return false
+            }
         } else if identifier == SegueIdentifier.PushCreateUser {
             MWLog("Should perform the PushCreateUser segue")
             return true
@@ -160,6 +198,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        
         if segue.identifier == SegueIdentifier.PushMainMenuFromLogin {
             let mainMenuViewController = segue.destinationViewController as MainMenuViewController
             // Prepare the main menu
@@ -209,5 +250,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             // Came back from main menu
             MWLog("Came back from Main Menu")
         }
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Show error alert
+    // -------------------------------
+    
+    private func showAlertWithTitle(title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let doneAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(doneAction)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 }
