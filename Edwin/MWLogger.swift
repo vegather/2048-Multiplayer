@@ -38,7 +38,7 @@ func MWLog(message: String, filePath: String = __FILE__, functionName: String = 
             dateFormatter.dateFormat = "yyyy-MM-dd HH.mm.ss"
             let dateString = dateFormatter.stringFromDate(date)
             
-            printString += "\(dateString).\(tensOfASecondString)"
+            printString += "\(dateString).\(tensOfASecondString)   "
         }
         
         var fileName = filePath.lastPathComponent

@@ -199,10 +199,10 @@
             </objects>
             <point key="canvasLocation" x="4" y="1104"/>
         </scene>
-        <!--View Controller-->
+        <!--Game View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="TheGame" id="BYZ-38-t0r" customClass="ViewController" customModule="Edwin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TheGame" id="BYZ-38-t0r" customClass="GameViewController" customModule="Edwin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -419,23 +419,131 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Main Menu" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0mI-H1-fgy">
-                                <rect key="frame" x="69" y="53" width="86" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Main Menu" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QyB-yx-rGV">
+                                <rect key="frame" x="16" y="48" width="568" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="HuW-3O-nmT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EWP-ea-oAl">
-                                <rect key="frame" x="69" y="93" width="53" height="30"/>
-                                <state key="normal" title="Log out">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rHE-oR-xCg">
+                                <rect key="frame" x="16" y="290" width="568" height="55"/>
+                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="400" id="aqg-K1-lcq"/>
+                                    <constraint firstAttribute="height" constant="55" id="oJV-B0-tq4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Join Game">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="aqg-K1-lcq"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="aqg-K1-lcq"/>
+                                    </mask>
+                                </variation>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5bu-cv-OuV">
+                                <rect key="frame" x="16" y="432" width="568" height="55"/>
+                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="21g-jv-hmq"/>
+                                    <constraint firstAttribute="width" constant="400" id="Jp0-sD-4Wl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Log Out">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Jp0-sD-4Wl"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="Jp0-sD-4Wl"/>
+                                    </mask>
+                                </variation>
                                 <connections>
-                                    <segue destination="Lyf-6o-KyI" kind="unwind" identifier="Pop From Main Menu" unwindAction="returnFromSegueActions:" id="6D2-Op-zBq"/>
+                                    <segue destination="Lyf-6o-KyI" kind="unwind" identifier="Pop From Main Menu" unwindAction="returnFromSegueActions:" id="JIu-cN-3oy"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOD-ON-aN3">
+                                <rect key="frame" x="16" y="361" width="568" height="55"/>
+                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="400" id="a2d-6b-Sas"/>
+                                    <constraint firstAttribute="height" constant="55" id="poN-OF-2My"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Edit Account">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="a2d-6b-Sas"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="a2d-6b-Sas"/>
+                                    </mask>
+                                </variation>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nP2-NE-OaJ">
+                                <rect key="frame" x="16" y="219" width="568" height="55"/>
+                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="13b-ih-HSQ"/>
+                                    <constraint firstAttribute="width" constant="400" id="TYb-Qa-j6Z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Create Game">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="TYb-Qa-j6Z"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="TYb-Qa-j6Z"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="custom" identifier="Push Create Game" customClass="PushSegue" customModule="Edwin" customModuleProvider="target" id="MKX-Aa-xGF"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QyB-yx-rGV" firstAttribute="leading" secondItem="PiH-NN-O7p" secondAttribute="leadingMargin" id="6hy-ph-hS9"/>
+                            <constraint firstItem="5bu-cv-OuV" firstAttribute="leading" secondItem="PiH-NN-O7p" secondAttribute="leadingMargin" id="9UY-HL-K7b"/>
+                            <constraint firstItem="nP2-NE-OaJ" firstAttribute="trailing" secondItem="PiH-NN-O7p" secondAttribute="trailingMargin" id="FoK-bB-c9d"/>
+                            <constraint firstItem="rHE-oR-xCg" firstAttribute="top" secondItem="nP2-NE-OaJ" secondAttribute="bottom" constant="16" id="KqH-Qs-oZK"/>
+                            <constraint firstItem="JOD-ON-aN3" firstAttribute="leading" secondItem="PiH-NN-O7p" secondAttribute="leadingMargin" id="MnZ-vx-1bO"/>
+                            <constraint firstItem="QyB-yx-rGV" firstAttribute="trailing" secondItem="PiH-NN-O7p" secondAttribute="trailingMargin" id="Mqs-rA-BsR"/>
+                            <constraint firstItem="rHE-oR-xCg" firstAttribute="trailing" secondItem="PiH-NN-O7p" secondAttribute="trailingMargin" id="OfT-XY-OMp"/>
+                            <constraint firstItem="JOD-ON-aN3" firstAttribute="trailing" secondItem="PiH-NN-O7p" secondAttribute="trailingMargin" id="Uzg-vD-XZG"/>
+                            <constraint firstItem="5bu-cv-OuV" firstAttribute="trailing" secondItem="PiH-NN-O7p" secondAttribute="trailingMargin" id="VdU-jb-3fc"/>
+                            <constraint firstItem="rHE-oR-xCg" firstAttribute="leading" secondItem="PiH-NN-O7p" secondAttribute="leadingMargin" id="Ybd-Ps-8g4"/>
+                            <constraint firstItem="JOD-ON-aN3" firstAttribute="top" secondItem="rHE-oR-xCg" secondAttribute="bottom" constant="16" id="b3s-Rg-1UQ"/>
+                            <constraint firstItem="Fsl-ZN-SYo" firstAttribute="top" secondItem="5bu-cv-OuV" secondAttribute="bottom" multiplier="2.3" constant="-520" id="dRN-Nu-eJT"/>
+                            <constraint firstItem="QyB-yx-rGV" firstAttribute="top" secondItem="HS2-bv-aF5" secondAttribute="bottom" constant="28" id="hX2-Rv-GT8"/>
+                            <constraint firstItem="nP2-NE-OaJ" firstAttribute="leading" secondItem="PiH-NN-O7p" secondAttribute="leadingMargin" id="u0J-6A-whe"/>
+                            <constraint firstItem="5bu-cv-OuV" firstAttribute="top" secondItem="JOD-ON-aN3" secondAttribute="bottom" constant="16" id="vDA-fa-96d"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MsN-67-B70" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -445,6 +553,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="L6E-1c-ape"/>
+        <segue reference="Qia-Jt-cgH"/>
     </inferredMetricsTieBreakers>
 </document>

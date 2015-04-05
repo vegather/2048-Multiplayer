@@ -8,6 +8,8 @@
 
 import UIKit
 
+// Note that this segue will result in duplicate call to viewWillAppear and viewDidAppear
+// viewDidLoad is just called once as normal though
 class PushSegue: UIStoryboardSegue {
     override func perform() {
         // Assign the source and destination views to local variables.

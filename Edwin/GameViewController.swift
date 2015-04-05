@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 
+let DIMENSION = 4
+
 class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
 
     typealias D = TileValue
@@ -17,10 +19,14 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     var gameView:  SKView?
     var gameBoardScene: BoardView?
     
+    var viewHasAppeared = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.gameBrain = GameBrain<GameViewController>(delegate: self, dimension: 4)
+        MWLog()
+        
+        self.gameBrain = GameBrain<GameViewController>(delegate: self, dimension: DIMENSION)
     }
     
     func setupSwipes() {
@@ -53,34 +59,45 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Geometry is set inside here
-        
-        let gameViewFrame = CGRectMake(0,
-            self.view.frame.size.height - self.view.frame.size.width,
-            self.view.frame.size.width,
-            self.view.frame.size.width)
-
-        if self.gameView == nil {
-            self.gameView = SKView(frame: gameViewFrame)
-            self.view.addSubview(self.gameView!)
-        }
-    }
+//    override func viewWillAppear(animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        MWLog()
+//        
+//        
+//    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        if let gameView = self.gameView {
-            self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: 4)
-            self.gameBoardScene?.gameViewDelegate = self
+        if viewHasAppeared == false {
+            viewHasAppeared = true
+            MWLog("First time")
+            
+            // Geometry is set inside here
+            
+            let gameViewFrame = CGRectMake(0,
+                self.view.frame.size.height - self.view.frame.size.width,
+                self.view.frame.size.width,
+                self.view.frame.size.width)
+            
+            if self.gameView == nil {
+                self.gameView = SKView(frame: gameViewFrame)
+                self.view.addSubview(self.gameView!)
+            }
+            
+            if let gameView = self.gameView {
+                self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: DIMENSION)
+                self.gameBoardScene?.gameViewDelegate = self
 
-            self.gameView?.presentScene(self.gameBoardScene)
-            
-            self.setupSwipes()
-            
-            self.gameBrain.startGame()
+                self.gameView?.presentScene(self.gameBoardScene)
+                
+                self.setupSwipes()
+                
+                self.gameBrain.startGame()
+            }
+        } else {
+            MWLog("Second time")
         }
     }
 
@@ -143,7 +160,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func boardViewDidFinishAnimating() {
-        MWLog("Setting userInteractionEnabled to true")
+        MWLog()
     }
     
     

@@ -53,6 +53,7 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     } 
     
     func startGame() {
+        MWLog()
         self.gameBoard.spawnNewGamePieceAtRandomPosition()
         self.gameBoard.spawnNewGamePieceAtRandomPosition()
     }
@@ -70,6 +71,7 @@ class GameBrain<E: GameBrainDelegate>: GameBoardDelegate {
     
     func gameBoardDidProduceActionsFromMoveInDirection(actions: [MoveAction<F>]) {
         if actions.count > 0 {
+            MWLog("Letting delegate know about \(actions.count) new actions")
             self.delegate?.gameBrainDidProduceActions(actions)
             self.gameBoard.spawnNewGamePieceAtRandomPosition()
         }

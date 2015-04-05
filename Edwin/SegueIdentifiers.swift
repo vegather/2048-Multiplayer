@@ -10,11 +10,12 @@ import Foundation
 
 struct SegueIdentifier {
     // Push segue identifiers
-    static let PushMainMenuFromLogin = "Push Main Menu From Login"
-    static let PushMainMenuFromCreateUser = "Push Main Menu From Create User"
-    static let PushCreateUser = "Push Create User"
+    static let PushMainMenuFromLogin        = "Push Main Menu From Login"
+    static let PushMainMenuFromCreateUser   = "Push Main Menu From Create User"
+    static let PushCreateUser               = "Push Create User"
+    static let PushCreateGame               = "Push Create Game"
     
     // Pop segue identifiers
-    static let PopFromMainMenu = "Pop From Main Menu"
-    static let PopFromCreateUser = "Pop From Create User"
+    static let PopFromMainMenu              = "Pop From Main Menu"
+    static let PopFromCreateUser            = "Pop From Create User"
 }
