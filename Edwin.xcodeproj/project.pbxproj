@@ -17,7 +17,6 @@
 		9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */; };
 		9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
-		9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9C31B31AB8AA0500ED5A41 /* GameView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
@@ -27,7 +26,6 @@
 		9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */; };
 		9ADD7CB61AA2212800BDCFA8 /* EdwinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */; };
 		9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */; };
-		9ADD7CCE1AA22E4300BDCFA8 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */; };
 		9ADD7CD01AA233E300BDCFA8 /* GameBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +50,6 @@
 		9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
 		9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueIdentifiers.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
-		9A9C31B31AB8AA0500ED5A41 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +63,6 @@
 		9ADD7CB41AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdwinTests.swift; sourceTree = "<group>"; };
 		9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataStructures.swift; path = ../DataStructures.swift; sourceTree = "<group>"; };
-		9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TileView.swift; path = ../TileView.swift; sourceTree = "<group>"; };
 		9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBrain.swift; path = ../GameBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,10 +97,8 @@
 		9A5582F91AAE690B004F0C2D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9ADD7CCD1AA22E4300BDCFA8 /* TileView.swift */,
-				9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */,
-				9A9C31B31AB8AA0500ED5A41 /* GameView.swift */,
 				9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */,
+				9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */,
 				9A76B6091AAFA6CF0042B378 /* BoardView.swift */,
 				9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */,
 			);
@@ -299,13 +293,11 @@
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */,
 				9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */,
-				9A9C31B41AB8AA0500ED5A41 /* GameView.swift in Sources */,
 				9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */,
 				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
 				9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */,
 				9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */,
 				9A61D0391AD0259100D741E2 /* MainMenuViewController.swift in Sources */,
-				9ADD7CCE1AA22E4300BDCFA8 /* TileView.swift in Sources */,
 				9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */,
 				9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */,
 				9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */,

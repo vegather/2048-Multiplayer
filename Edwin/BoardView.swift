@@ -45,7 +45,7 @@ class BoardView: SKScene {
     }
     
     init(sizeOfBoard: CGSize, dimension: Int) {
-        self.board = [[TwosPowerView?]](count: 4, repeatedValue: [TwosPowerView?](count: 4, repeatedValue: nil))
+        self.board = [[TwosPowerView?]](count: dimension, repeatedValue: [TwosPowerView?](count: dimension, repeatedValue: nil))
         self.dimension = dimension
         
         super.init(size: sizeOfBoard)
@@ -77,6 +77,8 @@ class BoardView: SKScene {
                 if let nodeToMove = self.getNodeForCoordinate(from) {
                     MWLog("Adding move action")
                     self.toMove.append((nodeToMove, from, to))
+                } else {
+                    MWLog("Could not find piece at coordinate \(from)")
                 }
             case let .Merge(from, andFrom, newPiece):
                 if let firstNode = self.getNodeForCoordinate(from) {
@@ -89,7 +91,11 @@ class BoardView: SKScene {
                         self.toEvolve.append(firstNode, newPiece.position)
                         MWLog("Adding remove action")
                         self.toRemove.append(secondNode)
+                    } else {
+                        MWLog("Could not find piece at coordinate \(andFrom)")
                     }
+                } else {
+                    MWLog("Could not find piece at coordinate \(from)")
                 }
             }
         }
@@ -253,24 +259,26 @@ class BoardView: SKScene {
     // -------------------------------
     
     private func setNode(node: TwosPowerView?, forCoordinate coordinate: Coordinate) {
-            self.board[coordinate.y][coordinate.x] = node
+        MWLog("Setting \(coordinate) to \(node)")
+        self.board[coordinate.y][coordinate.x] = node
     }
     
     private func getNodeForCoordinate(coordinate: Coordinate) -> TwosPowerView? {
+        MWLog("Getting node at \(coordinate)")
         return self.board[coordinate.y][coordinate.x]
     }
     
     private func positionForCoordinate(coordinate: Coordinate) -> CGPoint {
         let tileSize = self.sizeForTile()
-        let reversedY = CGFloat((4 - 1) - coordinate.y)
+        let reversedY = CGFloat((dimension - 1) - coordinate.y)
         
         return CGPoint(x: CGFloat(coordinate.x) * tileSize.width  + (tileSize.width  / 2.0),
                        y: reversedY             * tileSize.height + (tileSize.height / 2.0))
     }
     
     private func sizeForTile() -> CGSize {
-        return CGSize(width: self.size.width  / CGFloat(4),
-                     height: self.size.height / CGFloat(4))
+        return CGSize(width: self.size.width  / CGFloat(dimension),
+                     height: self.size.height / CGFloat(dimension))
     }
     
     private func printBoardView() {
@@ -287,50 +295,5 @@ class BoardView: SKScene {
         }
         MWLog()
     }
-    
-//    private func getMoveSequenceForMove(#from: Coordinate, to: Coordinate) -> SKAction {
-//        let destinationPoint = self.positionForCoordinate(to)
-//        let sourcePoint = self.positionForCoordinate(from)
-//        
-//        let firstOvershootPercentage = 6
-//        let secondOvershootPercentage = 2
-//        
-//        var moveAndBounceSequence: SKAction
-//        
-//        if from.y == to.y {
-//            // Going horisontally
-//            let distanceToDestination = abs(destinationPoint.x - sourcePoint.x)
-//            let firstOvershootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
-//            let secondOvershootDistance = distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0)
-//            
-//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
-//            
-//            let firstOvershootDuration = speed * firstOvershootDistance
-//            let secondOvershootDuration = speed * secondOvershootDistance
-//            
-//            if from.x > to.x {
-//                // Going left
-//                let firstMove = SKAction.moveToX(destinationPoint.x - firstOvershootDistance, duration: 1.0)
-//            } else {
-//                // Going right
-//                
-//            }
-//        } else {
-//            // Going vertically
-//            let distanceToDestination = abs(destinationPoint.y - sourcePoint.y)
-//            let firstOverShootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
-//            let secondOverShootDistance = firstOverShootDistance + (distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0))
-//            
-//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
-//            
-//            if from.y > to.y {
-//                // Going up
-//                
-//            } else {
-//                // Going down
-//                
-//            }
-//        }
-//    }
     
 }
