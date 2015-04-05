@@ -12,15 +12,16 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var createUserLabel: UILabel!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var profilePictureImageView: UIImageView!
-    @IBOutlet weak var userNameLabel: UITextField!
-    @IBOutlet weak var firstPasswordLabel: UITextField!
-    @IBOutlet weak var secondPasswordLabel: UITextField!
+    @IBOutlet weak var displayNameTextField: UITextField!
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var firstPasswordTextField: UITextField!
+    @IBOutlet weak var secondPasswordTextField: UITextField!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var underDoneButtonConstraint: NSLayoutConstraint!
     
     var initialUnderDoneButtonConstraintConstant: CGFloat!
+
     
     
     
@@ -31,13 +32,19 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        userNameLabel.delegate = self
-        firstPasswordLabel.delegate = self
-        secondPasswordLabel.delegate = self
+        displayNameTextField.delegate = self
+        emailTextField.delegate = self
+        firstPasswordTextField.delegate = self
+        secondPasswordTextField.delegate = self
         spinner.hidden = true
         
+        displayNameTextField.text = ""
+        emailTextField.text = ""
+        firstPasswordTextField.text = ""
+        secondPasswordTextField.text = ""
+        
         // We certainly do NOT want a user to be logged in at this point
-        ServerManager.logout()
+        UserServerManager.logout()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -139,30 +146,32 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     // -------------------------------
     
     private func createUser() {
-        userNameLabel.resignFirstResponder()
-        firstPasswordLabel.resignFirstResponder()
-        secondPasswordLabel.resignFirstResponder()
+        dismissKeyboard()
         
-        if countElements(userNameLabel.text) > 0 &&
-           countElements(firstPasswordLabel.text) > 0 &&
-           countElements(secondPasswordLabel.text) > 0
+        if countElements(displayNameTextField.text) > 0 &&
+           countElements(emailTextField.text) > 0 &&
+           countElements(firstPasswordTextField.text) > 0 &&
+           countElements(secondPasswordTextField.text) > 0
         {
-            if firstPasswordLabel.text == secondPasswordLabel.text {
+            if firstPasswordTextField.text == secondPasswordTextField.text {
                 // Create user
                 spinner.hidden = false
                 spinner.startAnimating()
                 
                 MWLog("Will ask ServerManager to create user")
                 
-                ServerManager.createUserWithEmail(userNameLabel.text, password: firstPasswordLabel.text, profilePicture: nil, completionHandler: { (errorMessage: String?) -> () in
-                    self.spinner.stopAnimating()
-                    if let error = errorMessage {
-                        // Got error
-                        self.showAlertWithTitle("Could not create user", andMessage: error)
-                    } else {
-                        // Success
-                        self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromCreateUser, sender: self)
-                    }
+                UserServerManager.createUserWithDisplayName(displayNameTextField.text,
+                    email: emailTextField.text,
+                    password: firstPasswordTextField.text,
+                    completionHandler: { (errorMessage) -> () in
+                        self.spinner.stopAnimating()
+                        if let error = errorMessage {
+                            // Got error
+                            self.showAlertWithTitle("Could not create user", andMessage: error)
+                        } else {
+                            // Success
+                            self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromCreateUser, sender: self)
+                        }
                 })
             } else {
                 // Non-matching password fields
@@ -185,7 +194,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         if identifier == SegueIdentifier.PopFromCreateUser {
             return true
         } else if identifier == SegueIdentifier.PushMainMenuFromCreateUser {
-            if ServerManager.isLoggedIn {
+            if UserServerManager.isLoggedIn {
                 return true
             } else {
                 createUser()
@@ -197,9 +206,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        userNameLabel.resignFirstResponder()
-        firstPasswordLabel.resignFirstResponder()
-        secondPasswordLabel.resignFirstResponder()
+        dismissKeyboard()
         
         if segue.identifier == SegueIdentifier.PopFromCreateUser {
             // Prepare logout
@@ -210,6 +217,19 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     }
 
     
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Helpers
+    // -------------------------------
+    
+    func dismissKeyboard() {
+        displayNameTextField.resignFirstResponder()
+        emailTextField.resignFirstResponder()
+        firstPasswordTextField.resignFirstResponder()
+        secondPasswordTextField.resignFirstResponder()
+    }
     
     
     
