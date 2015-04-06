@@ -221,7 +221,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     
     
     // -------------------------------
-    // MARK: Private Helpers
+    // MARK: Keyboard Dismissal
     // -------------------------------
     
     func dismissKeyboard() {
@@ -230,6 +230,11 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         firstPasswordTextField.resignFirstResponder()
         secondPasswordTextField.resignFirstResponder()
     }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        dismissKeyboard()
+    }
+    
     
     
     

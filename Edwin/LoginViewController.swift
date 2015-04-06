@@ -156,8 +156,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // -------------------------------
     
     private func loginUser() {
-        usernameTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
+        dismissKeyboard()
         
         if countElements(usernameTextField.text) > 0 &&
            countElements(passwordTextField.text) > 0
@@ -209,8 +208,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        usernameTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
+        dismissKeyboard()
         
         if segue.identifier == SegueIdentifier.PushMainMenuFromLogin {
             let mainMenuViewController = segue.destinationViewController as MainMenuViewController
@@ -261,6 +259,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             // Came back from main menu
             MWLog("Came back from Main Menu")
         }
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Keyboard Dismissal
+    // -------------------------------
+    
+    private func dismissKeyboard() {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        dismissKeyboard()
     }
     
     
