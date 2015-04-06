@@ -191,7 +191,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     // -------------------------------
     
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
-        if identifier == SegueIdentifier.PopFromCreateUser {
+        if identifier == SegueIdentifier.PopToLoginFromCreateUser {
             return true
         } else if identifier == SegueIdentifier.PushMainMenuFromCreateUser {
             if UserServerManager.isLoggedIn {
@@ -208,7 +208,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         dismissKeyboard()
         
-        if segue.identifier == SegueIdentifier.PopFromCreateUser {
+        if segue.identifier == SegueIdentifier.PopToLoginFromCreateUser {
             // Prepare logout
             MWLog("Will exit Create user")
         } else if segue.identifier == SegueIdentifier.PushMainMenuFromCreateUser {

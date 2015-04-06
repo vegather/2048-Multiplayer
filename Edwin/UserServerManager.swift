@@ -10,13 +10,13 @@ import Foundation
 
 class UserServerManager: ServerManager {
     
+    
+    
     // -------------------------------
     // MARK: Logging In And Out
     // -------------------------------
     
     class func loginWithEmail(email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
-//        ServerManager.data
-//        let theDataBase = Firebase(url: FIREBASE_URL)
         dataBase().authUser(email, password: password) { (error: NSError?, data: FAuthData?) -> Void in
             // data.auth is [uid: simplelogin:1, provider: password]
             MWLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
@@ -54,7 +54,6 @@ class UserServerManager: ServerManager {
     
     class func logout() {
         dataBase().unauth()
-//        Firebase(url: FIREBASE_URL).unauth()
     }
     
     class var isLoggedIn: Bool {

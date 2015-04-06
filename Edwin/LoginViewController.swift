@@ -228,8 +228,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func segueForUnwindingToViewController(toViewController: UIViewController, fromViewController: UIViewController, identifier: String?) -> UIStoryboardSegue {
         
         if let id = identifier{
-            if id == SegueIdentifier.PopFromMainMenu {
-                MWLog("Providing unwind segue for PopFromMainMenu")
+            if id == SegueIdentifier.PopToLoginFromMainMenu {
+                MWLog("Providing unwind segue for PopToLoginFromMainMenu")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
@@ -238,8 +238,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 
                 return unwindSegue
             }
-            else if id == SegueIdentifier.PopFromCreateUser {
-                MWLog("Providing unwind segue for PopFromCreateUser")
+            else if id == SegueIdentifier.PopToLoginFromCreateUser {
+                MWLog("Providing unwind segue for PopToLoginFromCreateUser")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
@@ -253,11 +253,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return super.segueForUnwindingToViewController(toViewController, fromViewController: fromViewController, identifier: identifier)
     }
     
-    @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
-        if sender.identifier == SegueIdentifier.PopFromCreateUser {
+    @IBAction func returnToLoginFromSegueAction(sender: UIStoryboardSegue){
+        if sender.identifier == SegueIdentifier.PopToLoginFromCreateUser {
             // Came back from create user
             MWLog("Came back from Create User")
-        } else if sender.identifier == SegueIdentifier.PopFromMainMenu {
+        } else if sender.identifier == SegueIdentifier.PopToLoginFromMainMenu {
             // Came back from main menu
             MWLog("Came back from Main Menu")
         }

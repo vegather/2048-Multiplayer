@@ -8,6 +8,22 @@
 
 import Foundation
 
+enum Players: Printable {
+    case Single
+    case Multi
+    
+    var description: String {
+        get {
+            switch self {
+            case .Single:
+                return "Single Player"
+            case .Multi:
+                return "Multi Player"
+            }
+        }
+    }
+}
+
 enum MoveDirection: Printable {
     case Up
     case Down
@@ -79,7 +95,7 @@ enum TileValue: Int, Evolvable {
     }
     
     static func getBaseValue() -> TileValue {
-        return TileValue.EightThousandOneHundredAndNinetyTwo
+        return TileValue.Two
     }
     
     var scoreValue: Int {
