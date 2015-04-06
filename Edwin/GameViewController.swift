@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-let DIMENSION = 2
+let DIMENSION = 4
 
 class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
 
