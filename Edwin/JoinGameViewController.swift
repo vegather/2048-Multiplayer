@@ -22,12 +22,6 @@ class JoinGameViewController: UIViewController {
     // MARK: View Controller Life Cycle
     // -------------------------------
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -49,10 +43,6 @@ class JoinGameViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-    }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        gamePinTextField.resignFirstResponder()
     }
 
     
@@ -118,8 +108,22 @@ class JoinGameViewController: UIViewController {
     // -------------------------------
     
     @IBAction func joinGameButtonTapped() {
+        dismissKeyboard()
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Keyboard Dismissal
+    // -------------------------------
+    
+    private func dismissKeyboard() {
         gamePinTextField.resignFirstResponder()
     }
     
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        dismissKeyboard()
+    }
     
 }

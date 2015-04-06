@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
-		9A398E5C1AD2C29000889A8E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
+		9A398E5D1AD2CDB900889A8E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
 		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */; };
 		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
@@ -94,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A398E5C1AD2C29000889A8E /* Firebase.framework in Frameworks */,
+				9A398E5D1AD2CDB900889A8E /* Firebase.framework in Frameworks */,
 				9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */,
 				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
 				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
@@ -489,6 +489,8 @@
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -505,6 +507,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
