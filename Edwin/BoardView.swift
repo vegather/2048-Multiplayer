@@ -72,7 +72,7 @@ class BoardView: SKScene {
             switch action {
             case let .Spawn(gamePiece):
                 MWLog("Adding spawn action")
-                self.toSpawn.append(gamePiece.gamePiece.position)
+                self.toSpawn.append(gamePiece.position)
             case let .Move(from, to):
                 if let nodeToMove = self.getNodeForCoordinate(from) {
                     MWLog("Adding move action")

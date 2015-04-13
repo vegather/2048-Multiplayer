@@ -17,10 +17,12 @@ struct SegueIdentifier {
     static let PushJoinGame                 = "Push Join Game"
     static let PushGameFromCreateGame       = "Push Game From Create Game"
     static let PushGameFromJoinGame         = "Push Game From Join Game"
+    static let PushByPoppingToOverFromGame  = "Push By Popping To Game Over From Game"
     
     // Pop segue identifiers
     static let PopToLoginFromMainMenu       = "Pop To Login From Main Menu"
     static let PopToLoginFromCreateUser     = "Pop To Login From Create User"
     static let PopToMainMenuFromCreateGame  = "Pop To Main Menu From Create Game"
     static let PopToMainMenuFromJoinGame    = "Pop To Main Menu From Join Game"
+    static let PopToMainMenuFromGameOver    = "Pop To Main Menu From Game Over"
 }

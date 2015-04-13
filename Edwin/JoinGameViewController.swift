@@ -60,8 +60,8 @@ class JoinGameViewController: UIViewController {
         // Would prefer to do this with UIKeyboardAnimationCurveUserInfoKey, but can't get it working
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
-        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as NSValue).CGRectValue()
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
+        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as! NSValue).CGRectValue()
         
         let joinGameButtonBottom = joinButton.frame.origin.y + joinButton.frame.size.height
         let keyboardTopWithSpace = keyboardEndFrame.origin.y - JOIN_GAME_BUTTON_MIN_DISTANCE_FROM_KEYBOARD
@@ -87,7 +87,7 @@ class JoinGameViewController: UIViewController {
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
         
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
         
         underJoinGameButtonConstraint.constant = initialUnderJoinGameButtonConstraintConstant
         view.setNeedsUpdateConstraints()
@@ -122,7 +122,7 @@ class JoinGameViewController: UIViewController {
         gamePinTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         dismissKeyboard()
     }
     

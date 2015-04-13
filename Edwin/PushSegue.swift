@@ -13,8 +13,8 @@ import UIKit
 class PushSegue: UIStoryboardSegue {
     override func perform() {
         // Assign the source and destination views to local variables.
-        var firstVCView =  (self.sourceViewController      as UIViewController).view as UIView!
-        var secondVCView = (self.destinationViewController as UIViewController).view as UIView!
+        var firstVCView =  (self.sourceViewController      as! UIViewController).view as UIView!
+        var secondVCView = (self.destinationViewController as! UIViewController).view as UIView!
         
         // Get the screen width and height.
         let screenWidth = UIScreen.mainScreen().bounds.size.width
@@ -39,7 +39,7 @@ class PushSegue: UIStoryboardSegue {
 //                }
 //                secondVCView.removeFromSuperview()
                 
-                self.sourceViewController.presentViewController(self.destinationViewController as UIViewController,
+                self.sourceViewController.presentViewController(self.destinationViewController as! UIViewController,
                     animated: false,
                     completion: nil)
         }

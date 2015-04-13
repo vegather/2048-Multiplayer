@@ -50,9 +50,17 @@ class MainMenuViewController: UIViewController {
                 })
                 
                 return unwindSegue
-            }
-            else if id == SegueIdentifier.PopToMainMenuFromJoinGame {
+            } else if id == SegueIdentifier.PopToMainMenuFromJoinGame {
                 MWLog("Providing unwind segue for PopToMainMenuFromJoinGame")
+                let unwindSegue = PopSegue(identifier: id,
+                    source: fromViewController,
+                    destination: toViewController,
+                    performHandler: { () -> Void in
+                })
+                
+                return unwindSegue
+            } else if id == SegueIdentifier.PopToMainMenuFromGameOver {
+                MWLog("Providing unwind segue for PopToMainMenuFromGameOver")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
@@ -73,6 +81,9 @@ class MainMenuViewController: UIViewController {
         } else if sender.identifier == SegueIdentifier.PopToMainMenuFromJoinGame {
             // Came back from main menu
             MWLog("Came back from Join Game")
+        } else if sender.identifier == SegueIdentifier.PopToMainMenuFromGameOver {
+            // Came back from Game Over
+            MWLog("Came back from Game Over")
         }
     }
 

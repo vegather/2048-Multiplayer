@@ -13,18 +13,20 @@ protocol GameBoardDelegate: class {
     
     // Need to separate spawn actions from the rest of the actions here so that
     // I can call spawnNewGamePieceAtRandomPosition only if any actions were produced
-    func gameBoardDidProduceActionsFromMoveInDirection(actions: [MoveAction<A>])
-    func gameBoardDidSpawnNodesWithActions(spawnActions: [MoveAction<A>])
-    func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int)
+//    func gameBoardDidProduceActionsFromMoveInDirection(actions: [MoveAction<A>])
+//    func gameBoardDidSpawnNodesWithAction(spawnAction: MoveAction<A>)
+//    func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int)
 }
 
+// Need to set Generics and Protocols up this way due to current limitations 
+// with the current Swift compiler. Here's to Swift 2.0!
 class GameBoard<B: GameBoardDelegate> {
 
     typealias C = B.A
     
     private var board: Array<Array<C?>>
     private let dimension: Int
-    weak var delegate: B?
+//    weak var delegate: B?
     
     init(dimension: Int) {
         self.dimension = dimension
@@ -38,7 +40,7 @@ class GameBoard<B: GameBoardDelegate> {
     // MARK: Moving pieces
     // -------------------------------
     
-    func moveInDirection(direction: MoveDirection) {
+    func moveInDirection(direction: MoveDirection) -> (scoreIncrease: Int, moves: [MoveAction<C>]) {
         var resultFromMove:(Int, [MoveAction<C>])
         
         MWLog("Board before moving")
@@ -63,8 +65,10 @@ class GameBoard<B: GameBoardDelegate> {
         
         MWLog("Score increase: \(scoreIncrease)")
         
-        self.delegate?.gameBoardDidProduceActionsFromMoveInDirection(moves)
-        self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
+        return resultFromMove
+        
+//        self.delegate?.gameBoardDidProduceActionsFromMoveInDirection(moves)
+//        self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
     }
     
     
@@ -516,21 +520,21 @@ class GameBoard<B: GameBoardDelegate> {
     // -------------------------------
     
     // Will do nothing if there are no empty spots on the board
-    func spawnNewGamePieceAtRandomPosition() {
+    func spawnNewGamePieceAtRandomPosition() -> MoveAction<C> {
         var emptySpots = [Coordinate]()
         
         for row in 0..<self.dimension {
             for col in 0..<self.dimension {
                 if self.board[row][col] == nil {
-                    // Crashes when the board is full
-                    emptySpots.append(Coordinate(x: col, y: row))
+                    let coordinateToAppend = Coordinate(x: col, y: row)
+                    emptySpots.append(coordinateToAppend)
                 }
             }
         }
         
-        let indexOfSpot = Int(arc4random()) % emptySpots.count
+        let indexOfSpot = UInt32(arc4random()) % UInt32(emptySpots.count)
         
-        let spot = emptySpots[indexOfSpot]
+        let spot = emptySpots[Int(indexOfSpot)]
         let value = C.getBaseValue()
         
         self.board[spot.y][spot.x] = value
@@ -538,8 +542,16 @@ class GameBoard<B: GameBoardDelegate> {
         MWLog("Gameboard after spawn")
         printBoard()
         
-        let spawnAction = [MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))]
-        self.delegate?.gameBoardDidSpawnNodesWithActions(spawnAction)
+        let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
+//        self.delegate?.gameBoardDidSpawnNodesWithAction(spawnAction)
+        
+        return spawnAction
+    }
+    
+    func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> MoveAction<C> {
+        MWLog("Spawning \(value) at \(coordinate)")
+        self.board[coordinate.y][coordinate.x] = value
+        return MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
     }
     
     
@@ -554,10 +566,8 @@ class GameBoard<B: GameBoardDelegate> {
             var rowString = ""
             for col in 0..<self.dimension {
                 if let value = self.board[row][col] {
-//                    print("\(value) ")
                     rowString += "\(value.scoreValue) "
                 } else {
-//                    print("- ")
                     rowString += "- "
                 }
             }

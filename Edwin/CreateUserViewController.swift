@@ -97,8 +97,8 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         // Would prefer to do this with UIKeyboardAnimationCurveUserInfoKey, but can't get it working
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
-        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as NSValue).CGRectValue()
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
+        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as! NSValue).CGRectValue()
         
         let doneButtonBottom = doneButton.frame.origin.y + doneButton.frame.size.height
         let keyboardTopWithSpace = keyboardEndFrame.origin.y - DONE_BUTTON_MIN_DISTANCE_FROM_KEYBOARD
@@ -124,7 +124,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
         
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
         
         underDoneButtonConstraint.constant = initialUnderDoneButtonConstraintConstant
         view.setNeedsUpdateConstraints()
@@ -148,10 +148,10 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     private func createUser() {
         dismissKeyboard()
         
-        if countElements(displayNameTextField.text) > 0 &&
-           countElements(emailTextField.text) > 0 &&
-           countElements(firstPasswordTextField.text) > 0 &&
-           countElements(secondPasswordTextField.text) > 0
+        if count(displayNameTextField.text) > 0 &&
+           count(emailTextField.text) > 0 &&
+           count(firstPasswordTextField.text) > 0 &&
+           count(secondPasswordTextField.text) > 0
         {
             if firstPasswordTextField.text == secondPasswordTextField.text {
                 // Create user
@@ -231,7 +231,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         secondPasswordTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         dismissKeyboard()
     }
     
