@@ -30,7 +30,7 @@ func MWLog(message: String, filePath: String = __FILE__, functionName: String = 
             
             // Adding extra "0"s to the milliseconds if necessary
             var tensOfASecondString = "\(tensOfASecond)"
-            while countElements(tensOfASecondString) < 4 {
+            while count(tensOfASecondString) < 4 {
                 tensOfASecondString = "0" + tensOfASecondString
             }
             
@@ -44,11 +44,11 @@ func MWLog(message: String, filePath: String = __FILE__, functionName: String = 
         var fileName = filePath.lastPathComponent
         var functionNameToPrint = functionName
         
-        if countElements(fileName) > 25 {
+        if count(fileName) > 25 {
             fileName = ((fileName as NSString).substringToIndex(22) as String) + "..."
         }
         
-        if countElements(functionName) > 45 {
+        if count(functionName) > 45 {
             functionNameToPrint = ((functionName as NSString).substringToIndex(42) as String) + "..."
         }
         

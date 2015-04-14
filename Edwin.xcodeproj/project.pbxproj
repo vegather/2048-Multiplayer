@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
-		9A398E5D1AD2CDB900889A8E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
 		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */; };
 		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
@@ -29,6 +28,8 @@
 		9A61D05E1AD2B26900D741E2 /* JoinGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D05D1AD2B26900D741E2 /* JoinGameViewController.swift */; };
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
+		9AB95D511AD3261D0079ED31 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */; };
+		9ABFEE6B1ADAFCC10023B55E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
 		9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */; };
@@ -74,6 +75,7 @@
 		9A61D05D1AD2B26900D741E2 /* JoinGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinGameViewController.swift; sourceTree = "<group>"; };
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
+		9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADD7C9E1AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -94,7 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A398E5D1AD2CDB900889A8E /* Firebase.framework in Frameworks */,
+				9ABFEE6B1ADAFCC10023B55E /* Firebase.framework in Frameworks */,
 				9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */,
 				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
 				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
@@ -146,6 +148,7 @@
 				9A61D05B1AD2109F00D741E2 /* CreateGameViewController.swift */,
 				9A61D05D1AD2B26900D741E2 /* JoinGameViewController.swift */,
 				9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */,
+				9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */,
 				9A61D03C1AD0278500D741E2 /* SegueIdentifiers.swift */,
 			);
 			name = "View Controllers";
@@ -345,6 +348,7 @@
 				9A61D05C1AD2109F00D741E2 /* CreateGameViewController.swift in Sources */,
 				9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */,
 				9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */,
+				9AB95D511AD3261D0079ED31 /* GameOverViewController.swift in Sources */,
 				9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */,
 				9ADD7CD01AA233E300BDCFA8 /* GameBrain.swift in Sources */,
 				9A61D0541AD1C1AD00D741E2 /* UserServerManager.swift in Sources */,
@@ -491,6 +495,22 @@
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -507,6 +527,22 @@
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
+					/Users/Vegard/Documents/My,
+					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,

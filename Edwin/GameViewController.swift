@@ -9,25 +9,72 @@
 import UIKit
 import SpriteKit
 
-let DIMENSION = 4
-
 class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate {
 
     typealias D = TileValue
     
     var gameBrain: GameBrain<GameViewController>!
     var gameView:  SKView?
+    var gameSetup: GameSetup<D>?
     var gameBoardScene: BoardView?
+    var actionsToPerformOnAppearance = [MoveAction<D>]()
     
     var viewHasAppeared = false
+    
+    
+    
+    // -------------------------------
+    // MARK: View Controller Life Cycle
+    // -------------------------------
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         MWLog()
-        
-        self.gameBrain = GameBrain<GameViewController>(delegate: self, dimension: DIMENSION)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if viewHasAppeared == false {
+            viewHasAppeared = true
+            MWLog("First time")
+            
+            // Geometry is set inside here
+            
+            let gameViewFrame = CGRectMake(0,
+                self.view.frame.size.height - self.view.frame.size.width,
+                self.view.frame.size.width,
+                self.view.frame.size.width)
+            
+            if self.gameView == nil {
+                self.gameView = SKView(frame: gameViewFrame)
+                self.view.addSubview(self.gameView!)
+            }
+            
+            if let gameView = self.gameView, gameSetup = self.gameSetup {
+                self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: gameSetup.dimension)
+                self.gameBoardScene?.gameViewDelegate = self
+
+                self.gameView?.presentScene(self.gameBoardScene)
+                
+                self.setupSwipes()
+            }
+            
+            if actionsToPerformOnAppearance.count > 0 {
+                self.gameBoardScene?.performMoveActions(actionsToPerformOnAppearance)
+            }
+        } else {
+            MWLog("Second time")
+        }
+    }
+
+    
+    
+    
+    // -------------------------------
+    // MARK: Swipes
+    // -------------------------------
     
     func setupSwipes() {
         if let gestureView = self.gameView {
@@ -58,55 +105,6 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             gestureView.addGestureRecognizer(downSwipe)
         }
     }
-    
-//    override func viewWillAppear(animated: Bool) {
-//        super.viewWillAppear(animated)
-//        
-//        MWLog()
-//        
-//        
-//    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if viewHasAppeared == false {
-            viewHasAppeared = true
-            MWLog("First time")
-            
-            // Geometry is set inside here
-            
-            let gameViewFrame = CGRectMake(0,
-                self.view.frame.size.height - self.view.frame.size.width,
-                self.view.frame.size.width,
-                self.view.frame.size.width)
-            
-            if self.gameView == nil {
-                self.gameView = SKView(frame: gameViewFrame)
-                self.view.addSubview(self.gameView!)
-            }
-            
-            if let gameView = self.gameView {
-                self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: DIMENSION)
-                self.gameBoardScene?.gameViewDelegate = self
-
-                self.gameView?.presentScene(self.gameBoardScene)
-                
-                self.setupSwipes()
-                
-                self.gameBrain.startGame()
-            }
-        } else {
-            MWLog("Second time")
-        }
-    }
-
-    
-    
-    
-    // -------------------------------
-    // MARK: Swipes
-    // -------------------------------
     
     func leftSwipe() {
         if let gameBoardScene = self.gameBoardScene {
@@ -156,6 +154,20 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     
     // -------------------------------
+    // MARK: Preparing
+    // -------------------------------
+    
+    func prepareGameSetup(gameSetup: GameSetup<D>) {
+        MWLog("\(gameSetup)")
+        self.gameSetup = gameSetup
+        self.gameBrain = GameBrain<GameViewController>(delegate: self)
+        self.gameBrain.prepareForGameWithSetup(&self.gameSetup!)
+    }
+    
+    
+    
+    
+    // -------------------------------
     // MARK: Board View Delegate
     // -------------------------------
     
@@ -167,12 +179,19 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     
     // -------------------------------
-    // MARK: Game Brain Delegate Methods
+    // MARK: Game Brain Ongoing Game
     // -------------------------------
 
     func gameBrainDidProduceActions(actions: [MoveAction<D>]) {
         MWLog("actions: \(actions)")
-        self.gameBoardScene?.performMoveActions(actions)
+        
+        if viewHasAppeared {
+            self.gameBoardScene?.performMoveActions(actions)
+        } else {
+            for action in actions {
+                self.actionsToPerformOnAppearance.append(action)
+            }
+        }
     }
     
     func gameBrainUserHasNewScore(newUserScore: Int) {
@@ -187,5 +206,61 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         
     }
     
+    
+    
+    // -------------------------------
+    // MARK: Game Brain Game Creation
+    // -------------------------------
+    
+    func gameBrainWillCreateMultiplayerGame() {
+        
+    }
+    
+    func gameBrainDidCreateMultiplayerGameWithGamepin(gamePin: String) {
+        
+    }
+    
+    func gameBrainDidCreateSinglePlayerGame() {
+        
+    }
+    
+    
+    // -------------------------------
+    // MARK: Game Brain Getting Opponent
+    // -------------------------------
+    
+    func gameBrainDidGetOpponentNamed(opponentName: String) {
+        
+    }
+    
+    
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Segue Management
+    // -------------------------------
+    
+
+    @IBAction func forfeitGameButtonTapped() {
+        MWLog()
+        self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        MWLog()
+        if segue.identifier == SegueIdentifier.PushByPoppingToOverFromGame {
+            if let destination = segue.destinationViewController as? GameOverViewController {
+                destination.prepare(players: Players.Single,
+                    won: nil,
+                    currentUserScore: 10000,
+                    opponentScore: nil,
+                    currentUserDisplayName: "Steve",
+                    opponentDisplayName: nil)
+            }
+        }
+    }
 }
 

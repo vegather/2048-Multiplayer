@@ -98,8 +98,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // Would prefer to do this with UIKeyboardAnimationCurveUserInfoKey, but can't get it working
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
-        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as NSValue).CGRectValue()
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
+        let keyboardEndFrame = (notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as! NSValue).CGRectValue()
         
         let loginButtonBottom = loginButton.frame.origin.y + loginButton.frame.size.height
         let keyboardTopWithSpace = keyboardEndFrame.origin.y - LOGIN_BUTTON_MIN_DISTANCE_FROM_KEYBOARD
@@ -134,7 +134,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         var animationCurve = UIViewAnimationCurve.EaseInOut
         NSNumber(integer: 7).getValue(&animationCurve)
         
-        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as NSNumber).doubleValue
+        let durationOfAnimation = (notification.userInfo!["UIKeyboardAnimationDurationUserInfoKey"] as! NSNumber).doubleValue
         
         underLoginConstraint.constant = initialUnderLoginConstraintConstant
         overEdwinLabelConstraint.constant = initialOverEdwinLabelConstraintConstant
@@ -158,8 +158,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private func loginUser() {
         dismissKeyboard()
         
-        if countElements(usernameTextField.text) > 0 &&
-           countElements(passwordTextField.text) > 0
+        if count(usernameTextField.text) > 0 &&
+           count(passwordTextField.text) > 0
         {
             spinner.hidden = false
             spinner.startAnimating()
@@ -211,11 +211,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         dismissKeyboard()
         
         if segue.identifier == SegueIdentifier.PushMainMenuFromLogin {
-            let mainMenuViewController = segue.destinationViewController as MainMenuViewController
+            let mainMenuViewController = segue.destinationViewController as! MainMenuViewController
             // Prepare the main menu
             MWLog("Preparing the Main Menu")
         } else if segue.identifier == SegueIdentifier.PushCreateUser {
-            let createUserViewController = segue.destinationViewController as CreateUserViewController
+            let createUserViewController = segue.destinationViewController as! CreateUserViewController
             // Prepare create user
             MWLog("Preparing Create User")
         } else {
@@ -273,7 +273,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         dismissKeyboard()
     }
     

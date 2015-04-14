@@ -8,6 +8,38 @@
 
 import Foundation
 
+struct GameSetup<T: Evolvable>: Printable {
+    
+    var players: Players
+    var setupForCreating: Bool
+    var dimension: Int
+    var turnDuration: Int
+    var firstTile: T!
+    var firstCoordinate: Coordinate!
+    var secondTile: T!
+    var secondCoordinate: Coordinate!
+    
+    init(players: Players, setupForCreating: Bool, dimension: Int, turnDuration: Int) {
+        self.players = players
+        self.setupForCreating = setupForCreating
+        self.dimension = dimension
+        self.turnDuration = turnDuration
+    }
+    
+    func isReady() -> Bool {
+        return firstTile        != nil &&
+               firstCoordinate  != nil &&
+               secondTile       != nil &&
+               secondCoordinate != nil
+    }
+    
+    var description: String {
+        get {
+            return "GameSetup(players: \(players), setupForCreating: \(setupForCreating), dimension: \(dimension), turnDuration: \(turnDuration), firstTile: \(firstTile), firstCoordinate: \(firstCoordinate), secondTile: \(secondTile), secondCoordinate: \(secondCoordinate))"
+        }
+    }
+}
+
 enum Players: Printable {
     case Single
     case Multi
@@ -48,7 +80,7 @@ enum MoveDirection: Printable {
 
 protocol Evolvable: Equatable, Printable {
     func evolve() -> Self?
-    class func getBaseValue() -> Self  // Gets the lowest value
+    static func getBaseValue() -> Self  // Gets the lowest value
     var scoreValue: Int { get } // The score increase that this piece should amount to
 }
 

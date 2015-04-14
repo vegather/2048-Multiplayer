@@ -25,6 +25,8 @@ class CreateGameViewController: UIViewController {
     
     
     
+    typealias D = TileValue
+    
     
     // -------------------------------
     // MARK: View Controller Life Cycle
@@ -98,6 +100,28 @@ class CreateGameViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == SegueIdentifier.PushGameFromCreateGame {
+            if let destination = segue.destinationViewController as? GameViewController {
+//                destination.prepareGameSetup(self.currentGameSetup())
+                destination.prepareGameSetup(currentGameSetup())
+            }
+        }
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Helpers
+    // -------------------------------
+    
+    private func currentGameSetup() -> GameSetup<D> {
+        let setup = GameSetup<D>(
+            players: self.numberOfPlayers,
+            setupForCreating: true,
+            dimension: self.dimension,
+            turnDuration: self.turnDuration)
         
+        return setup
     }
 }
