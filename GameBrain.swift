@@ -40,14 +40,10 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     typealias F = E.D
     typealias A = F
     
-    private var userScore = 0
-    private var opponentScore = 0
+    private(set) var userScore = 0      // Public getter, private setter
+    private(set) var opponentScore = 0  // Public getter, private setter
     private weak var delegate: E?
-    private var gameBoard: GameBoard<GameBrain>!// { // Might have to turn this into GameBoard<GameBrain<E>>
-//        didSet {
-//            gameBoard.delegate = self
-//        }
-    // }
+    private var gameBoard: GameBoard<GameBrain>!
     
     private var gameServer = GameServerManager()
     private var gameSetup: GameSetup<F>!
@@ -63,12 +59,6 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
         self.delegate = delegate
         self.gameServer.gameDelegate = self
     } 
-    
-//    func startGame() {
-//        MWLog()
-//        self.gameBoard.spawnNewGamePieceAtRandomPosition()
-//        self.gameBoard.spawnNewGamePieceAtRandomPosition()
-//    }
     
     func moveInDirection(direction: MoveDirection) {
         let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)

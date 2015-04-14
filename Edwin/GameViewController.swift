@@ -19,8 +19,51 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     var gameBoardScene: BoardView?
     var actionsToPerformOnAppearance = [MoveAction<D>]()
     
+    var userDisplayName: String? = UserServerManager.lastKnownCurrentUserDisplayName {
+        didSet {
+            MWLog("Setting userDisplayName to \(userDisplayName)")
+            if userDisplayNameLabel != nil, let userDisplayName = userDisplayName {
+                userDisplayNameLabel.text = userDisplayName
+            }
+        }
+    }
+    
+    var opponentDisplayName: String? {
+        didSet {
+            MWLog("Setting opponentDisplayName to \(opponentDisplayName)")
+            if opponentDisplayNameLabel != nil, let opponentDisplayName = opponentDisplayName {
+                opponentDisplayNameLabel.text = opponentDisplayName
+            }
+        }
+    }
+    
     var viewHasAppeared = false
     
+    // For single/multi alignment
+    @IBOutlet weak var scoreBoardHeightConstrant: NSLayoutConstraint!
+    @IBOutlet weak var currentUserResultWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var currentPlayerResultBox: UIView!
+    
+    // General outlets
+    @IBOutlet weak var opponentDisplayNameLabel: UILabel! {
+        didSet {
+            if let opponentDisplayName = opponentDisplayName {
+                MWLog("Setting opponentDisplayNameLabel.text to \(opponentDisplayName)")
+                opponentDisplayNameLabel.text = opponentDisplayName
+            }
+        }
+    }
+    @IBOutlet weak var opponentScoreLabel: UILabel!
+    
+    @IBOutlet weak var userDisplayNameLabel: UILabel! {
+        didSet {
+            if let userDisplayName = userDisplayName {
+                MWLog("Setting userDisplayNameLabel.text to \(userDisplayName)")
+                userDisplayNameLabel.text = userDisplayName
+            }
+        }
+    }
+    @IBOutlet weak var userScoreLabel: UILabel!
     
     
     // -------------------------------
@@ -53,6 +96,23 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             }
             
             if let gameView = self.gameView, gameSetup = self.gameSetup {
+                if gameSetup.players == Players.Single {
+                    self.currentPlayerResultBox.removeConstraint(currentUserResultWidthConstraint)
+                    let newConstraint = NSLayoutConstraint(
+                        item: currentPlayerResultBox,
+                        attribute: NSLayoutAttribute.Trailing,
+                        relatedBy: NSLayoutRelation.Equal,
+                        toItem: self.view,
+                        attribute: NSLayoutAttribute.Trailing,
+                        multiplier: 1.0,
+                        constant: -16)
+                    self.view.addConstraint(newConstraint)
+                    // setNeedsUpdateConstraints() will get called further down
+                    
+                    opponentDisplayNameLabel.hidden = true
+                    opponentScoreLabel.hidden = true
+                }
+                
                 self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: gameSetup.dimension)
                 self.gameBoardScene?.gameViewDelegate = self
 
@@ -60,6 +120,15 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 
                 self.setupSwipes()
             }
+            
+            userScoreLabel.text = "\(gameBrain.userScore)"
+            opponentScoreLabel.text = "\(gameBrain.opponentScore)"
+            
+            scoreBoardHeightConstrant.constant = self.view.frame.size.height -
+                                                 self.view.frame.size.width -
+                                                 UIApplication.sharedApplication().statusBarFrame.height
+            view.setNeedsUpdateConstraints()
+            
             
             if actionsToPerformOnAppearance.count > 0 {
                 self.gameBoardScene?.performMoveActions(actionsToPerformOnAppearance)
@@ -195,11 +264,15 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     }
     
     func gameBrainUserHasNewScore(newUserScore: Int) {
-        
+        if userScoreLabel != nil {
+            userScoreLabel.text = "\(newUserScore)"
+        }
     }
     
     func gameBrainOpponentHasNewScore(newOpponentScore: Int) {
-        
+        if opponentScoreLabel != nil {
+            opponentScoreLabel.text = "\(newOpponentScore)"
+        }
     }
     
     func gameBrainDidChangeTurnTo(currentTurn: Turn) {
@@ -230,7 +303,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func gameBrainDidGetOpponentNamed(opponentName: String) {
-        
+        opponentDisplayName = opponentName
     }
     
     
@@ -245,7 +318,20 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
 
     @IBAction func forfeitGameButtonTapped() {
         MWLog()
-        self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+        
+        let alert = UIAlertController(
+            title: "Are you sure",
+            message: "Quitting the game will terminate the current game",
+            preferredStyle: UIAlertControllerStyle.Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        let okAction     = UIAlertAction(title: "Quit",   style: UIAlertActionStyle.Destructive) { (action: UIAlertAction!) -> Void in
+            self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+        }
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     
@@ -253,12 +339,36 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         MWLog()
         if segue.identifier == SegueIdentifier.PushByPoppingToOverFromGame {
             if let destination = segue.destinationViewController as? GameOverViewController {
-                destination.prepare(players: Players.Single,
-                    won: nil,
-                    currentUserScore: 10000,
-                    opponentScore: nil,
-                    currentUserDisplayName: "Steve",
-                    opponentDisplayName: nil)
+                
+                var didWin: Bool? = nil
+                if gameBrain.userScore > gameBrain.opponentScore {
+                    didWin = true
+                } else if gameBrain.userScore < gameBrain.opponentScore {
+                    didWin = false
+                } // Otherwise draw
+                
+                let userName: String
+                if let userDisplayName = userDisplayName {
+                    userName = userDisplayName
+                } else {
+                    userName = "You"
+                }
+                
+                let opponentName: String
+                if let opponentDisplayName = opponentDisplayName {
+                    opponentName = opponentDisplayName
+                } else {
+                    opponentName = "Opponent"
+                }
+                
+                // nil on a multiplayer is draw
+                destination.prepare(
+                    players: gameSetup!.players,
+                    won: didWin,
+                    currentUserScore: gameBrain.userScore,
+                    opponentScore: gameBrain.opponentScore,
+                    currentUserDisplayName: userName,
+                    opponentDisplayName: opponentName)
             }
         }
     }

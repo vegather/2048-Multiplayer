@@ -30,6 +30,9 @@ class GameOverViewController: UIViewController {
     // Need this becuase viewWillAppear gets called twice with current PushSegue
     var timesViewHasAppeared: Int = 0
     
+    
+    
+    
     // -------------------------------
     // MARK: View Controller Life Cycle
     // -------------------------------
@@ -76,6 +79,8 @@ class GameOverViewController: UIViewController {
                                         } else {
                                             gameWonLostLabel.text = "You Lost"
                                         }
+                                    } else {
+                                        gameWonLostLabel.text = "Draw"
                                     }
                                 }
                             }

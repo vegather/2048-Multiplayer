@@ -66,9 +66,6 @@ class GameBoard<B: GameBoardDelegate> {
         MWLog("Score increase: \(scoreIncrease)")
         
         return resultFromMove
-        
-//        self.delegate?.gameBoardDidProduceActionsFromMoveInDirection(moves)
-//        self.delegate?.gameBoardDidCalculateScoreIncrease(scoreIncrease)
     }
     
     

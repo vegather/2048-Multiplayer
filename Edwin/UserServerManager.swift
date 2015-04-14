@@ -21,9 +21,15 @@ class UserServerManager: ServerManager {
             // data.auth is [uid: simplelogin:1, provider: password]
             MWLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
             
-            if error == nil {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    completionHandler(errorMessage: nil)
+            if error == nil, let data = data {
+                self.dataBase().childByAppendingPath("users").childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
+                    withBlock: { (snapshot: FDataSnapshot!) -> Void in
+                        let name = snapshot.childSnapshotForPath("displayName").value as! String
+                        self.lastKnownCurrentUserDisplayName = name
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            completionHandler(errorMessage: nil)
+                        })
                 })
             } else {
                 let errorCode = error!.code as NSInteger
@@ -53,6 +59,7 @@ class UserServerManager: ServerManager {
     }
     
     class func logout() {
+        self.lastKnownCurrentUserDisplayName = nil
         dataBase().unauth()
     }
     
@@ -65,6 +72,23 @@ class UserServerManager: ServerManager {
             }
         }
     }
+    
+    static let CURRENT_USER_NAME_KEY = "CurrentUserDisplayName"
+    
+    private(set) static var lastKnownCurrentUserDisplayName: String? {
+        set {
+            if let new = newValue {
+                NSUserDefaults.standardUserDefaults().setObject(new, forKey: CURRENT_USER_NAME_KEY)
+            } else {
+                NSUserDefaults.standardUserDefaults().setObject("You", forKey: CURRENT_USER_NAME_KEY)
+            }
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        get {
+            return NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_NAME_KEY)
+        }
+    }
+    
     
     
     
