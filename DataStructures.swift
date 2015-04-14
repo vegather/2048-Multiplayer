@@ -204,5 +204,3 @@ enum MoveAction<T: Evolvable>: Printable {
         }
     }
 }
-
-

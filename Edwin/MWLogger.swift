@@ -61,5 +61,3 @@ func MWLog(message: String, filePath: String = __FILE__, functionName: String = 
         println(printString)
     });
 }
-
-

@@ -9,18 +9,10 @@
 import UIKit
 import SpriteKit
 
-//class EvolvableViewType: UIView {
-//    func evolve() {
-//        println("evolve needs implementation")
-//    }
-//}
-
-
 protocol EvolvableViewType {
 
     typealias C: Evolvable
 
-//    init(value: C, size: CGSize)
     func evolve()
     var value: C {get set}
 }
@@ -31,5 +23,3 @@ protocol GameBoardViewType {
     
     typealias TileViewType
 }
-
-

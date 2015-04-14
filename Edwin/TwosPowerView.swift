@@ -65,39 +65,39 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
     private class func getColorForValue(value: TileValue) -> UIColor {
         switch (value) {
         case .Two:
-            return UIColor.blueColor()
+            return UIColor(red: 26.0 / 255.0,  green: 188.0 / 255.0, blue: 156.0 / 255.0, alpha: 1.0) // Turquise
         case .Four:
-            return UIColor.brownColor()
+            return UIColor(red: 22.0 / 255.0,  green: 160.0 / 255.0, blue: 133.0 / 255.0, alpha: 1.0) // Green sea
         case .Eight:
-            return UIColor.redColor()
+            return UIColor(red: 39.0 / 255.0,  green: 174.0 / 255.0, blue: 96.0  / 255.0, alpha: 1.0) // Nephritis
         case .Sixteen:
-            return UIColor.grayColor()
+            return UIColor(red: 46.0 / 255.0,  green: 204.0 / 255.0, blue: 113.0 / 255.0, alpha: 1.0) // Emerald
         case .ThirtyTwo:
-            return UIColor.greenColor()
+            return UIColor(red: 241.0 / 255.0, green: 196.0 / 255.0, blue: 15.0 / 255.0,  alpha: 1.0) // Sun Flower
         case .SixtyFour:
-            return UIColor.purpleColor()
+            return UIColor(red: 243.0 / 255.0, green: 156.0 / 255.0, blue: 18.0 / 255.0,  alpha: 1.0) // Orange
         case .OneHundredAndTwentyEight:
-            return UIColor.orangeColor()
+            return UIColor(red: 230.0 / 255.0, green: 126.0 / 255.0, blue: 34.0 / 255.0,  alpha: 1.0) // Carrot
         case .TwoHundredAndFiftySix:
-            return UIColor.darkGrayColor()
+            return UIColor(red: 211.0 / 255.0, green: 84.0 / 255.0,  blue: 0.0 / 255.0,   alpha: 1.0) // Pumpkin
         case .FiveHundredAndTwelve:
-            return UIColor.lightGrayColor()
+            return UIColor(red: 192.0 / 255.0, green: 57.0 / 255.0,  blue: 43.0 / 255.0,  alpha: 1.0) // Pomegranate
         case .OneThousandAndTwentyFour:
-            return UIColor.cyanColor()
+            return UIColor(red: 231.0 / 255.0, green: 76.0 / 255.0,  blue: 60.0 / 255.0,  alpha: 1.0) // Alizaring
         case .TwoThousandAndFourtyEight:
-            return UIColor.magentaColor()
+            return UIColor(red: 52.0 / 255.0,  green: 152.0 / 255.0, blue: 219.0 / 255.0, alpha: 1.0) // Peter River
         case .FourThousandAndNinetySix:
-            return UIColor.blueColor()
+            return UIColor(red: 41.0 / 255.0,  green: 128.0 / 255.0, blue: 185.0 / 255.0, alpha: 1.0) // Belize Blue
         case .EightThousandOneHundredAndNinetyTwo:
-            return UIColor.brownColor()
+            return UIColor(red: 155.0 / 255.0, green: 89.0 / 255.0,  blue: 182.0 / 255.0, alpha: 1.0) // Amethyst
         case .SixteenThousandThreeHundredAndEightyFour:
-            return UIColor.redColor()
+            return UIColor(red: 142.0 / 255.0, green: 68.0 / 255.0,  blue: 173.0 / 255.0, alpha: 1.0) // Wisteria
         case .ThirtyTwoThousandSevenHundredAndSixtyEight:
-            return UIColor.grayColor()
+            return UIColor(red: 52.0 / 255.0,  green: 73.0 / 255.0,  blue: 94.0 / 255.0,  alpha: 1.0) // Wet Asphalt
         case .SixtyFiveThousandFiveHundredAndThirtySix:
-            return UIColor.greenColor()
+            return UIColor(red: 44.0 / 255.0,  green: 62.0 / 255.0,  blue: 80.0 / 255.0,  alpha: 1.0) // Midnight Blue
         case .OneHundredAndThirtyOneThousandAndSeventyTwo:
-            return UIColor.purpleColor()
+            return UIColor(red: 127.0 / 255.0, green: 140.0 / 255.0, blue: 141.0 / 255.0, alpha: 1.0) // Asbestos
         default:
             return UIColor.whiteColor()
         }

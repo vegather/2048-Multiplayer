@@ -33,12 +33,7 @@ class PushSegue: UIStoryboardSegue {
             firstVCView.frame = CGRectOffset(firstVCView.frame, -screenWidth, 0.0)
             secondVCView.frame = CGRectOffset(secondVCView.frame, -screenWidth, 0.0)
             
-            }) { (Finished) -> Void in
-//                if (self.sourceViewController.presentedViewController != nil) {
-//                    self.sourceViewController.dismissViewControllerAnimated(false, completion: nil)
-//                }
-//                secondVCView.removeFromSuperview()
-                
+            }) { (Finished) -> Void in                
                 self.sourceViewController.presentViewController(self.destinationViewController as! UIViewController,
                     animated: false,
                     completion: nil)
