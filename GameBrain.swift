@@ -48,16 +48,35 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     private var gameServer = GameServerManager()
     private var gameSetup: GameSetup<F>!
     
-    private(set) var currentPlayer: Turn = Turn.User {
+    private(set) var currentPlayer: Turn = Turn.User { // Public getter, private setter
         didSet {
             self.delegate?.gameBrainDidChangeTurnTo(self.currentPlayer)
         }
     }
     
+    private(set) var gamePin: String? = nil { // Public getter, private setter
+        didSet {
+            if let gamePin = gamePin {
+                self.delegate?.gameBrainDidCreateMultiplayerGameWithGamepin(gamePin)
+            }
+        }
+    }
+    
+    private(set) var opponentDisplayName: String? = nil {
+        didSet {
+            if let opponentDisplayName = opponentDisplayName {
+                self.delegate?.gameBrainDidGetOpponentNamed(opponentDisplayName)
+            }
+        }
+    }
+    
+    let userDisplayName: String = UserServerManager.lastKnownCurrentUserDisplayName
     
     init(delegate: E?) {
+        
         self.delegate = delegate
         self.gameServer.gameDelegate = self
+        self.gameServer.creatorDelegate = self
     } 
     
     func moveInDirection(direction: MoveDirection) {
@@ -94,7 +113,12 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             default: break
             }
         }
- 
+    }
+    
+    func deleteCurrentGame() {
+        if let gamePin = self.gamePin {
+            self.gameServer.deleteEventWithGamepin(gamePin)
+        }
     }
     
     
@@ -170,9 +194,10 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                 self.gameServer.createGameWithDimension(gameSetup.dimension, turnDuration: gameSetup.turnDuration)
                     { (gamePin: String!, errorMessage: String?) -> () in
                         if let error = errorMessage {
-                            MWLog("\(error)")
+                            MWLog("Got error from createGame: \(error)")
                         } else {
-                            self.delegate?.gameBrainDidCreateMultiplayerGameWithGamepin(gamePin)
+                            MWLog("Got gamePin: \(gamePin)")
+                            self.gamePin = gamePin
                         }
                     }
             } else {
@@ -213,7 +238,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     // -------------------------------
     
     func gotOpponentWithDisplayName(displayName: String) {
-        
+        self.opponentDisplayName = displayName
     }
 
 }
