@@ -59,7 +59,6 @@ class UserServerManager: ServerManager {
     }
     
     class func logout() {
-        self.lastKnownCurrentUserDisplayName = nil
         dataBase().unauth()
     }
     
@@ -75,17 +74,19 @@ class UserServerManager: ServerManager {
     
     static let CURRENT_USER_NAME_KEY = "CurrentUserDisplayName"
     
-    private(set) static var lastKnownCurrentUserDisplayName: String? {
+    private(set) static var lastKnownCurrentUserDisplayName: String {
         set {
-            if let new = newValue {
-                NSUserDefaults.standardUserDefaults().setObject(new, forKey: CURRENT_USER_NAME_KEY)
-            } else {
-                NSUserDefaults.standardUserDefaults().setObject("You", forKey: CURRENT_USER_NAME_KEY)
-            }
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: CURRENT_USER_NAME_KEY)
             NSUserDefaults.standardUserDefaults().synchronize()
         }
         get {
-            return NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_NAME_KEY)
+            if let name = NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_NAME_KEY) {
+                return name
+            } else {
+                NSUserDefaults.standardUserDefaults().setObject("You", forKey: CURRENT_USER_NAME_KEY)
+                NSUserDefaults.standardUserDefaults().synchronize()
+                return "You"
+            }
         }
     }
     

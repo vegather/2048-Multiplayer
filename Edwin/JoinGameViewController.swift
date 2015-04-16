@@ -15,7 +15,8 @@ class JoinGameViewController: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     
     var initialUnderJoinGameButtonConstraintConstant: CGFloat!
-    
+    var gameServer = GameServerManager()
+    var gameSetup: GameSetup<TileValue>?
     
     
     // -------------------------------
@@ -109,6 +110,29 @@ class JoinGameViewController: UIViewController {
     
     @IBAction func joinGameButtonTapped() {
         dismissKeyboard()
+        
+        if let gamePin = enteredGamepin() {
+            self.gameServer.joinGameWithGamepin(gamePin,
+                completionHandler:
+                { (dimension: Int!, turnDuration: Int!, errorMessage: String?) -> () in
+                    if let errorMessage = errorMessage {
+                        self.showAlertWithTitle("Alert while joining game", andMessage: errorMessage)
+                    } else {
+                        // Move to the game
+                        
+                    }
+                })
+        } else {
+            showAlertWithTitle("No gamepin", andMessage: "You need to enter the gamepin that is showing on your opponents screen.")
+        }
+    }
+    
+    private func enteredGamepin() -> String? {
+        if count(gamePinTextField.text) > 0 {
+            return gamePinTextField.text
+        } else {
+            return nil
+        }
     }
     
     
@@ -126,4 +150,18 @@ class JoinGameViewController: UIViewController {
         dismissKeyboard()
     }
     
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Show error alert
+    // -------------------------------
+    
+    private func showAlertWithTitle(title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let doneAction = UIAlertAction(title: "Got it", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(doneAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
 }

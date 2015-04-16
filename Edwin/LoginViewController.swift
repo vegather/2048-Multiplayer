@@ -59,6 +59,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        usernameTextField.text = ""
+        passwordTextField.text = ""
+        
         if UserServerManager.isLoggedIn {
             self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
         }
@@ -286,7 +289,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     private func showAlertWithTitle(title: String, andMessage message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let doneAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        let doneAction = UIAlertAction(title: "Got it", style: UIAlertActionStyle.Default, handler: nil)
         alert.addAction(doneAction)
         self.presentViewController(alert, animated: true, completion: nil)
     }

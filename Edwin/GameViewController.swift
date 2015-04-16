@@ -18,24 +18,10 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     var gameSetup: GameSetup<D>?
     var gameBoardScene: BoardView?
     var actionsToPerformOnAppearance = [MoveAction<D>]()
+    var blurryMessageView: BlurryMessageView!
     
-    var userDisplayName: String? = UserServerManager.lastKnownCurrentUserDisplayName {
-        didSet {
-            MWLog("Setting userDisplayName to \(userDisplayName)")
-            if userDisplayNameLabel != nil, let userDisplayName = userDisplayName {
-                userDisplayNameLabel.text = userDisplayName
-            }
-        }
-    }
-    
-    var opponentDisplayName: String? {
-        didSet {
-            MWLog("Setting opponentDisplayName to \(opponentDisplayName)")
-            if opponentDisplayNameLabel != nil, let opponentDisplayName = opponentDisplayName {
-                opponentDisplayNameLabel.text = opponentDisplayName
-            }
-        }
-    }
+    // This is to make sure the blurryMessage does not show up until AFTER the view is done animating
+    var opponentsTurnWhenDoneAnimating: Bool = false
     
     var viewHasAppeared = false
     
@@ -45,25 +31,19 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     @IBOutlet weak var currentPlayerResultBox: UIView!
     
     // General outlets
-    @IBOutlet weak var opponentDisplayNameLabel: UILabel! {
-        didSet {
-            if let opponentDisplayName = opponentDisplayName {
-                MWLog("Setting opponentDisplayNameLabel.text to \(opponentDisplayName)")
-                opponentDisplayNameLabel.text = opponentDisplayName
-            }
-        }
-    }
     @IBOutlet weak var opponentScoreLabel: UILabel!
+    @IBOutlet weak var opponentDisplayNameLabel: UILabel!
     
+    @IBOutlet weak var userScoreLabel: UILabel!
     @IBOutlet weak var userDisplayNameLabel: UILabel! {
         didSet {
-            if let userDisplayName = userDisplayName {
-                MWLog("Setting userDisplayNameLabel.text to \(userDisplayName)")
-                userDisplayNameLabel.text = userDisplayName
-            }
+            MWLog("Setting userDisplayNameLabel.text to \(gameBrain.userDisplayName)")
+            userDisplayNameLabel.text = gameBrain.userDisplayName
         }
     }
-    @IBOutlet weak var userScoreLabel: UILabel!
+    
+    
+    
     
     
     // -------------------------------
@@ -93,6 +73,27 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             if self.gameView == nil {
                 self.gameView = SKView(frame: gameViewFrame)
                 self.view.addSubview(self.gameView!)
+                
+                self.blurryMessageView = BlurryMessageView(frame: self.gameView!.frame)
+            }
+            
+            if let opponentName = gameBrain.opponentDisplayName {
+                MWLog("Has opponent: \(opponentName)")
+                opponentDisplayNameLabel.text = opponentName
+                opponentScoreLabel.text = "0"
+                self.turnUserInteractionOn()
+            } else {
+                if let gamePin = gameBrain.gamePin {
+                    MWLog("Not yet an opponent, but the game has a gamePin")
+                    opponentDisplayNameLabel.text = "Gamepin"
+                    opponentScoreLabel.text = gamePin
+                    self.turnUserInteractionOffWithMessage("Waiting for opponent...")
+                } else {
+                    MWLog("No opponent, and no gamePin")
+                    opponentDisplayNameLabel.text = ""
+                    opponentScoreLabel.text = ""
+                    self.turnUserInteractionOffWithMessage("Creating game...")
+                }
             }
             
             if let gameView = self.gameView, gameSetup = self.gameSetup {
@@ -138,6 +139,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
 
+    
     
     
     
@@ -236,13 +238,49 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     
     
+    
+    // -------------------------------
+    // MARK: Changing Game State
+    // -------------------------------
+    
+    private func turnUserInteractionOffWithMessage(message: String) {
+        // Make sure we actually are on screen
+        // If we're not, make sure the message gets on screen in viewWillAppear (or similar)
+        MWLog("message: \(message)")
+        self.gameView?.userInteractionEnabled = false
+        
+        if self.blurryMessageView != nil {
+            self.blurryMessageView.message = message
+            self.view.addSubview(self.blurryMessageView)
+        }
+    }
+    
+    private func turnUserInteractionOn() {
+        MWLog()
+        
+        if self.blurryMessageView != nil {
+            self.blurryMessageView.removeFromSuperview()
+            self.gameView?.userInteractionEnabled = true
+        }
+    }
+    
+    
+    
+    
+    
     // -------------------------------
     // MARK: Board View Delegate
     // -------------------------------
     
     func boardViewDidFinishAnimating() {
         MWLog()
+        
+        if opponentsTurnWhenDoneAnimating == true {
+            opponentsTurnWhenDoneAnimating = false
+            turnUserInteractionOffWithMessage("Waiting for opponent to move...")
+        }
     }
+    
     
     
     
@@ -276,7 +314,12 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     }
     
     func gameBrainDidChangeTurnTo(currentTurn: Turn) {
-        
+        if currentTurn == Turn.Opponent {
+            self.gameView?.userInteractionEnabled = false
+            opponentsTurnWhenDoneAnimating = true
+        } else {
+            turnUserInteractionOn()
+        }
     }
     
     
@@ -286,15 +329,22 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func gameBrainWillCreateMultiplayerGame() {
-        
+        MWLog()
+        turnUserInteractionOffWithMessage("Creating game...")
     }
     
     func gameBrainDidCreateMultiplayerGameWithGamepin(gamePin: String) {
-        
+        MWLog("gamePin: \(gamePin)")
+        if opponentDisplayNameLabel != nil && opponentScoreLabel != nil {
+            opponentDisplayNameLabel.text = ""
+            opponentScoreLabel.text = ""
+        }
+        turnUserInteractionOffWithMessage("Waiting for an opponent to join...\n The GamePin is \(gamePin)")
     }
     
     func gameBrainDidCreateSinglePlayerGame() {
-        
+        MWLog()
+        turnUserInteractionOn()
     }
     
     
@@ -303,7 +353,12 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func gameBrainDidGetOpponentNamed(opponentName: String) {
-        opponentDisplayName = opponentName
+        MWLog("opponentName: \(opponentName)")
+        
+        opponentDisplayNameLabel.text = opponentName
+        opponentScoreLabel.text = "0"
+        
+        turnUserInteractionOn()
     }
     
     
@@ -325,6 +380,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             preferredStyle: UIAlertControllerStyle.Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
         let okAction     = UIAlertAction(title: "Quit",   style: UIAlertActionStyle.Destructive) { (action: UIAlertAction!) -> Void in
+            self.gameBrain.deleteCurrentGame()
             self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
         }
         
@@ -347,21 +403,16 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     didWin = false
                 } // Otherwise draw
                 
-                let userName: String
-                if let userDisplayName = userDisplayName {
-                    userName = userDisplayName
-                } else {
-                    userName = "You"
-                }
+                let userName: String = gameBrain.userDisplayName
                 
                 let opponentName: String
-                if let opponentDisplayName = opponentDisplayName {
+                if let opponentDisplayName = gameBrain.opponentDisplayName {
                     opponentName = opponentDisplayName
                 } else {
                     opponentName = "Opponent"
                 }
                 
-                // nil on a multiplayer is draw
+                // won == nil on a multiplayer is draw
                 destination.prepare(
                     players: gameSetup!.players,
                     won: didWin,
