@@ -18,12 +18,32 @@ struct GameSetup2<T: Evolvable>: Printable {
     var firstCoordinate: Coordinate!
     var secondTile: T!
     var secondCoordinate: Coordinate!
+    var opponentDisplayName: String! // Primarily used when joining a game
     
     init(players: Players, setupForCreating: Bool, dimension: Int, turnDuration: Int) {
         self.players = players
         self.setupForCreating = setupForCreating
         self.dimension = dimension
         self.turnDuration = turnDuration
+    }
+    
+    convenience init(
+        players: Players,
+        setupForCreating: Bool,
+        dimension: Int,
+        turnDuration: Int,
+        firstValue: T!,
+        firstCoordinate: Coordinate!,
+        secondValue: T!,
+        secondCoordinate: Coordinate!,
+        opponentDisplayName: String!)
+    {
+        self.init(players: players, setupForCreating: setupForCreating, dimension: dimension, turnDuration: turnDuration)
+        self.firstTile = firstValue
+        self.firstCoordinate = firstCoordinate
+        self.secondTile = secondValue
+        self.secondCoordinate = secondCoordinate
+        self.opponentDisplayName = opponentDisplayName
     }
     
     func isReady() -> Bool {
@@ -35,7 +55,7 @@ struct GameSetup2<T: Evolvable>: Printable {
     
     var description: String {
         get {
-            return "GameSetup(players: \(players), setupForCreating: \(setupForCreating), dimension: \(dimension), turnDuration: \(turnDuration), firstTile: \(firstTile), firstCoordinate: \(firstCoordinate), secondTile: \(secondTile), secondCoordinate: \(secondCoordinate))"
+            return "GameSetup(players: \(players), setupForCreating: \(setupForCreating), dimension: \(dimension), turnDuration: \(turnDuration), firstTile: \(firstTile), firstCoordinate: \(firstCoordinate), secondTile: \(secondTile), secondCoordinate: \(secondCoordinate), opponentDisplayName: \(opponentDisplayName))"
         }
     }
 }

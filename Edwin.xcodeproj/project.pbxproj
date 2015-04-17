@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
-		9A5366D91ADDA0B5002A2F57 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0501AD14AA900D741E2 /* Firebase.framework */; };
 		9A5366DB1ADDF1D5002A2F57 /* BlurryMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */; };
+		9A5C42FB1AE0620000D3FB8A /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5C42FA1AE0620000D3FB8A /* Firebase.framework */; };
 		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */; };
 		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
@@ -55,6 +55,7 @@
 /* Begin PBXFileReference section */
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
 		9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryMessageView.swift; sourceTree = "<group>"; };
+		9A5C42FA1AE0620000D3FB8A /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
 		9A61D0281ACB7EC900D741E2 /* MWLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MWLogger.swift; sourceTree = "<group>"; };
 		9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpriteKit+Spring.swift"; sourceTree = "<group>"; };
 		9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -70,7 +71,6 @@
 		9A61D0481AD0CCCF00D741E2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A61D04C1AD0CD2200D741E2 /* Edwin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Edwin-Bridging-Header.h"; sourceTree = "<group>"; };
-		9A61D0501AD14AA900D741E2 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../../../../Programming/iOS/Frameworks/Firebase.framework; sourceTree = "<group>"; };
 		9A61D0531AD1C1AD00D741E2 /* UserServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserServerManager.swift; sourceTree = "<group>"; };
 		9A61D0551AD1C1BF00D741E2 /* GameServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameServerManager.swift; sourceTree = "<group>"; };
 		9A61D05B1AD2109F00D741E2 /* CreateGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGameViewController.swift; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A5366D91ADDA0B5002A2F57 /* Firebase.framework in Frameworks */,
+				9A5C42FB1AE0620000D3FB8A /* Firebase.framework in Frameworks */,
 				9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */,
 				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
 				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
@@ -169,7 +169,7 @@
 		9ADD7C911AA2212800BDCFA8 = {
 			isa = PBXGroup;
 			children = (
-				9A61D0501AD14AA900D741E2 /* Firebase.framework */,
+				9A5C42FA1AE0620000D3FB8A /* Firebase.framework */,
 				9A61D0481AD0CCCF00D741E2 /* Security.framework */,
 				9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */,
 				9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */,
@@ -519,6 +519,7 @@
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -569,6 +570,7 @@
 					Files/Programming/iOS/Frameworks,
 					/Users/Vegard/Documents/My,
 					Files/Programming/iOS/Frameworks,
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

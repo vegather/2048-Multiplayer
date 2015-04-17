@@ -23,6 +23,7 @@ protocol GameBrainDelegate: class {
     
     func gameBrainWillCreateMultiplayerGame()
     func gameBrainDidCreateMultiplayerGameWithGamepin(gamePin: String)
+    func gameBrainDidJoinGame()
     
     func gameBrainDidCreateSinglePlayerGame()
     
@@ -208,7 +209,49 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             self.delegate?.gameBrainDidProduceActions(spawnActions)
         } else {
             MWLog("Setting up for joining")
+            // Setup for joining, implied that it's a Players.Multi game
+            
+            self.opponentDisplayName = gameSetup.opponentDisplayName
+            
+            // MIGHT NEED TO DO SOMETHING WITH THE TURN DURATION IN HERE
+            
+            let firstSpawn =  self.gameBoard.spawnNodeWithValue(gameSetup.firstTile, atCoordinate: gameSetup.firstCoordinate)
+            let secondSpawn = self.gameBoard.spawnNodeWithValue(gameSetup.secondTile, atCoordinate: gameSetup.secondCoordinate)
+            let spawns = [firstSpawn, secondSpawn]
+            self.delegate?.gameBrainDidProduceActions(spawns)
+            self.delegate?.gameBrainDidJoinGame()
         }
+    }
+    
+    func addInitialState(tileOne: MoveAction<F>, tileTwo: MoveAction<F>) {
+        
+        // This is currently the only way to get associated values out of enums in Swift
+        var valueOne: F! = nil
+        var coordinateOne: Coordinate! = nil
+        switch tileOne {
+        case let .Spawn(gamePiece):
+            valueOne = gamePiece.value
+            coordinateOne = gamePiece.position
+        default: break
+        }
+        
+        var valueTwo: F! = nil
+        var coordinateTwo: Coordinate! = nil
+        switch tileTwo {
+        case let .Spawn(gamePiece):
+            valueTwo = gamePiece.value
+            coordinateTwo = gamePiece.position
+        default: break
+        }
+        
+        gameServer.addInitialStateToCurrentGame(
+            firstTile: valueOne,
+            hasCoordinate: coordinateOne,
+            secondTile: valueTwo,
+            hasCoordinate: coordinateTwo)
+            { (errorMessage: String?) -> () in
+                MWLog("Got error while adding initial state to Firebase. Error Message: \(errorMessage)")
+            }
     }
     
     private func finishSetup() {

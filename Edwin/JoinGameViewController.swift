@@ -16,7 +16,9 @@ class JoinGameViewController: UIViewController {
     
     var initialUnderJoinGameButtonConstraintConstant: CGFloat!
     var gameServer = GameServerManager()
-    var gameSetup: GameSetup<TileValue>?
+    var gameSetup: GameSetup<TileValue>!
+    
+    typealias T = TileValue
     
     
     // -------------------------------
@@ -112,16 +114,33 @@ class JoinGameViewController: UIViewController {
         dismissKeyboard()
         
         if let gamePin = enteredGamepin() {
-            self.gameServer.joinGameWithGamepin(gamePin,
-                completionHandler:
-                { (dimension: Int!, turnDuration: Int!, errorMessage: String?) -> () in
+            gameServer.joinGameWithGamepin(gamePin) { (
+                dimension:              Int!,
+                turnDuration:           Int!,
+                tileOneValue:           T!,
+                tileOneCoordinate:      Coordinate!,
+                tileTwoValue:           T!,
+                tileTwoCoordinate:      Coordinate!,
+                opponentDisplayName:    String!,
+                errorMessage:           String?
+                ) -> () in
                     if let errorMessage = errorMessage {
-                        self.showAlertWithTitle("Alert while joining game", andMessage: errorMessage)
+                        self.showAlertWithTitle("Error while joining game", andMessage: errorMessage)
                     } else {
-                        // Move to the game
+                        self.gameSetup = GameSetup(
+                            players:                Players.Multi,
+                            setupForCreating:       false,
+                            dimension:              dimension,
+                            turnDuration:           turnDuration,
+                            firstValue:             tileOneValue,
+                            firstCoordinate:        tileOneCoordinate,
+                            secondValue:            tileTwoValue,
+                            secondCoordinate:       tileTwoCoordinate,
+                            opponentDisplayName:    opponentDisplayName)
                         
+                        self.performSegueWithIdentifier(SegueIdentifier.PushGameFromJoinGame, sender: self)
                     }
-                })
+                }
         } else {
             showAlertWithTitle("No gamepin", andMessage: "You need to enter the gamepin that is showing on your opponents screen.")
         }
@@ -148,6 +167,21 @@ class JoinGameViewController: UIViewController {
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         dismissKeyboard()
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Segue Management
+    // -------------------------------
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == SegueIdentifier.PushGameFromJoinGame {
+            if let destination = segue.destinationViewController as? GameViewController {
+                destination.prepareGameSetup(self.gameSetup)
+            }
+        }
     }
     
     

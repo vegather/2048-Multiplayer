@@ -102,7 +102,6 @@ class CreateGameViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SegueIdentifier.PushGameFromCreateGame {
             if let destination = segue.destinationViewController as? GameViewController {
-//                destination.prepareGameSetup(self.currentGameSetup())
                 destination.prepareGameSetup(currentGameSetup())
             }
         }

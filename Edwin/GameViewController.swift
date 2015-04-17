@@ -20,6 +20,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     var actionsToPerformOnAppearance = [MoveAction<D>]()
     var blurryMessageView: BlurryMessageView!
     
+    var initialGameStateActions = [MoveAction<D>]()
+    
     // This is to make sure the blurryMessage does not show up until AFTER the view is done animating
     var opponentsTurnWhenDoneAnimating: Bool = false
     
@@ -81,7 +83,16 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 MWLog("Has opponent: \(opponentName)")
                 opponentDisplayNameLabel.text = opponentName
                 opponentScoreLabel.text = "0"
-                self.turnUserInteractionOn()
+                if let gameSetup = self.gameSetup {
+                    if gameSetup.setupForCreating {
+                        self.turnUserInteractionOn()
+                    } else {
+                        self.turnUserInteractionOffWithMessage("Waiting for opponent to move...")
+                    }
+                } else {
+                    self.turnUserInteractionOffWithMessage("Unknown state. Quit the game and try again.")
+                }
+                
             } else {
                 if let gamePin = gameBrain.gamePin {
                     MWLog("Not yet an opponent, but the game has a gamePin")
@@ -299,6 +310,16 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 self.actionsToPerformOnAppearance.append(action)
             }
         }
+        
+        if initialGameStateActions.count < 2 {
+            for action in actions {
+                initialGameStateActions.append(action)
+            }
+            
+            if initialGameStateActions.count == 2 {
+                gameBrain.addInitialState(initialGameStateActions[0], tileTwo: initialGameStateActions[1])
+            }
+        }
     }
     
     func gameBrainUserHasNewScore(newUserScore: Int) {
@@ -342,6 +363,14 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         turnUserInteractionOffWithMessage("Waiting for an opponent to join...\n The GamePin is \(gamePin)")
     }
     
+    func gameBrainDidJoinGame() {
+        if viewHasAppeared {
+            opponentDisplayNameLabel.text = self.gameBrain.opponentDisplayName
+            opponentScoreLabel.text = "0"
+            turnUserInteractionOffWithMessage("Waiting for opponent to move...")
+        }
+    }
+    
     func gameBrainDidCreateSinglePlayerGame() {
         MWLog()
         turnUserInteractionOn()
@@ -355,10 +384,12 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     func gameBrainDidGetOpponentNamed(opponentName: String) {
         MWLog("opponentName: \(opponentName)")
         
-        opponentDisplayNameLabel.text = opponentName
-        opponentScoreLabel.text = "0"
-        
-        turnUserInteractionOn()
+        if viewHasAppeared {
+            opponentDisplayNameLabel.text = opponentName
+            opponentScoreLabel.text = "0"
+            
+            turnUserInteractionOn()
+        }
     }
     
     
@@ -412,7 +443,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     opponentName = "Opponent"
                 }
                 
-                // won == nil on a multiplayer is draw
+                // won == nil when a multiplayer game results in a draw
                 destination.prepare(
                     players: gameSetup!.players,
                     won: didWin,
