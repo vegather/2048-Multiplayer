@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GameSetup2<T: Evolvable>: Printable {
+class GameSetup<T: Evolvable>: Printable {
     
     var players: Players
     var setupForCreating: Bool
