@@ -25,7 +25,6 @@ class GameServerManager: ServerManager {
     
     
     
-    
     // -------------------------------
     // MARK: Creating and Joining Games
     // -------------------------------
@@ -106,10 +105,10 @@ class GameServerManager: ServerManager {
         })
     }
     
-    func addInitialStateToCurrentGame(
-        #firstTile: TileValue,
+    func addInitialStateToCurrentGame<T: Evolvable>(
+        #firstTile: T,
         hasCoordinate firstCoordinate: Coordinate,
-        secondTile: TileValue,
+        secondTile: T,
         hasCoordinate secondCoordinate: Coordinate,
         completionHandler:(errorMessage: String?) -> ())
     {
@@ -137,7 +136,18 @@ class GameServerManager: ServerManager {
         })
     }
     
-    func joinGameWithGamepin(gamepin: String, completionHandler: (dimension: Int!, turnDuration: Int!, errorMessage: String?) -> ()) {
+    func joinGameWithGamepin<T: Evolvable>(
+        gamepin: String,
+        completionHandler: (
+            dimension:              Int!,
+            turnDuration:           Int!,
+            tileOneValue:           T!,
+            tileOneCoordinate:      Coordinate!,
+            tileTwoValue:           T!,
+            tileTwoCoordinate:      Coordinate!,
+            opponentDisplayName:    String!,
+            errorMessage:           String?) -> ())
+    {
         // Check if game with gamepin exists
         // Check if that game does not have an opponent
         // Set self as opponent
@@ -147,57 +157,124 @@ class GameServerManager: ServerManager {
         
         gameEntryPoint.observeSingleEventOfType(FEventType.Value,
             withBlock: { (gameSnapshot: FDataSnapshot!) -> Void in
-                if gameSnapshot != nil  {
-                    // There is a game with requested gamepin
-                    gameEntryPoint.observeSingleEventOfType(FEventType.Value,
-                        withBlock: { (gameSnapshot: FDataSnapshot!) -> Void in
-                            if gameSnapshot.childSnapshotForPath("InitialState").exists() == false { // WARNING! WARNING! WARNING! Set to true
-                                // The game has an initial state
-                                if gameSnapshot.childSnapshotForPath("Opponent").exists() == false {
-                                    // There is no opponent yet
-                                    gameEntryPoint.childByAppendingPath("Opponent").setValue(GameServerManager.dataBase().authData.uid)
-                                    
-                                    let gameDimension = gameSnapshot.childSnapshotForPath("BoardSize").value as! Int
-                                    let gameTurnDuration = gameSnapshot.childSnapshotForPath("TurnDuration").value as! Int
-                                    
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        completionHandler(dimension: gameDimension, turnDuration: gameTurnDuration, errorMessage: nil)
-                                    })
-                                    
-                                } else {
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        completionHandler(dimension: nil, turnDuration: nil, errorMessage: "")
-                                    })
+                if gameSnapshot.exists() {
+                    if gameSnapshot.childSnapshotForPath("InitialState").exists() == true {
+                        // The game has an initial state
+                        if gameSnapshot.childSnapshotForPath("Opponent").exists() == false {
+                            // There is no opponent yet
+                            
+                            let userPath = GameServerManager.dataBase().childByAppendingPath("users").childByAppendingPath("simplelogin:\(gamepin)")
+                            userPath.observeSingleEventOfType(FEventType.Value)
+                                { (userSnapshot: FDataSnapshot!) -> Void in
+                                    MWLog("Got userdata \"\(userSnapshot)\" for uid \"simplelogin\(gamepin)\"")
+                                    if let opponentName = userSnapshot.childSnapshotForPath("displayName").value as? String {
+                                        MWLog("Game creator (opponent) name \"\(opponentName)\"")
+                                        
+                                        // ####  WARNING!!  ####
+                                        // SHOULD USE MORE PROTECTION IN HERE! THIS MIGHT CRASH!!
+                                        
+                                        gameEntryPoint.childByAppendingPath("Opponent").setValue(GameServerManager.dataBase().authData.uid)
+                                        
+                                        let gameDimension           = gameSnapshot.childSnapshotForPath("BoardSize").value as! Int
+                                        let gameTurnDuration        = gameSnapshot.childSnapshotForPath("TurnDuration").value as! Int
+                                        
+                                        let initialStateSnapshot    = gameSnapshot.childSnapshotForPath("InitialState")
+                                        let tileOneSnapshot         = initialStateSnapshot.childSnapshotForPath("tile1")
+                                        let tileTwoSnapshot         = initialStateSnapshot.childSnapshotForPath("tile2")
+                                        
+                                        let tileOneValueString      = tileOneSnapshot.childSnapshotForPath("Value").value    as! String
+                                        let tileOneCoordinateString = tileOneSnapshot.childSnapshotForPath("Position").value as! String
+                                        let tileTwoValueString      = tileTwoSnapshot.childSnapshotForPath("Value").value    as! String
+                                        let tileTwoCoordinateString = tileTwoSnapshot.childSnapshotForPath("Position").value as! String
+                                        
+                                        let tileOneValue = TileValue(rawValue: tileOneValueString.toInt()!) as! T
+                                        let tileTwoValue = TileValue(rawValue: tileTwoValueString.toInt()!) as! T
+                                        
+                                        let tileOneCoordinateParts = tileOneCoordinateString.componentsSeparatedByString(",")
+                                        let tileTwoCoordinateParts = tileTwoCoordinateString.componentsSeparatedByString(",")
+                                        
+                                        let tileOneCoordinate = Coordinate(x: tileOneCoordinateParts[0].toInt()!, y: tileOneCoordinateParts[1].toInt()!)
+                                        let tileTwoCoordinate = Coordinate(x: tileTwoCoordinateParts[0].toInt()!, y: tileTwoCoordinateParts[1].toInt()!)
+                                        
+                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                            completionHandler(
+                                                dimension:              gameDimension,
+                                                turnDuration:           gameTurnDuration,
+                                                tileOneValue:           tileOneValue,
+                                                tileOneCoordinate:      tileOneCoordinate,
+                                                tileTwoValue:           tileTwoValue,
+                                                tileTwoCoordinate:      tileTwoCoordinate,
+                                                opponentDisplayName:    opponentName,
+                                                errorMessage:           nil)
+                                        })
+                                    } else {
+                                        MWLog("User with uid simplelogin:\(gamepin) does not have a display name")
+                                    }
                                 }
-                            } else {
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    completionHandler(dimension: nil, turnDuration: nil, errorMessage: "The game has no initial state")
-                                })
-                            }
-                        }, withCancelBlock: { (error: NSError!) -> Void in
-                            if error == nil {
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    completionHandler(dimension: nil, turnDuration: nil, errorMessage: "Unknown error while getting initial the game with gamepin \(gamepin)")
-                                })
-                            } else {
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    completionHandler(dimension: nil, turnDuration: nil, errorMessage: error.localizedDescription)
-                                })
-                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                completionHandler(
+                                    dimension:              nil,
+                                    turnDuration:           nil,
+                                    tileOneValue:           nil,
+                                    tileOneCoordinate:      nil,
+                                    tileTwoValue:           nil,
+                                    tileTwoCoordinate:      nil,
+                                    opponentDisplayName:    nil,
+                                    errorMessage:           "The game already have an opponent")
+                            })
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            completionHandler(
+                                dimension:              nil,
+                                turnDuration:           nil,
+                                tileOneValue:           nil,
+                                tileOneCoordinate:      nil,
+                                tileTwoValue:           nil,
+                                tileTwoCoordinate:      nil,
+                                opponentDisplayName:    nil,
+                                errorMessage:           "The game is not completely created yet. Wait for prompt on opponents screen.")
                         })
+                    }
                 } else {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        completionHandler(dimension: nil, turnDuration: nil, errorMessage: "There is no game with gamepin \(gamepin)")
+                        completionHandler(
+                            dimension:              nil,
+                            turnDuration:           nil,
+                            tileOneValue:           nil,
+                            tileOneCoordinate:      nil,
+                            tileTwoValue:           nil,
+                            tileTwoCoordinate:      nil,
+                            opponentDisplayName:    nil,
+                            errorMessage:           "There is no game with gamepin \(gamepin)")
                     })
                 }
+                
             }) { (error: NSError!) -> Void in
                 if error == nil {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        completionHandler(dimension: nil, turnDuration: nil, errorMessage: "Unknown error while getting game with gamepin \(gamepin)")
+                        completionHandler(
+                            dimension:              nil,
+                            turnDuration:           nil,
+                            tileOneValue:           nil,
+                            tileOneCoordinate:      nil,
+                            tileTwoValue:           nil,
+                            tileTwoCoordinate:      nil,
+                            opponentDisplayName:    nil,
+                            errorMessage:           "Unknown error while getting game with gamepin \(gamepin)")
                     })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        completionHandler(dimension: nil, turnDuration: nil, errorMessage: error.localizedDescription)
+                        completionHandler(
+                            dimension:              nil,
+                            turnDuration:           nil,
+                            tileOneValue:           nil,
+                            tileOneCoordinate:      nil,
+                            tileTwoValue:           nil,
+                            tileTwoCoordinate:      nil,
+                            opponentDisplayName:    nil,
+                            errorMessage:           error.localizedDescription)
                     })
                 }
         }
@@ -205,7 +282,7 @@ class GameServerManager: ServerManager {
     
     func performedMoveInDirection<T: Evolvable>(direction: MoveDirection, whichSpawnedTile newTile: T, atCoordinate coordinate: Coordinate) {
         // Update the LastMove on the server
-        // Use updateChildValues
+        // Use updateChildValues to not overwrite
         
         
     }
@@ -228,38 +305,3 @@ class GameServerManager: ServerManager {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//dataBasePath.childByAppendingPath("Opponent").observeSingleEventOfType(FEventType.Value,
-//    withBlock: { (opponentSnapshot: FDataSnapshot!) -> Void in
-//        if opponentSnapshot.exists() == false {
-//            // There is no opponent, so create it
-//            dataBasePath.childByAppendingPath("Opponent").setValue(GameServerManager.dataBase().authData.uid)
-//            
-//        } else {
-//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                completionHandler(dimension: nil, turnDuration: nil, errorMessage: "The game with gamepin \(gamepin) already has an opponent")
-//            })
-//        }
-//    }, withCancelBlock: { (error:NSError!) -> Void in
-//        if error == nil {
-//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                completionHandler(dimension: nil, turnDuration: nil, errorMessage: "Unknown error while getting opponent for game with gamepin \(gamepin)")
-//            })
-//        } else {
-//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                completionHandler(dimension: nil, turnDuration: nil, errorMessage: error.localizedDescription)
-//            })
-//        }
-//})
