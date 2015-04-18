@@ -114,33 +114,16 @@ class JoinGameViewController: UIViewController {
         dismissKeyboard()
         
         if let gamePin = enteredGamepin() {
-            gameServer.joinGameWithGamepin(gamePin) { (
-                dimension:              Int!,
-                turnDuration:           Int!,
-                tileOneValue:           T!,
-                tileOneCoordinate:      Coordinate!,
-                tileTwoValue:           T!,
-                tileTwoCoordinate:      Coordinate!,
-                opponentDisplayName:    String!,
-                errorMessage:           String?
-                ) -> () in
+            gameServer.joinGameWithGamepin(
+                gamePin,
+                completionHandler: { (gameSetup: GameSetup<T>!, errorMessage: String?) -> () in
                     if let errorMessage = errorMessage {
                         self.showAlertWithTitle("Error while joining game", andMessage: errorMessage)
                     } else {
-                        self.gameSetup = GameSetup(
-                            players:                Players.Multi,
-                            setupForCreating:       false,
-                            dimension:              dimension,
-                            turnDuration:           turnDuration,
-                            firstValue:             tileOneValue,
-                            firstCoordinate:        tileOneCoordinate,
-                            secondValue:            tileTwoValue,
-                            secondCoordinate:       tileTwoCoordinate,
-                            opponentDisplayName:    opponentDisplayName)
-                        
+                        self.gameSetup = gameSetup
                         self.performSegueWithIdentifier(SegueIdentifier.PushGameFromJoinGame, sender: self)
                     }
-                }
+            })
         } else {
             showAlertWithTitle("No gamepin", andMessage: "You need to enter the gamepin that is showing on your opponents screen.")
         }
@@ -193,6 +176,8 @@ class JoinGameViewController: UIViewController {
     // -------------------------------
     
     private func showAlertWithTitle(title: String, andMessage message: String) {
+        MWLog("Will show alert with title \"\(title)\" and message \"\(message)\"")
+        
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         let doneAction = UIAlertAction(title: "Got it", style: UIAlertActionStyle.Default, handler: nil)
         alert.addAction(doneAction)

@@ -31,11 +31,11 @@
 		9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A76B6091AAFA6CF0042B378 /* BoardView.swift */; };
 		9AAF6DB11AA3B4650053CBA9 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */; };
 		9AB95D511AD3261D0079ED31 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */; };
+		9AC4171B1AE188C7008D4EF8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AC4171A1AE188C7008D4EF8 /* Images.xcassets */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
 		9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */; };
 		9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */; };
-		9ADD7CA71AA2212800BDCFA8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */; };
 		9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */; };
 		9ADD7CB61AA2212800BDCFA8 /* EdwinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */; };
 		9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */; };
@@ -78,13 +78,13 @@
 		9A76B6091AAFA6CF0042B378 /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		9AAF6DB01AA3B4650053CBA9 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBoard.swift; path = ../GameBoard.swift; sourceTree = "<group>"; };
 		9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
+		9AC4171A1AE188C7008D4EF8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADD7C9E1AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		9ADD7CA41AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9ADD7CA91AA2212800BDCFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9ADD7CAF1AA2212800BDCFA8 /* EdwinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EdwinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADD7CB41AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -209,9 +209,9 @@
 			isa = PBXGroup;
 			children = (
 				9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */,
-				9ADD7CA61AA2212800BDCFA8 /* Images.xcassets */,
 				9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */,
 				9ADD7C9E1AA2212800BDCFA8 /* Info.plist */,
+				9AC4171A1AE188C7008D4EF8 /* Images.xcassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -313,9 +313,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AC4171B1AE188C7008D4EF8 /* Images.xcassets in Resources */,
 				9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */,
 				9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */,
-				9ADD7CA71AA2212800BDCFA8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +526,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -576,6 +577,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

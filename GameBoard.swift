@@ -34,6 +34,20 @@ class GameBoard<B: GameBoardDelegate> {
         self.board = [[C?]](count: dimension, repeatedValue: [C?](count: dimension, repeatedValue: nil))
     }
     
+    func isFull() -> Bool {
+        var full = true
+        for row in 0..<self.dimension {
+            for col in 0..<self.dimension {
+                if self.board[row][col] == nil {
+                    full = false
+                    break
+                }
+            }
+        }
+        
+        return full
+    }
+    
     
     
     // -------------------------------
@@ -517,38 +531,49 @@ class GameBoard<B: GameBoardDelegate> {
     // -------------------------------
     
     // Will do nothing if there are no empty spots on the board
-    func spawnNewGamePieceAtRandomPosition() -> MoveAction<C> {
-        var emptySpots = [Coordinate]()
+    func spawnNewGamePieceAtRandomPosition() -> MoveAction<C>? {
         
-        for row in 0..<self.dimension {
-            for col in 0..<self.dimension {
-                if self.board[row][col] == nil {
-                    let coordinateToAppend = Coordinate(x: col, y: row)
-                    emptySpots.append(coordinateToAppend)
+        if self.isFull() == false {
+            var emptySpots = [Coordinate]()
+            
+            for row in 0..<self.dimension {
+                for col in 0..<self.dimension {
+                    if self.board[row][col] == nil {
+                        let coordinateToAppend = Coordinate(x: col, y: row)
+                        emptySpots.append(coordinateToAppend)
+                    }
                 }
             }
+            
+            let indexOfSpot = UInt32(arc4random()) % UInt32(emptySpots.count)
+            
+            let spot = emptySpots[Int(indexOfSpot)]
+            let value = C.getBaseValue()
+            
+            self.board[spot.y][spot.x] = value
+            
+            MWLog("Gameboard after spawn")
+            printBoard()
+            
+            let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
+    //        self.delegate?.gameBoardDidSpawnNodesWithAction(spawnAction)
+            
+            return spawnAction
+        } else {
+            MWLog("The board is full")
+            return nil
         }
-        
-        let indexOfSpot = UInt32(arc4random()) % UInt32(emptySpots.count)
-        
-        let spot = emptySpots[Int(indexOfSpot)]
-        let value = C.getBaseValue()
-        
-        self.board[spot.y][spot.x] = value
-        
-        MWLog("Gameboard after spawn")
-        printBoard()
-        
-        let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
-//        self.delegate?.gameBoardDidSpawnNodesWithAction(spawnAction)
-        
-        return spawnAction
     }
     
-    func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> MoveAction<C> {
-        MWLog("Spawning \(value) at \(coordinate)")
-        self.board[coordinate.y][coordinate.x] = value
-        return MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
+    func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> MoveAction<C>? {
+        if self.board[coordinate.y][coordinate.x] == nil {
+            MWLog("Spawning \(value) at \(coordinate)")
+            self.board[coordinate.y][coordinate.x] = value
+            return MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
+        } else {
+            MWLog("The coordinate: \(coordinate) is already occupied by \(value)")
+            return nil
+        }
     }
     
     

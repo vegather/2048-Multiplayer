@@ -20,6 +20,7 @@ protocol GameBrainDelegate: class {
     func gameBrainUserHasNewScore(newUserScore: Int)
     func gameBrainOpponentHasNewScore(newOpponentScore: Int)
     func gameBrainDidChangeTurnTo(currentTurn: Turn)
+    func gameIsOver()
     
     func gameBrainWillCreateMultiplayerGame()
     func gameBrainDidCreateMultiplayerGameWithGamepin(gamePin: String)
@@ -41,16 +42,21 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     typealias F = E.D
     typealias A = F
     
-    private(set) var userScore = 0      // Public getter, private setter
+    private(set) var userScore = 0 // Public getter, private setter
     private(set) var opponentScore = 0  // Public getter, private setter
     private weak var delegate: E?
     private var gameBoard: GameBoard<GameBrain>!
     
-    private var gameServer = GameServerManager()
+    private var gameServer: GameServerManager!
     private var gameSetup: GameSetup<F>!
     
     private(set) var currentPlayer: Turn = Turn.User { // Public getter, private setter
         didSet {
+            if currentPlayer == Turn.User {
+                MWLog("Changed current player to \"User\"")
+            } else {
+                MWLog("Changed current player to \"Opponent\"")
+            }
             self.delegate?.gameBrainDidChangeTurnTo(self.currentPlayer)
         }
     }
@@ -74,45 +80,55 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     let userDisplayName: String = UserServerManager.lastKnownCurrentUserDisplayName
     
     init(delegate: E?) {
-        
         self.delegate = delegate
-        self.gameServer.gameDelegate = self
-        self.gameServer.creatorDelegate = self
     } 
     
     func moveInDirection(direction: MoveDirection) {
-        let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
-        let spawn   = self.gameBoard.spawnNewGamePieceAtRandomPosition()
-        
-        self.delegate?.gameBrainDidProduceActions(actions)
-        self.delegate?.gameBrainDidProduceActions([spawn])
-        
-        if currentPlayer == Turn.User {
-            userScore += scoreIncrease
-            self.delegate?.gameBrainUserHasNewScore(userScore)
-        } else {
-            opponentScore += scoreIncrease
-            self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
-        }
-        
-        
-        if gameSetup.players == Players.Multi {
-            
-            // Change currentPlayer
-            if currentPlayer == Turn.User {
-                currentPlayer = Turn.Opponent
+        if gameBoard.isFull() == false {
+            let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
+            if actions.count > 0 {
+                if let spawn = self.gameBoard.spawnNewGamePieceAtRandomPosition() {
+                
+                    self.delegate?.gameBrainDidProduceActions(actions)
+                    self.delegate?.gameBrainDidProduceActions([spawn])
+                    
+                    if gameSetup.players == Players.Multi {
+                        
+                        MWLog("Multi player game")
+                        
+                        // Change currentPlayer
+                        if currentPlayer == Turn.User {
+                            userScore += scoreIncrease
+                            self.delegate?.gameBrainUserHasNewScore(userScore)
+                            currentPlayer = Turn.Opponent
+                        } else {
+                            opponentScore += scoreIncrease
+                            self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
+                            currentPlayer = Turn.User
+                        }
+                        
+                        // Have to do switch case to unwrap associated value
+                        switch spawn {
+                        case let .Spawn(gamePiece):
+                            MWLog("Letting server know about new LastMove")
+                            gameServer.performedMoveInDirection(direction,
+                                whichSpawnedTile: gamePiece.value,
+                                atCoordinate: gamePiece.position)
+                        default: break
+                        }
+                    } else if gameSetup.players == Players.Single {
+                        MWLog("Single Player game")
+                        userScore += scoreIncrease
+                        self.delegate?.gameBrainUserHasNewScore(userScore)
+                    }
+                } else {
+                    MWLog("ERROR: Could not spawn")
+                }
             } else {
-                currentPlayer = Turn.User
+                MWLog("ERROR: That is not a legal move")
             }
-            
-            // Have to do switch case to unwrap associated value
-            switch spawn {
-            case let .Spawn(gamePiece):
-                gameServer.performedMoveInDirection(direction,
-                    whichSpawnedTile: gamePiece.value,
-                    atCoordinate: gamePiece.position)
-            default: break
-            }
+        } else {
+            MWLog("ERROR: Can't move with a full board")
         }
     }
     
@@ -126,42 +142,6 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     
     
     // -------------------------------
-    // MARK: Game Board Delegate Methods
-    // -------------------------------
-//    func gameBoardDidSpawnNodesWithAction(spawnAction: MoveAction<A>) {
-//        switch spawnAction {
-//        case let .Spawn(gamePiece):
-//            if self.gameSetup.firstTile == nil {
-//                MWLog("Setting the gameSetups firstTile to \(gamePiece)")
-//                self.gameSetup.firstTile = gamePiece.value as! TileValue
-//                self.gameSetup.firstCoordinate = gamePiece.position
-//            } else if self.gameSetup.secondTile == nil {
-//                MWLog("Setting the gameSetups secondTile to \(gamePiece)")
-//                self.gameSetup.secondTile = gamePiece.value as! TileValue
-//                self.gameSetup.secondCoordinate = gamePiece.position
-//                self.finis⌘hSetup()
-//            } else {
-//                self.delegate?.gameBrainDidProduceActions([spawnAction])
-//            }
-//        default:
-//            MWLog("Not a Spawn action")
-//        }
-//    }
-//    
-//    func gameBoardDidCalculateScoreIncrease(scoreIncrease: Int) {
-//        switch self.currentPlayer {
-//        case .User:
-//            self.userScore += scoreIncrease
-//            self.delegate?.gameBrainUserHasNewScore(self.userScore)
-//        case .Opponent:
-//            self.opponentScore += scoreIncrease
-//            self.delegate?.gameBrainOpponentHasNewScore(self.opponentScore)
-//        }
-//    }
-    
-    
-    
-    // -------------------------------
     // MARK: Prepare for game
     // -------------------------------
     
@@ -171,55 +151,75 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
         
         if gameSetup.setupForCreating {
             MWLog("Setting up for creating")
-            let firstSpawnAction  = self.gameBoard.spawnNewGamePieceAtRandomPosition()
-            let secondSpawnAction = self.gameBoard.spawnNewGamePieceAtRandomPosition()
-            
-            // Need to do this through switch case for the moment
-            switch firstSpawnAction {
-            case let .Spawn(gamePiece):
-                self.gameSetup.firstTile = gamePiece.value
-                self.gameSetup.firstCoordinate = gamePiece.position
-            default: break
-            }
-            
-            switch secondSpawnAction {
-            case let .Spawn(gamePiece):
-                self.gameSetup.secondTile = gamePiece.value
-                self.gameSetup.secondCoordinate = gamePiece.position
-            default: break
-            }
-            
-            if gameSetup.players == Players.Multi {
-                self.delegate?.gameBrainWillCreateMultiplayerGame()
-                
-                self.gameServer.createGameWithDimension(gameSetup.dimension, turnDuration: gameSetup.turnDuration)
-                    { (gamePin: String!, errorMessage: String?) -> () in
-                        if let error = errorMessage {
-                            MWLog("Got error from createGame: \(error)")
-                        } else {
-                            MWLog("Got gamePin: \(gamePin)")
-                            self.gamePin = gamePin
-                        }
+            if let firstSpawnAction  = self.gameBoard.spawnNewGamePieceAtRandomPosition() {
+                if let secondSpawnAction = self.gameBoard.spawnNewGamePieceAtRandomPosition() {
+                    
+                    self.gameServer = GameServerManager()
+                    self.gameServer.gameDelegate = self
+                    self.gameServer.creatorDelegate = self
+                    
+                    // Need to do this through switch case for the moment
+                    switch firstSpawnAction {
+                    case let .Spawn(gamePiece):
+                        self.gameSetup.firstTile = gamePiece.value
+                        self.gameSetup.firstCoordinate = gamePiece.position
+                    default: break
                     }
+                    
+                    switch secondSpawnAction {
+                    case let .Spawn(gamePiece):
+                        self.gameSetup.secondTile = gamePiece.value
+                        self.gameSetup.secondCoordinate = gamePiece.position
+                    default: break
+                    }
+                    
+                    if gameSetup.players == Players.Multi {
+                        self.delegate?.gameBrainWillCreateMultiplayerGame()
+                        
+                        self.gameServer.createGameWithDimension(gameSetup.dimension, turnDuration: gameSetup.turnDuration)
+                            { (gamePin: String!, errorMessage: String?) -> () in
+                                if let error = errorMessage {
+                                    MWLog("Got error from createGame: \(error)")
+                                } else {
+                                    MWLog("Got gamePin: \(gamePin)")
+                                    self.gamePin = gamePin
+                                }
+                            }
+                    } else {
+                        self.delegate?.gameBrainDidCreateSinglePlayerGame()
+                    }
+                    
+                    let spawnActions = [firstSpawnAction, secondSpawnAction]
+                    self.delegate?.gameBrainDidProduceActions(spawnActions)
+                } else {
+                    MWLog("ERROR: Could not spawn second random tile")
+                }
             } else {
-                self.delegate?.gameBrainDidCreateSinglePlayerGame()
+                MWLog("ERROR: Could not spawn first random tile")
             }
-            
-            let spawnActions = [firstSpawnAction, secondSpawnAction]
-            self.delegate?.gameBrainDidProduceActions(spawnActions)
         } else {
             MWLog("Setting up for joining")
             // Setup for joining, implied that it's a Players.Multi game
             
             self.opponentDisplayName = gameSetup.opponentDisplayName
+            self.gameServer = gameSetup.gameServer
+            self.gameServer.gameDelegate = self
+            self.currentPlayer = Turn.Opponent
             
             // MIGHT NEED TO DO SOMETHING WITH THE TURN DURATION IN HERE
             
-            let firstSpawn =  self.gameBoard.spawnNodeWithValue(gameSetup.firstTile, atCoordinate: gameSetup.firstCoordinate)
-            let secondSpawn = self.gameBoard.spawnNodeWithValue(gameSetup.secondTile, atCoordinate: gameSetup.secondCoordinate)
-            let spawns = [firstSpawn, secondSpawn]
-            self.delegate?.gameBrainDidProduceActions(spawns)
-            self.delegate?.gameBrainDidJoinGame()
+            if let firstSpawn =  self.gameBoard.spawnNodeWithValue(gameSetup.firstTile, atCoordinate: gameSetup.firstCoordinate) {
+                if let secondSpawn = self.gameBoard.spawnNodeWithValue(gameSetup.secondTile, atCoordinate: gameSetup.secondCoordinate) {
+                    let spawns = [firstSpawn, secondSpawn]
+                    self.delegate?.gameBrainDidProduceActions(spawns)
+                    self.delegate?.gameBrainDidJoinGame()
+                    MWLog("Finished joining game")
+                } else {
+                    MWLog("ERROR: Could not spawn second planned tile")
+                }
+            } else {
+                MWLog("ERROR: Could not spawn first planned tile")
+            }
         }
     }
     
@@ -254,10 +254,6 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             }
     }
     
-    private func finishSetup() {
-        
-    }
-    
     
     
     
@@ -265,12 +261,35 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     // MARK: Game Delegate
     // -------------------------------
     
-    func opponentDidPerformMoveInDirection(
-        direction: MoveDirection,
-        whichSpawnedTile newTile: TileValue,
-        atCoordinate coordinate: Coordinate)
+    func opponentDidPerformMoveInDirection<T: Evolvable>(direction: MoveDirection, whichSpawnedTile newTile: T, atCoordinate coordinate: Coordinate)
     {
+        // Do direction first
+        // Then spawn
+        // Send direction to VC
+        // Send spawn to VC
         
+        MWLog("Received direction: \(direction), spawnCoordinate: \(coordinate), spawnValue: \(newTile)")
+        
+        let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
+        if let spawnAction = self.gameBoard.spawnNodeWithValue(newTile as! F, atCoordinate: coordinate) {
+            
+            if currentPlayer == Turn.User {
+                userScore += scoreIncrease
+                self.delegate?.gameBrainUserHasNewScore(userScore)
+                currentPlayer = Turn.Opponent
+            } else {
+                opponentScore += scoreIncrease
+                self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
+                currentPlayer = Turn.User
+            }
+            
+            MWLog("Will notify GameVC \(self.delegate) about new actions")
+            
+            self.delegate?.gameBrainDidProduceActions(actions)
+            self.delegate?.gameBrainDidProduceActions([spawnAction])
+        } else {
+            MWLog("ERROR: Could not spawn tile")
+        }
     }
     
     

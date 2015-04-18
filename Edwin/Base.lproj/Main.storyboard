@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="52J-k0-eQv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="52J-k0-eQv">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -20,7 +20,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x00-dp-FYU">
                                 <rect key="frame" x="16" y="424" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="LYS-Pa-O70"/>
                                     <constraint firstAttribute="width" constant="400" id="kas-mE-61p"/>
@@ -46,7 +46,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VEv-ns-6Ke">
                                 <rect key="frame" x="16" y="495" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.15013863150000001" green="0.59735041860000004" blue="0.29534465069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="2gG-Mo-H6i"/>
                                     <constraint firstAttribute="width" constant="400" id="boo-f8-WEz"/>
@@ -75,7 +75,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="0zM-dV-mAz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3R5-5X-5oI">
@@ -269,12 +269,12 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="rjx-PZ-k5c"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efd-L1-dJr">
                                 <rect key="frame" x="16" y="525" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="GeH-Hg-kPE"/>
                                     <constraint firstAttribute="width" constant="400" id="mqX-vI-7yN"/>
@@ -633,7 +633,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B7A-no-A6c">
                                 <rect key="frame" x="16" y="489" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.15013863150000001" green="0.59735041860000004" blue="0.29534465069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="eh8-ZY-ApL"/>
                                     <constraint firstAttribute="width" constant="400" id="sHt-be-93W"/>
@@ -659,7 +659,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GxS-V8-D5D">
                                 <rect key="frame" x="16" y="418" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="2C3-Tj-pES"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="55" id="JmR-ru-tD4"/>
@@ -730,7 +730,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="ndy-0m-TQT"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -780,7 +780,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Hhu-1C-Bqs"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minimumValue="2" maximumValue="8" translatesAutoresizingMaskIntoConstraints="NO" id="SfG-Ka-0Em">
@@ -843,7 +843,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xrp-VQ-upH">
                                 <rect key="frame" x="16" y="436" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="Hpt-jE-H9h"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="55" id="san-sz-sOT"/>
@@ -871,7 +871,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvA-Le-Yt8">
                                 <rect key="frame" x="16" y="499" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.15013863150000001" green="0.59735041860000004" blue="0.29534465069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="0gF-CU-038"/>
                                     <constraint firstAttribute="height" constant="55" id="IXs-vg-CCV"/>
@@ -975,7 +975,8 @@
                                         <exclude reference="aD6-CL-sQC"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular">
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="104" y="100" width="400" height="0.0"/>
                                     <mask key="constraints">
                                         <include reference="aD6-CL-sQC"/>
                                     </mask>
@@ -993,7 +994,8 @@
                                         <exclude reference="jwh-qk-hKH"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular">
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="104" y="108" width="400" height="30"/>
                                     <mask key="constraints">
                                         <include reference="jwh-qk-hKH"/>
                                     </mask>
@@ -1001,7 +1003,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efo-wW-mDw">
                                 <rect key="frame" x="16" y="345" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="J7G-Ay-uDs"/>
                                     <constraint firstAttribute="height" constant="55" id="bpb-36-78S"/>
@@ -1030,6 +1032,9 @@
                                 <subviews>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Udn-eu-eKa">
                                         <rect key="frame" x="290" y="35" width="20" height="20"/>
+                                        <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
+                                            <rect key="frame" x="390" y="-10" width="20" height="20"/>
+                                        </variation>
                                     </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1037,18 +1042,24 @@
                                     <constraint firstAttribute="centerY" secondItem="Udn-eu-eKa" secondAttribute="centerY" id="fHS-35-NID"/>
                                     <constraint firstAttribute="centerX" secondItem="Udn-eu-eKa" secondAttribute="centerX" id="r85-3N-xnY"/>
                                 </constraints>
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="100" width="800" height="0.0"/>
+                                </variation>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edwin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ka-1d-kWS">
                                 <rect key="frame" x="16" y="70" width="568" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="qdz-Vn-Yqv"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
+                                    <rect key="frame" x="16" y="70" width="768" height="60"/>
+                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xsr-rv-9ou">
                                 <rect key="frame" x="16" y="425" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.15013863150000001" green="0.59735041860000004" blue="0.29534465069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="HKN-3x-aHs"/>
                                     <constraint firstAttribute="width" constant="400" id="c1W-DK-T5t"/>
@@ -1080,6 +1091,9 @@
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="16" y="95" width="73" height="24"/>
+                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eZf-9o-B8g">
                                 <rect key="frame" x="16" y="222" width="80" height="24"/>
@@ -1089,6 +1103,9 @@
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="16" y="87" width="80" height="24"/>
+                                </variation>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1180,12 +1197,12 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="HuW-3O-nmT"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="53"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="53"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5bu-cv-OuV">
                                 <rect key="frame" x="16" y="432" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.1254153103" green="0.48471024629999998" blue="0.24275158350000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="21g-jv-hmq"/>
                                     <constraint firstAttribute="width" constant="400" id="Jp0-sD-4Wl"/>
@@ -1211,7 +1228,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOD-ON-aN3">
                                 <rect key="frame" x="16" y="337" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.15013863150000001" green="0.59735041860000004" blue="0.29534465069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="a2d-6b-Sas"/>
                                     <constraint firstAttribute="height" constant="55" id="poN-OF-2My"/>
@@ -1234,7 +1251,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nP2-NE-OaJ">
                                 <rect key="frame" x="16" y="274" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="13b-ih-HSQ"/>
                                     <constraint firstAttribute="width" constant="400" id="TYb-Qa-j6Z"/>
@@ -1260,7 +1277,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rHE-oR-xCg">
                                 <rect key="frame" x="16" y="211" width="568" height="55"/>
-                                <color key="backgroundColor" red="0.43387985849999999" green="0.78042416479999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.2008396834" green="0.82978636029999997" blue="0.40346345309999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="aqg-K1-lcq"/>
                                     <constraint firstAttribute="height" constant="55" id="oJV-B0-tq4"/>
@@ -1313,6 +1330,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Qia-Jt-cgH"/>
-        <segue reference="ADF-F8-pCW"/>
+        <segue reference="U7e-Xg-Q1Q"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.17521558700000001" green="0.71211266520000005" blue="0.34878253939999998" alpha="1" colorSpace="calibratedRGB"/>
 </document>

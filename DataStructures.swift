@@ -18,7 +18,8 @@ class GameSetup<T: Evolvable>: Printable {
     var firstCoordinate: Coordinate!
     var secondTile: T!
     var secondCoordinate: Coordinate!
-    var opponentDisplayName: String! // Primarily used when joining a game
+    var opponentDisplayName: String!   // Primarily used when joining a game
+    var gameServer: GameServerManager! // Primarily used when joining a game
     
     init(players: Players, setupForCreating: Bool, dimension: Int, turnDuration: Int) {
         self.players = players
@@ -36,7 +37,8 @@ class GameSetup<T: Evolvable>: Printable {
         firstCoordinate: Coordinate!,
         secondValue: T!,
         secondCoordinate: Coordinate!,
-        opponentDisplayName: String!)
+        opponentDisplayName: String!,
+        gameServer: GameServerManager!)
     {
         self.init(players: players, setupForCreating: setupForCreating, dimension: dimension, turnDuration: turnDuration)
         self.firstTile = firstValue
@@ -44,6 +46,7 @@ class GameSetup<T: Evolvable>: Printable {
         self.secondTile = secondValue
         self.secondCoordinate = secondCoordinate
         self.opponentDisplayName = opponentDisplayName
+        self.gameServer = gameServer
     }
     
     func isReady() -> Bool {
