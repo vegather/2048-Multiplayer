@@ -18,7 +18,7 @@ func MWLog(filePath: String = __FILE__, functionName: String = __FUNCTION__, lin
 }
 
 func MWLog(message: String, filePath: String = __FILE__, functionName: String = __FUNCTION__, lineNumber: Int = __LINE__) {
-    dispatch_async(logQueue, { () -> Void in
+//    dispatch_async(logQueue, { () -> Void in
         var printString = ""
         
         if SHOULD_INCLUDE_TIME {
@@ -59,5 +59,5 @@ func MWLog(message: String, filePath: String = __FILE__, functionName: String = 
             message)
         
         println(printString)
-    });
+//    });
 }

@@ -22,10 +22,12 @@ class UserServerManager: ServerManager {
             MWLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
             
             if error == nil, let data = data {
-                self.dataBase().childByAppendingPath("users").childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
+                self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
                     withBlock: { (snapshot: FDataSnapshot!) -> Void in
-                        let name = snapshot.childSnapshotForPath("displayName").value as! String
-                        self.lastKnownCurrentUserDisplayName = name
+                        let nameSnapshot = snapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName)
+                        if nameSnapshot.exists() {
+                            self.lastKnownCurrentUserDisplayName = nameSnapshot.value as! String
+                        }
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             completionHandler(errorMessage: nil)
@@ -105,12 +107,19 @@ class UserServerManager: ServerManager {
             MWLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
             
             if createUserError == nil {
-                self.loginWithEmail(email, password: password, completionHandler: { (errorMessage: String?) -> () in
-                    
-                    let newUser = ["email": email, "displayName" : displayName] as NSDictionary
-                    self.dataBase().childByAppendingPath("users").childByAppendingPath(self.dataBase().authData.uid).setValue(newUser)
-                    
-                    completionHandler(errorMessage: errorMessage)
+                
+                let newUser = [FireBaseKeys.Users.Email: email, FireBaseKeys.Users.DisplayName : displayName] as NSDictionary
+                let userUID = createUserData["uid"] as! String
+                let newUserPath = self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
+                
+                newUserPath.setValue(newUser, withCompletionBlock: { (setNewUserError: NSError!, ref: Firebase!) -> Void in
+                    if setNewUserError == nil {
+                        self.loginWithEmail(email, password: password, completionHandler: { (errorMessage: String?) -> () in
+                            completionHandler(errorMessage: errorMessage)
+                        })
+                    } else {
+                        MWLog("ERROR: Got error while setting new user \(setNewUserError.localizedDescription)")
+                    }
                 })
             } else {
                 completionHandler(errorMessage: "\(createUserError)")
