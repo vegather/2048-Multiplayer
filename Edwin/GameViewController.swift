@@ -21,6 +21,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     var blurryMessageView: BlurryMessageView!
     
     var initialGameStateActions = [MoveAction<D>]()
+    var gameResult: GameResult? // This needs to be set before calling performSegue
     
     var viewHasAppeared = false
     
@@ -280,6 +281,21 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     
     
+    // -------------------------------
+    // MARK: Timer
+    // -------------------------------
+    
+    private func timerTimetOut() {
+        
+    }
+    
+    private func connectionToOpponentTimedOut() {
+        
+    }
+    
+    
+    
+    
     
     // -------------------------------
     // MARK: Board View Delegate
@@ -349,8 +365,53 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
     
-    func gameIsOver() {
+    func gameBrainGameIsOverFromFillingUpBoard() {
         // Find out who won
+        MWLog()
+        
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Single {
+                
+                // Singleplayer
+                gameResult = GameResult(
+                    players:                Players.Single,
+                    boardSize:              gameSetup.dimension,
+                    turnDuration:           gameSetup.turnDuration,
+                    currentUserScore:       gameBrain.userScore,
+                    currentUserDisplayName: gameBrain.userDisplayName)
+            } else {
+                
+                // Multiplayer
+                
+                var didWin: Bool? = nil
+                if gameBrain.userScore > gameBrain.opponentScore {
+                    didWin = true
+                } else if gameBrain.userScore < gameBrain.opponentScore {
+                    didWin = false
+                } // Otherwise draw
+                
+                let opponentName: String
+                if let opponentDisplayName = gameBrain.opponentDisplayName {
+                    opponentName = opponentDisplayName
+                } else {
+                    opponentName = "Opponent"
+                }
+                
+                gameResult = GameResult(
+                    players:                Players.Multi,
+                    boardSize:              gameSetup.dimension,
+                    turnDuration:           gameSetup.turnDuration,
+                    won:                    didWin,
+                    currentUserScore:       gameBrain.userScore,
+                    opponentScore:          gameBrain.opponentScore,
+                    currentUserDisplayName: gameBrain.userDisplayName,
+                    opponentDisplayName:    opponentName)
+            }
+            
+            self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+        } else {
+            MWLog("ERROR: There was no gameSetup")
+        }
     }
     
     
@@ -441,30 +502,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         if segue.identifier == SegueIdentifier.PushByPoppingToOverFromGame {
             if let destination = segue.destinationViewController as? GameOverViewController {
                 
-                var didWin: Bool? = nil
-                if gameBrain.userScore > gameBrain.opponentScore {
-                    didWin = true
-                } else if gameBrain.userScore < gameBrain.opponentScore {
-                    didWin = false
-                } // Otherwise draw
-                
-                let userName: String = gameBrain.userDisplayName
-                
-                let opponentName: String
-                if let opponentDisplayName = gameBrain.opponentDisplayName {
-                    opponentName = opponentDisplayName
-                } else {
-                    opponentName = "Opponent"
-                }
-                
-                // won == nil when a multiplayer game results in a draw
-                destination.prepare(
-                    players: gameSetup!.players,
-                    won: didWin,
-                    currentUserScore: gameBrain.userScore,
-                    opponentScore: gameBrain.opponentScore,
-                    currentUserDisplayName: userName,
-                    opponentDisplayName: opponentName)
+                destination.gameResult = gameResult
             }
         }
     }
