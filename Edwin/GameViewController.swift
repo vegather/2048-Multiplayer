@@ -123,6 +123,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             
             if let gameView = self.gameView, gameSetup = self.gameSetup {
                 if gameSetup.players == Players.Single {
+                    timeLeftLabel.hidden = true
                     
                     self.turnUserInteractionOn()
                     
@@ -140,9 +141,10 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     
                     opponentDisplayNameLabel.hidden = true
                     opponentScoreLabel.hidden = true
+                } else {
+                    timeLeftLabel.hidden = false
+                    timeLeft = gameSetup.turnDuration
                 }
-                
-                timeLeft = gameSetup.turnDuration
                 
                 self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: gameSetup.dimension)
                 self.gameBoardScene?.gameViewDelegate = self
@@ -306,13 +308,19 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     private func startCurrentUserTimer() {
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
-                self.timeLeftTimer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1),
-                    target:   self,
-                    selector: Selector("decrementCurrentUserTimeLeft:"),
-                    userInfo: nil,
-                    repeats:  true)
-                
-                timeLeft = gameSetup.turnDuration
+                if gameBrain.opponentDisplayName != nil {
+                    MWLog("Starting timer")
+                    
+                    self.timeLeftTimer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1),
+                        target:   self,
+                        selector: Selector("decrementCurrentUserTimeLeft:"),
+                        userInfo: nil,
+                        repeats:  true)
+                    
+                    timeLeft = gameSetup.turnDuration
+                } else {
+                    MWLog("ERROR: There is not an opponent yet.")
+                }
             } else {
                 MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
             }
@@ -324,6 +332,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     private func stopCurrentUserTimer() {
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
+                MWLog("Stopping timer")
+                
                 timeLeftTimer?.invalidate()
                 timeLeftTimer = nil
                 timeLeft = gameSetup.turnDuration
@@ -335,7 +345,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
     
-    private func decrementCurrentUserTimeLeft(timer: NSTimer!) {
+    @objc private func decrementCurrentUserTimeLeft(timer: NSTimer!) {
         timeLeft--
         if timeLeft == 0 {
             currentUserTimerTimedOut()
@@ -394,12 +404,13 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     private func startOpponentTimeoutTimer() {
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
-                opponentTimeoutTimer = NSTimer(
-                    timeInterval: NSTimeInterval(gameSetup.turnDuration * 2),
-                    target: self,
+                MWLog("Setting timer to turnDuration * 2")
+                
+                opponentTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(gameSetup.turnDuration * 2),
+                    target:   self,
                     selector: Selector("opponentTimerTimedOut:"),
                     userInfo: nil,
-                    repeats: false)
+                    repeats:  false)
             } else {
                 MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
             }
@@ -412,6 +423,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     private func stopOpponentTimeoutTimer() {
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
+                MWLog("Invalidating timer")
                 opponentTimeoutTimer?.invalidate()
                 opponentTimeoutTimer = nil
             } else {
@@ -422,9 +434,11 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
     
-    private func opponentTimerTimedOut(timer: NSTimer) {
+    @objc private func opponentTimerTimedOut(timer: NSTimer!) {
         
         if let gameSetup = gameSetup {
+            MWLog("Will present alert")
+            
             let opponentName: String
             if let opponentDisplayName = gameBrain.opponentDisplayName {
                 opponentName = opponentDisplayName
@@ -470,12 +484,22 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func boardViewDidFinishAnimating() {
-        if gameBrain.currentPlayer == Turn.Opponent {
-            MWLog("Opponents turn")
-            turnUserInteractionOffWithMessage("Waiting for opponent to move...")
-        } else if gameBrain.currentPlayer == Turn.User {
-            MWLog("Current users turn")
-            turnUserInteractionOn()
+        if gameSetup?.players == Players.Multi {
+            if gameBrain.currentPlayer == Turn.Opponent {
+                MWLog("Opponents turn")
+                
+                turnUserInteractionOffWithMessage("Waiting for opponent to move...")
+                
+                stopCurrentUserTimer()
+                startOpponentTimeoutTimer()
+            } else if gameBrain.currentPlayer == Turn.User {
+                MWLog("Current users turn")
+                
+                turnUserInteractionOn()
+                
+                stopOpponentTimeoutTimer()
+                startCurrentUserTimer()
+            }
         }
     }
     
@@ -636,6 +660,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             opponentScoreLabel.text = "0"
             
             turnUserInteractionOn()
+            
+            startCurrentUserTimer()
         } else {
             MWLog("opponentName: \(opponentName), but the view has not appeared yet")
         }
@@ -654,9 +680,43 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     @IBAction func forfeitGameButtonTapped() {
         MWLog()
         
+        var alertMessage = "Quitting the game will terminate the current game."
+        
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Multi {
+                let opponentName: String
+                if let opponentDisplayName = gameBrain.opponentDisplayName {
+                    opponentName = opponentDisplayName
+                } else {
+                    opponentName = "Opponent"
+                }
+                
+                alertMessage += " Also your opponent will win."
+                
+                gameResult = GameResult(
+                    players:                Players.Multi,
+                    boardSize:              gameSetup.dimension,
+                    turnDuration:           gameSetup.turnDuration,
+                    won:                    false,
+                    currentUserScore:       gameBrain.userScore,
+                    opponentScore:          gameBrain.opponentScore,
+                    currentUserDisplayName: gameBrain.userDisplayName,
+                    opponentDisplayName:    opponentName)
+            } else {
+                gameResult = GameResult(
+                    players:                Players.Single,
+                    boardSize:              gameSetup.dimension,
+                    turnDuration:           gameSetup.turnDuration,
+                    currentUserScore:       gameBrain.userScore,
+                    currentUserDisplayName: gameBrain.userDisplayName)
+            }
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
+        
         let alert = UIAlertController(
             title: "Are you sure",
-            message: "Quitting the game will terminate the current game",
+            message: alertMessage,
             preferredStyle: UIAlertControllerStyle.Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
         let okAction     = UIAlertAction(title: "Quit",   style: UIAlertActionStyle.Destructive) { (action: UIAlertAction!) -> Void in
