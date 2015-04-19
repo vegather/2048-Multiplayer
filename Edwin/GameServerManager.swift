@@ -188,7 +188,7 @@ class GameServerManager: ServerManager {
                                         MWLog("Game creator (opponent) name \"\(opponentName)\"")
                                         
                                         // ####  WARNING!!  ####
-                                        // SHOULD USE MORE PROTECTION IN HERE! THIS MIGHT CRASH!!
+                                        // SHOULD USE MORE PROTECTION IN HERE! THIS MIGHT CRASH!! AND IT DOES!
                                         
                                         self.creatorOfCurrentGame = "simplelogin:\(gamepin)"
                                         

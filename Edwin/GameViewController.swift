@@ -25,6 +25,22 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     var viewHasAppeared = false
     
+    
+    // TIMER VARIABLES
+    
+    @IBOutlet weak var timeLeftLabel: UILabel! {
+        didSet {
+            timeLeftLabel.text = "\(timeLeft)"
+        }
+    }
+    var timeLeft: Int = 0 { // In seconds
+        didSet {
+            timeLeftLabel?.text = "\(timeLeft)"
+        }
+    }
+    var timeLeftTimer: NSTimer?
+    var opponentTimeoutTimer: NSTimer?
+    
     // For single/multi alignment
     @IBOutlet weak var scoreBoardHeightConstrant: NSLayoutConstraint!
     @IBOutlet weak var currentUserResultWidthConstraint: NSLayoutConstraint!
@@ -125,6 +141,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     opponentDisplayNameLabel.hidden = true
                     opponentScoreLabel.hidden = true
                 }
+                
+                timeLeft = gameSetup.turnDuration
                 
                 self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: gameSetup.dimension)
                 self.gameBoardScene?.gameViewDelegate = self
@@ -282,15 +300,165 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     
     
     // -------------------------------
-    // MARK: Timer
+    // MARK: Current User Timer
     // -------------------------------
     
-    private func timerTimetOut() {
-        
+    private func startCurrentUserTimer() {
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Multi {
+                self.timeLeftTimer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1),
+                    target:   self,
+                    selector: Selector("decrementCurrentUserTimeLeft:"),
+                    userInfo: nil,
+                    repeats:  true)
+                
+                timeLeft = gameSetup.turnDuration
+            } else {
+                MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
+            }
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
     }
     
-    private func connectionToOpponentTimedOut() {
+    private func stopCurrentUserTimer() {
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Multi {
+                timeLeftTimer?.invalidate()
+                timeLeftTimer = nil
+                timeLeft = gameSetup.turnDuration
+            } else {
+                MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
+            }
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
+    }
+    
+    private func decrementCurrentUserTimeLeft(timer: NSTimer!) {
+        timeLeft--
+        if timeLeft == 0 {
+            currentUserTimerTimedOut()
+        }
+    }
+    
+    private func currentUserTimerTimedOut() {
+        timeLeftTimer?.invalidate()
+        timeLeftTimer = nil
+        stopOpponentTimeoutTimer()
         
+        if let gameSetup = gameSetup {
+            let opponentName: String
+            if let opponentDisplayName = gameBrain.opponentDisplayName {
+                opponentName = opponentDisplayName
+            } else {
+                opponentName = "Opponent"
+            }
+            
+            gameResult = GameResult(
+                players:                Players.Multi,
+                boardSize:              gameSetup.dimension,
+                turnDuration:           gameSetup.turnDuration,
+                won:                    false,
+                currentUserScore:       gameBrain.userScore,
+                opponentScore:          gameBrain.opponentScore,
+                currentUserDisplayName: gameBrain.userDisplayName,
+                opponentDisplayName:    opponentName)
+            
+            let timeoutMessage = UIAlertController(
+                title: "You lost",
+                message: "You spent too long thinking, and used up your \(gameSetup.turnDuration) seconds.",
+                preferredStyle: UIAlertControllerStyle.Alert)
+            
+            let okAction = UIAlertAction(
+                title: "Got it",
+                style: UIAlertActionStyle.Default,
+                handler: { (action: UIAlertAction!) -> Void in
+                    self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+            })
+            
+            timeoutMessage.addAction(okAction)
+            presentViewController(timeoutMessage, animated: true, completion: nil)
+            
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
+    }
+    
+    
+    
+    // -------------------------------
+    // MARK: Opponent Timer
+    // -------------------------------
+    
+    private func startOpponentTimeoutTimer() {
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Multi {
+                opponentTimeoutTimer = NSTimer(
+                    timeInterval: NSTimeInterval(gameSetup.turnDuration * 2),
+                    target: self,
+                    selector: Selector("opponentTimerTimedOut:"),
+                    userInfo: nil,
+                    repeats: false)
+            } else {
+                MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
+            }
+            
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
+    }
+    
+    private func stopOpponentTimeoutTimer() {
+        if let gameSetup = gameSetup {
+            if gameSetup.players == Players.Multi {
+                opponentTimeoutTimer?.invalidate()
+                opponentTimeoutTimer = nil
+            } else {
+                MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
+            }
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
+    }
+    
+    private func opponentTimerTimedOut(timer: NSTimer) {
+        
+        if let gameSetup = gameSetup {
+            let opponentName: String
+            if let opponentDisplayName = gameBrain.opponentDisplayName {
+                opponentName = opponentDisplayName
+            } else {
+                opponentName = "Opponent"
+            }
+            
+            gameResult = GameResult(
+                players:                Players.Multi,
+                boardSize:              gameSetup.dimension,
+                turnDuration:           gameSetup.turnDuration,
+                won:                    true,
+                currentUserScore:       gameBrain.userScore,
+                opponentScore:          gameBrain.opponentScore,
+                currentUserDisplayName: gameBrain.userDisplayName,
+                opponentDisplayName:    opponentName)
+            
+            let timeoutMessage = UIAlertController(
+                title: "You won",
+                message: "Your opponent spent too long thinking, and used up his/her \(gameSetup.turnDuration) seconds.",
+                preferredStyle: UIAlertControllerStyle.Alert)
+            
+            let okAction = UIAlertAction(
+                title: "Got it",
+                style: UIAlertActionStyle.Default,
+                handler: { (action: UIAlertAction!) -> Void in
+                    self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+            })
+            
+            timeoutMessage.addAction(okAction)
+            presentViewController(timeoutMessage, animated: true, completion: nil)
+        } else {
+            MWLog("ERROR: No gameSetup")
+        }
     }
     
     
@@ -408,7 +576,13 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     opponentDisplayName:    opponentName)
             }
             
-            self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+            // Just want the user to see what happened before moving to gameOver screen
+            turnUserInteractionOn() // Clear any messages
+            self.view.userInteractionEnabled = false
+            delay(1.0) {
+                self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+            }
+            
         } else {
             MWLog("ERROR: There was no gameSetup")
         }
@@ -505,6 +679,22 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 destination.gameResult = gameResult
             }
         }
+    }
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Helpers
+    // -------------------------------
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }
 
