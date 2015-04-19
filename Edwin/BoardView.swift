@@ -50,7 +50,7 @@ class BoardView: SKScene {
         
         super.init(size: sizeOfBoard)
 
-        self.backgroundColor = UIColor(red: 189.0 / 255.0,  green: 195.0 / 255.0, blue: 199.0 / 255.0, alpha: 1.0) // Silver
+        self.backgroundColor = UIColor(red: 236.0 / 255.0,  green: 240.0 / 255.0, blue: 241.0 / 255.0, alpha: 1.0) // Cloud
     }
 
     required init?(coder aDecoder: NSCoder) {
