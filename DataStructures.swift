@@ -8,45 +8,105 @@
 
 import Foundation
 
+class GameResult: Printable {
+    var players:                Players
+    var boardSize:              Int
+    var turnDuration:           Int
+    var won:                    Bool?   // nil means draw. Only applicable for multiplayer games
+    var currentUserScore:       Int
+    var opponentScore:          Int!    // Only applicable for multiplayer games
+    var currentUserDisplayName: String
+    var opponentDisplayName:    String! // Only applicable for multiplayer games
+    
+    // Use this for singleplayer games
+    init(
+        players:                Players,
+        boardSize:              Int,
+        turnDuration:           Int,
+        currentUserScore:       Int,
+        currentUserDisplayName: String)
+    {
+        self.players                = players
+        self.boardSize              = boardSize
+        self.turnDuration           = turnDuration
+        self.currentUserScore       = currentUserScore
+        self.currentUserDisplayName = currentUserDisplayName
+    }
+    
+    // Use this for multiplayer games
+    convenience init(
+        players:                Players,
+        boardSize:              Int,
+        turnDuration:           Int,
+        won:                    Bool?,
+        currentUserScore:       Int,
+        opponentScore:          Int,
+        currentUserDisplayName: String,
+        opponentDisplayName:    String)
+    {
+        self.init(
+            players:                players,
+            boardSize:              boardSize,
+            turnDuration:           turnDuration,
+            currentUserScore:       currentUserScore,
+            currentUserDisplayName: currentUserDisplayName)
+        
+        self.won = won
+        self.opponentScore = opponentScore
+        self.opponentDisplayName = opponentDisplayName
+    }
+    
+    var description: String {
+        get {
+            return "GameResult(players: \(players), boardSize: \(boardSize), turnDuration: \(turnDuration), won: \(won), currentUserScore: \(currentUserScore), opponentScore: \(opponentScore), currentUserDisplayName: \(currentUserDisplayName), opponentDisplayName: \(opponentDisplayName))"
+        }
+    }
+}
+
 class GameSetup<T: Evolvable>: Printable {
     
-    var players: Players
-    var setupForCreating: Bool
-    var dimension: Int
-    var turnDuration: Int
-    var firstTile: T!
-    var firstCoordinate: Coordinate!
-    var secondTile: T!
-    var secondCoordinate: Coordinate!
-    var opponentDisplayName: String!   // Primarily used when joining a game
-    var gameServer: GameServerManager! // Primarily used when joining a game
+    var players:                Players
+    var setupForCreating:       Bool
+    var dimension:              Int
+    var turnDuration:           Int
+    var firstTile:              T!
+    var firstCoordinate:        Coordinate!
+    var secondTile:             T!
+    var secondCoordinate:       Coordinate!
+    var opponentDisplayName:    String!   // Primarily used when joining a game
+    var gameServer:             GameServerManager! // Primarily used when joining a game
     
-    init(players: Players, setupForCreating: Bool, dimension: Int, turnDuration: Int) {
-        self.players = players
-        self.setupForCreating = setupForCreating
-        self.dimension = dimension
-        self.turnDuration = turnDuration
+    init(
+        players:                Players,
+        setupForCreating:       Bool,
+        dimension:              Int,
+        turnDuration:           Int)
+    {
+        self.players            = players
+        self.setupForCreating   = setupForCreating
+        self.dimension          = dimension
+        self.turnDuration       = turnDuration
     }
     
     convenience init(
-        players: Players,
-        setupForCreating: Bool,
-        dimension: Int,
-        turnDuration: Int,
-        firstValue: T!,
-        firstCoordinate: Coordinate!,
-        secondValue: T!,
-        secondCoordinate: Coordinate!,
-        opponentDisplayName: String!,
-        gameServer: GameServerManager!)
+        players:                Players,
+        setupForCreating:       Bool,
+        dimension:              Int,
+        turnDuration:           Int,
+        firstValue:             T!,
+        firstCoordinate:        Coordinate!,
+        secondValue:            T!,
+        secondCoordinate:       Coordinate!,
+        opponentDisplayName:    String!,
+        gameServer:             GameServerManager!)
     {
         self.init(players: players, setupForCreating: setupForCreating, dimension: dimension, turnDuration: turnDuration)
-        self.firstTile = firstValue
-        self.firstCoordinate = firstCoordinate
-        self.secondTile = secondValue
-        self.secondCoordinate = secondCoordinate
-        self.opponentDisplayName = opponentDisplayName
-        self.gameServer = gameServer
+        self.firstTile              = firstValue
+        self.firstCoordinate        = firstCoordinate
+        self.secondTile             = secondValue
+        self.secondCoordinate       = secondCoordinate
+        self.opponentDisplayName    = opponentDisplayName
+        self.gameServer             = gameServer
     }
     
     func isReady() -> Bool {

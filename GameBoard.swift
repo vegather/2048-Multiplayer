@@ -34,8 +34,8 @@ class GameBoard<B: GameBoardDelegate> {
         self.board = [[C?]](count: dimension, repeatedValue: [C?](count: dimension, repeatedValue: nil))
     }
     
-    func isFull() -> Bool {
-        var full = true
+    private func isFull() -> Bool {
+        var full = true // Assuming that it's full. Try to prove otherwise
         for row in 0..<self.dimension {
             for col in 0..<self.dimension {
                 if self.board[row][col] == nil {
@@ -43,9 +43,85 @@ class GameBoard<B: GameBoardDelegate> {
                     break
                 }
             }
+            if full == false {
+                break
+            }
         }
         
         return full
+    }
+    
+    func canStillDoMove() -> Bool {
+        if self.isFull() {
+            var canMove = false // Assuming a move can't be done. Try to disprove this.
+            
+            // Check for merges horisontally
+            for row in 0..<self.dimension {
+                var lastValue: C?
+                for col in 0..<self.dimension {
+                    if let last = lastValue {
+                        if let currentValue = self.board[row][col] {
+                            if currentValue == last {
+                                MWLog("Horisontal merge between (\(col),\(row)) and (\(col - 1),\(row))")
+                                canMove = true
+                                break
+                            } else {
+                                lastValue = currentValue
+                            }
+                        }
+                    } else {
+                        lastValue = self.board[row][col]
+                    }
+                }
+                
+                if canMove {
+                    break
+                } else {
+                    lastValue = nil
+                }
+            }
+            
+            // Check for merges vertically
+            
+            if canMove == false
+            {
+                for col in 0..<self.dimension {
+                    var lastValue: C?
+                    for row in 0..<self.dimension {
+                        if let last = lastValue {
+                            if let currentValue = self.board[row][col] {
+                                if currentValue == last {
+                                    MWLog("Vertical merge between (\(col),\(row)) and (\(col),\(row - 1))")
+                                    canMove = true
+                                    break
+                                } else {
+                                    lastValue = currentValue
+                                }
+                            }
+                        } else {
+                            lastValue = self.board[row][col]
+                        }
+                    }
+                    
+                    if canMove {
+                        break
+                    } else {
+                        lastValue = nil
+                    }
+                }
+            }
+            
+            if canMove {
+                MWLog("The board is full, but there are still merges that can be done")
+            } else {
+                MWLog("GAME OVER - The board is full, and there are no more valid moves. ")
+            }
+            
+            return canMove
+        } else {
+            MWLog("The board is not full. There are still possible moves")
+            return true
+        }
     }
     
     
@@ -79,7 +155,9 @@ class GameBoard<B: GameBoardDelegate> {
         
         MWLog("Score increase: \(scoreIncrease)")
         
-        return resultFromMove
+        MWLog("Will return scoreIncrease: \(scoreIncrease), numMoves: \(moves.count)")
+        
+        return (scoreIncrease, moves)
     }
     
     
@@ -531,7 +609,7 @@ class GameBoard<B: GameBoardDelegate> {
     // -------------------------------
     
     // Will do nothing if there are no empty spots on the board
-    func spawnNewGamePieceAtRandomPosition() -> MoveAction<C>? {
+    func spawnNewGamePieceAtRandomPosition() -> (actions: MoveAction<C>?, gameOver: Bool) {
         
         if self.isFull() == false {
             var emptySpots = [Coordinate]()
@@ -558,21 +636,34 @@ class GameBoard<B: GameBoardDelegate> {
             let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
     //        self.delegate?.gameBoardDidSpawnNodesWithAction(spawnAction)
             
-            return spawnAction
+            var gameOver = false
+            if canStillDoMove() == false {
+                gameOver = true
+            }
+            
+            return (spawnAction, gameOver)
         } else {
             MWLog("The board is full")
-            return nil
+            return (nil, false)
         }
     }
     
-    func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> MoveAction<C>? {
+    func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> (actions: MoveAction<C>?, gameOver: Bool) {
         if self.board[coordinate.y][coordinate.x] == nil {
             MWLog("Spawning \(value) at \(coordinate)")
             self.board[coordinate.y][coordinate.x] = value
-            return MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
+            
+            let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
+            
+            var gameOver = false
+            if canStillDoMove() == false {
+                gameOver = true
+            }
+            
+            return (spawnAction, gameOver)
         } else {
             MWLog("The coordinate: \(coordinate) is already occupied by \(value)")
-            return nil
+            return (nil, false)
         }
     }
     
