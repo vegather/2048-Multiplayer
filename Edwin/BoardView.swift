@@ -31,7 +31,7 @@ class BoardView: SKScene {
     let ANIMATION_DURATION = 0.15
     
     // Will be increased every time a batch of moveActions start, and decremented when batches are done
-    var numberOfNodesInTheProcessOfMoving = 0
+    var ongoingAnimations = 0
     var hasNotifiedDelegateAboutBeingDoneAnimating = false
     
     
@@ -105,7 +105,7 @@ class BoardView: SKScene {
             moveNodes(toMove)
             MWLog("Will clear toMove buffer")
             self.toMove.removeAll(keepCapacity: false)
-        } else if numberOfNodesInTheProcessOfMoving == 0 {
+        } else if ongoingAnimations == 0 {
             MWLog("Will spawn nodes: \(toSpawn)")
             spawnNodes(toSpawn)
             MWLog("Will clear toSpawn buffer")
@@ -136,7 +136,7 @@ class BoardView: SKScene {
             self.toEvolve.count == 0 &&
             self.toSpawn.count  == 0 &&
             self.toRemove.count == 0 &&
-            self.numberOfNodesInTheProcessOfMoving == 0
+            self.ongoingAnimations == 0
     }
     
     
@@ -153,18 +153,18 @@ class BoardView: SKScene {
                 
                 let (node, from, to) = nodesToMove[i]
                 
-                self.numberOfNodesInTheProcessOfMoving += 1
+                self.ongoingAnimations += 1
                 
                 let destination = self.positionForCoordinate(to)
                 
                 let moveAction = SKAction.moveTo(destination, duration: ANIMATION_DURATION)
                 node.runAction(moveAction, completion: { () -> Void in
                     
-                    self.numberOfNodesInTheProcessOfMoving -= 1
+                    self.ongoingAnimations -= 1
                     
-                    MWLog("In completion handler for runAction - i: \(i), nodesToMove.count: \(nodesToMove.count) counter: \(self.numberOfNodesInTheProcessOfMoving)")
+                    MWLog("In completion handler for runAction - i: \(i), nodesToMove.count: \(nodesToMove.count) counter: \(self.ongoingAnimations)")
 
-                    if self.numberOfNodesInTheProcessOfMoving == 0 {
+                    if self.ongoingAnimations == 0 {
                         MWLog("Will spawn nodes: \(self.toSpawn)")
                         self.spawnNodes(self.toSpawn)
                         MWLog("Will clear toSpawn buffer")
@@ -181,9 +181,11 @@ class BoardView: SKScene {
                         self.toRemove.removeAll(keepCapacity: false)
                         
                         if self.isDoneAnimating() && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
-                            MWLog("Is done animating, and will let the delegate know about it")
-                            self.hasNotifiedDelegateAboutBeingDoneAnimating = true
-                            self.gameViewDelegate?.boardViewDidFinishAnimating()
+                            if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
+                                MWLog("Is done animating, and will let the delegate know about it")
+                                self.hasNotifiedDelegateAboutBeingDoneAnimating = true
+                                self.gameViewDelegate?.boardViewDidFinishAnimating()
+                            }
                         } else {
                             MWLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
                         }
@@ -221,9 +223,18 @@ class BoardView: SKScene {
             
             nodeToAdd.setScale(0.2)
             
+            ongoingAnimations++
             let firstPopAction = SKAction.scaleTo(1.2, duration: 0.1)
             let secondPopAction = SKAction.scaleTo(1.0, duration: 0.05)
-            let popAction = SKAction.sequence([firstPopAction, secondPopAction])
+            let cleanupAction = SKAction.runBlock() {
+                self.ongoingAnimations--
+                if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
+                    MWLog("Is done animating, and will let the delegate know about it")
+                    self.hasNotifiedDelegateAboutBeingDoneAnimating = true
+                    self.gameViewDelegate?.boardViewDidFinishAnimating()
+                }
+            }
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction, cleanupAction])
             
             nodeToAdd.runAction(popAction)
         }
@@ -235,10 +246,19 @@ class BoardView: SKScene {
             node.evolve()
             self.setNode(node, forCoordinate: coordinate)
             
+            ongoingAnimations++
             let firstPopAction = SKAction.scaleTo(1.5, duration: 0.06)
             let secondPopAction = SKAction.scaleTo(0.9, duration: 0.07)
             let thirdPopAction = SKAction.scaleTo(1.0, duration: 0.05)
-            let popAction = SKAction.sequence([firstPopAction, secondPopAction, thirdPopAction])
+            let cleanupAction = SKAction.runBlock() {
+                self.ongoingAnimations--
+                if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
+                    MWLog("Is done animating, and will let the delegate know about it")
+                    self.hasNotifiedDelegateAboutBeingDoneAnimating = true
+                    self.gameViewDelegate?.boardViewDidFinishAnimating()
+                }
+            }
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction, thirdPopAction, cleanupAction])
             node.runAction(popAction)
         }
     }
