@@ -29,6 +29,7 @@ class BoardView: SKScene {
     var toRemove = [TwosPowerView]()
     
     let ANIMATION_DURATION = 0.15
+    let WAIT_AFTER_ANIMATION_DURATION = 0.1
     
     // Will be increased every time a batch of moveActions start, and decremented when batches are done
     var ongoingAnimations = 0
@@ -224,9 +225,10 @@ class BoardView: SKScene {
             nodeToAdd.setScale(0.2)
             
             ongoingAnimations++
-            let firstPopAction = SKAction.scaleTo(1.2, duration: 0.1)
+            let firstPopAction  = SKAction.scaleTo(1.2, duration: 0.1)
             let secondPopAction = SKAction.scaleTo(1.0, duration: 0.05)
-            let cleanupAction = SKAction.runBlock() {
+            let waitAction      = SKAction.waitForDuration(NSTimeInterval(WAIT_AFTER_ANIMATION_DURATION))
+            let cleanupAction   = SKAction.runBlock() {
                 self.ongoingAnimations--
                 if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
                     MWLog("Is done animating, and will let the delegate know about it")
@@ -234,7 +236,7 @@ class BoardView: SKScene {
                     self.gameViewDelegate?.boardViewDidFinishAnimating()
                 }
             }
-            let popAction = SKAction.sequence([firstPopAction, secondPopAction, cleanupAction])
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction, waitAction, cleanupAction])
             
             nodeToAdd.runAction(popAction)
         }
@@ -247,10 +249,11 @@ class BoardView: SKScene {
             self.setNode(node, forCoordinate: coordinate)
             
             ongoingAnimations++
-            let firstPopAction = SKAction.scaleTo(1.5, duration: 0.06)
+            let firstPopAction  = SKAction.scaleTo(1.5, duration: 0.06)
             let secondPopAction = SKAction.scaleTo(0.9, duration: 0.07)
-            let thirdPopAction = SKAction.scaleTo(1.0, duration: 0.05)
-            let cleanupAction = SKAction.runBlock() {
+            let thirdPopAction  = SKAction.scaleTo(1.0, duration: 0.05)
+            let waitAction      = SKAction.waitForDuration(NSTimeInterval(WAIT_AFTER_ANIMATION_DURATION))
+            let cleanupAction   = SKAction.runBlock() {
                 self.ongoingAnimations--
                 if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
                     MWLog("Is done animating, and will let the delegate know about it")
@@ -258,7 +261,7 @@ class BoardView: SKScene {
                     self.gameViewDelegate?.boardViewDidFinishAnimating()
                 }
             }
-            let popAction = SKAction.sequence([firstPopAction, secondPopAction, thirdPopAction, cleanupAction])
+            let popAction = SKAction.sequence([firstPopAction, secondPopAction, thirdPopAction, waitAction, cleanupAction])
             node.runAction(popAction)
         }
     }
