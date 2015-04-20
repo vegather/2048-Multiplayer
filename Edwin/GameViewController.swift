@@ -773,8 +773,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             opponentScoreLabel.text = "0"
             
             turnUserInteractionOn()
-            startCurrentUserTimer()
-            timeLeftLabel.hidden = false
+//            startCurrentUserTimer()
+//            timeLeftLabel.hidden = false
         } else {
             MWLog("opponentName: \(opponentName), but the view has not appeared yet")
         }
