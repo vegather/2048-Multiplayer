@@ -51,21 +51,21 @@ class AccountViewController: UIViewController {
             
             // Go fetch statistics data
             
-            UserServerManager.getNumberOfWinsStatisticsByIncrementing(true) { (newNumberOfWins: Int) -> () in
+            UserServerManager.getNumberOfWinsStatisticsByIncrementing(false) { (newNumberOfWins: Int) -> () in
                 self.numberOfWinsLabel.text = "\(newNumberOfWins)"
                 self.numberOfWinsLabel.hidden = false
                 self.numberOfWinsSpinner.stopAnimating()
                 self.numberOfWinsSpinner.hidden = true
             }
             
-            UserServerManager.getNumberOfLossesStatisticsByIncrementing(true) { (newNumberOfLosses: Int) -> () in
+            UserServerManager.getNumberOfLossesStatisticsByIncrementing(false) { (newNumberOfLosses: Int) -> () in
                 self.numberOfLossesLabel.text = "\(newNumberOfLosses)"
                 self.numberOfLossesLabel.hidden = false
                 self.numberOfLossesSpinner.stopAnimating()
                 self.numberOfLossesSpinner.hidden = true
             }
             
-            UserServerManager.getNumberOfDrawsStatisticsByIncrementing(true) { (newNumberOfDraws: Int) -> () in
+            UserServerManager.getNumberOfDrawsStatisticsByIncrementing(false) { (newNumberOfDraws: Int) -> () in
                 self.numberOfDrawsLabel.text = "\(newNumberOfDraws)"
                 self.numberOfDrawsLabel.hidden = false
                 self.numberOfDrawsSpinner.stopAnimating()
