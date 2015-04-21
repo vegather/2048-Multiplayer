@@ -106,10 +106,19 @@ class AccountViewController: UIViewController {
                         let newDisplayNameTextField = textFields[0] as! UITextField
                         let newDisplayName = newDisplayNameTextField.text
                         
-                        // Call UserServerManager
+                        MWLog("setting newDisplayName to: \(newDisplayName)")
                         
-                        MWLog("newDisplayName: \(newDisplayName)")
-                        self.enableButtons()
+                        // Call UserServerManager
+                        UserServerManager.changeCurrentUsersDisplayNameTo(newDisplayName) { (errorMessage: String?) -> () in
+                            self.enableButtons()
+                            if let errorMessage = errorMessage {
+                                MWLog("Error setting displayName to \(newDisplayName)")
+                                self.showAlertWithTitle("Could not change Display Name", andMessage: errorMessage)
+                            } else {
+                                MWLog("Display got set successfully to \(newDisplayName).")
+                            }
+                        }
+                        
                     } else {
                         MWLog("ERROR: There is NOT one textField")
                         self.enableButtons()
@@ -173,10 +182,21 @@ class AccountViewController: UIViewController {
                     let newEmail = newEmailTextField.text
                     let password = passwordTextField.text
                     
-                    // Call UserServerManager
+                    MWLog("Attempting to change email to \(newEmail)")
                     
-                    MWLog("newEmail: \(newEmail), password: \(password)")
-                    self.enableButtons()
+                    // Call UserServerManager
+                    UserServerManager.changeCurrentUsersEmailTo(newEmail, withPassword: password)
+                    { (errorMessage: String?) -> () in
+                        self.enableButtons()
+                        if let errorMessage = errorMessage {
+                            MWLog("Error setting email to \(newEmail)")
+                            self.showAlertWithTitle("Could not change email", andMessage: errorMessage)
+                        } else {
+                            self.enableButtons()
+                            MWLog("Email got changed successfully to \(newEmail).")
+                        }
+                    }
+                    
                 } else {
                     MWLog("ERROR: There are NOT two textField")
                     self.enableButtons()
@@ -236,10 +256,21 @@ class AccountViewController: UIViewController {
                         let oldPassword = oldPasswordTextField.text
                         let newPassword = newPasswordTextField.text
                         
-                        // Call UserServerManager
+                        MWLog("Attempting to change password")
                         
-                        MWLog("oldPassword: \(oldPassword), newPassword: \(newPassword)")
-                        self.enableButtons()
+                        // Call UserServerManager
+                        UserServerManager.changeCurrentUsersPasswordFrom(oldPassword, to: newPassword)
+                        { (errorMessage: String?) -> () in
+                            self.enableButtons()
+                            if let errorMessage = errorMessage {
+                                MWLog("Could not change password")
+                                self.showAlertWithTitle("Could not change password", andMessage: errorMessage)
+                            } else {
+                                self.enableButtons()
+                                MWLog("Successfully changed password.")
+                            }
+                        }
+                        
                     } else {
                         MWLog("ERROR: There are NOT two textField")
                         self.enableButtons()
@@ -275,6 +306,11 @@ class AccountViewController: UIViewController {
         changeEmailButton.enabled       = false
         changePasswordButton.enabled    = false
         backToMainMenuButton.enabled    = false
+        
+        changeDisplayNameButton.alpha = 0.4
+        changeEmailButton.alpha       = 0.4
+        changePasswordButton.alpha    = 0.4
+        backToMainMenuButton.alpha    = 0.4
     }
     
     private func enableButtons() {
@@ -282,6 +318,11 @@ class AccountViewController: UIViewController {
         changeEmailButton.enabled       = true
         changePasswordButton.enabled    = true
         backToMainMenuButton.enabled    = true
+        
+        changeDisplayNameButton.alpha = 1.0
+        changeEmailButton.alpha       = 1.0
+        changePasswordButton.alpha    = 1.0
+        backToMainMenuButton.alpha    = 1.0
     }
     
     private func showAlertWithTitle(title: String, andMessage message: String) {

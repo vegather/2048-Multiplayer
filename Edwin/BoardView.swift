@@ -29,7 +29,7 @@ class BoardView: SKScene {
     var toRemove = [TwosPowerView]()
     
     let ANIMATION_DURATION = 0.15
-    let WAIT_AFTER_ANIMATION_DURATION = 0.1
+    let WAIT_AFTER_ANIMATION_DURATION: Double
     
     // Will be increased every time a batch of moveActions start, and decremented when batches are done
     var ongoingAnimations = 0
@@ -45,9 +45,17 @@ class BoardView: SKScene {
         }
     }
     
-    init(sizeOfBoard: CGSize, dimension: Int) {
+    init(sizeOfBoard: CGSize, dimension: Int, shouldDelayBeforeDoneAnimating: Bool) {
+        MWLog("sizeOfBoard: \(sizeOfBoard), dimension: \(dimension), shouldDelay: \(shouldDelayBeforeDoneAnimating)")
+        
         self.board = [[TwosPowerView?]](count: dimension, repeatedValue: [TwosPowerView?](count: dimension, repeatedValue: nil))
         self.dimension = dimension
+        
+        if shouldDelayBeforeDoneAnimating {
+            WAIT_AFTER_ANIMATION_DURATION = 0.15
+        } else {
+            WAIT_AFTER_ANIMATION_DURATION = 0.0
+        }
         
         super.init(size: sizeOfBoard)
 

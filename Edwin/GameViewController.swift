@@ -242,7 +242,15 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     }
                 }
                 
-                self.gameBoardScene = BoardView(sizeOfBoard: gameView.frame.size, dimension: gameSetup.dimension)
+                var shouldDelayBeforeDoneAnimating = false
+                if gameSetup.players == Players.Multi {
+                    shouldDelayBeforeDoneAnimating = true
+                }
+                
+                self.gameBoardScene = BoardView(
+                    sizeOfBoard: gameView.frame.size,
+                    dimension: gameSetup.dimension,
+                    shouldDelayBeforeDoneAnimating: shouldDelayBeforeDoneAnimating)
                 self.gameBoardScene?.gameViewDelegate = self
 
                 self.gameView?.presentScene(self.gameBoardScene)
@@ -662,11 +670,13 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                         gameEndScreenshot:      self.grabScreenshot())
                 }
                 
-//                    Just want the user to see what happened before moving to gameOver screen
-//                    turnUserInteractionOn() // Clear any messages
-//                    self.view.userInteractionEnabled = false
+                //Just want the user to see what happened before moving to gameOver screen
+                turnUserInteractionOn() // Clear any messages
+                self.view.userInteractionEnabled = false
 
-                self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
+                delay(0.5) {
+                    self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
+                }
             }
         } else {
             MWLog("ERROR: No gameSetup")
@@ -737,13 +747,6 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     func gameBrainGameIsOverFromFillingUpBoard() {
         // Find out who won
         MWLog()
-        
-        if let gameSetup = gameSetup {
-            
-            
-        } else {
-            MWLog("ERROR: There was no gameSetup")
-        }
     }
     
     

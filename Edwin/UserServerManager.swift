@@ -76,7 +76,8 @@ class UserServerManager: ServerManager {
         }
     }
     
-    static let CURRENT_USER_NAME_KEY = "CurrentUserDisplayName"
+    static let CURRENT_USER_NAME_KEY  = "CurrentUserDisplayName"
+    static let CURRENT_USER_EMAIL_KEY = "CurrentUserEmail"
     
     private(set) static var lastKnownCurrentUserDisplayName: String {
         set {
@@ -94,9 +95,23 @@ class UserServerManager: ServerManager {
         }
     }
     
-    static var currentUserEmail: String? {
+    // Need this because apparently the email in authData.prividerData is not updated after 
+    // a call to ServerManager.dataBase().changeEmailForUser
+    private(set) static var currentUserEmail: String? {
+        set {
+            MWLog("Setting email to \(newValue)")
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: CURRENT_USER_EMAIL_KEY)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
         get {
-            return ServerManager.dataBase().authData.providerData["email"] as? String
+            if let email = NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_EMAIL_KEY) {
+                MWLog("Returning email: \(email)")
+                return email
+            } else {
+                let potentialEmail = ServerManager.dataBase().authData.providerData["email"] as? String
+                MWLog("Returning potentialEmail \(potentialEmail)")
+                return potentialEmail
+            }
         }
     }
     
@@ -142,21 +157,56 @@ class UserServerManager: ServerManager {
     
     class func changeCurrentUsersDisplayNameTo(newDisplayName: String, completionHandler: (errorMessage: String?) -> ()) {
         let uid = ServerManager.dataBase().authData.uid
+        let displayNamePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(uid).childByAppendingPath(FireBaseKeys.Users.DisplayName)
         
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            displayNamePath.setValue(newDisplayName, withCompletionBlock: { (error: NSError!, fireRef: Firebase!) -> Void in
+                if error == nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.lastKnownCurrentUserDisplayName = newDisplayName
+                        completionHandler(errorMessage: nil)
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completionHandler(errorMessage: error.localizedDescription)
+                    }
+                }
+            })
+        }
     }
     
     class func changeCurrentUsersEmailTo(newEmail: String, withPassword password: String, completionHandler: (errorMessage: String?) -> ()) {
-        if let currentEmail = ServerManager.dataBase().authData.providerData["email"] as? String {
+        if let currentEmail = self.currentUserEmail {
         
-            ServerManager.dataBase().changeEmailForUser(
-                currentEmail,
-                password: password,
-                toNewEmail: newEmail) { (error: NSError!) -> Void in
-                    if error != nil {
-                        
-                    } else {
-                        completionHandler(errorMessage: nil)
-                    }
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+                ServerManager.dataBase().changeEmailForUser(
+                    currentEmail,
+                    password: password,
+                    toNewEmail: newEmail) { (error: NSError!) -> Void in
+                        if error == nil {
+                            
+                            self.currentUserEmail = newEmail
+                            
+                            let uid = ServerManager.dataBase().authData.uid
+                            let emailPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(uid).childByAppendingPath(FireBaseKeys.Users.Email)
+                            emailPath.setValue(newEmail, withCompletionBlock: { (error2: NSError!, ref: Firebase!) -> Void in
+                                if error2 == nil {
+                                    dispatch_async(dispatch_get_main_queue()) {
+                                        completionHandler(errorMessage: nil)
+                                    }
+                                } else {
+                                    dispatch_async(dispatch_get_main_queue()) {
+                                        completionHandler(errorMessage: error2.localizedDescription)
+                                    }
+                                }
+                            })
+                            
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                completionHandler(errorMessage: error.localizedDescription)
+                            }
+                        }
+                }
             }
         } else {
             MWLog("Could not get current email")
@@ -165,8 +215,25 @@ class UserServerManager: ServerManager {
     }
     
     class func changeCurrentUsersPasswordFrom(oldPassword: String, to newPassword: String, completionHandler: (errorMessage: String?) -> ()) {
-        if let currentEmail = ServerManager.dataBase().authData.providerData["email"] as? String {
+        if let currentEmail = self.currentUserEmail {
             
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+                ServerManager.dataBase().changePasswordForUser(
+                    currentEmail,
+                    fromOld: oldPassword,
+                    toNew: newPassword,
+                    withCompletionBlock: { (error: NSError!) -> Void in
+                        if error == nil {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                completionHandler(errorMessage: nil)
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                completionHandler(errorMessage: error.localizedDescription)
+                            }
+                        }
+                })
+            }
         } else {
             MWLog("Could not get current email")
             completionHandler(errorMessage: "Could not get your current Email. Try logging out and back in.")
