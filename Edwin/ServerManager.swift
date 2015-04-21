@@ -17,6 +17,9 @@ struct FireBaseKeys {
     struct Users {
         static let DisplayName  = "DisplayName"
         static let Email        = "Email"
+        static let Wins         = "NumberOfWins"
+        static let Losses       = "NumberOfLosses"
+        static let Draws        = "NumberOfDraws"
     }
 }
 

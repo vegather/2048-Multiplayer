@@ -26,7 +26,6 @@ class GameBoard<B: GameBoardDelegate> {
     
     private var board: Array<Array<C?>>
     private let dimension: Int
-//    weak var delegate: B?
     
     init(dimension: Int) {
         self.dimension = dimension
@@ -634,7 +633,6 @@ class GameBoard<B: GameBoardDelegate> {
             printBoard()
             
             let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
-    //        self.delegate?.gameBoardDidSpawnNodesWithAction(spawnAction)
             
             var gameOver = false
             if canStillDoMove() == false {

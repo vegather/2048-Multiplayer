@@ -10,9 +10,9 @@
 		9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */; };
 		9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
 		9A5366DB1ADDF1D5002A2F57 /* BlurryMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */; };
+		9A57AE971AE5902200FC2D1D /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A57AE961AE5902200FC2D1D /* AccountViewController.swift */; };
 		9A5C42FB1AE0620000D3FB8A /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5C42FA1AE0620000D3FB8A /* Firebase.framework */; };
 		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
-		9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */; };
 		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
 		9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0341AD021ED00D741E2 /* PushSegue.swift */; };
 		9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0361AD021F900D741E2 /* PopSegue.swift */; };
@@ -55,9 +55,9 @@
 /* Begin PBXFileReference section */
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
 		9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryMessageView.swift; sourceTree = "<group>"; };
+		9A57AE961AE5902200FC2D1D /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		9A5C42FA1AE0620000D3FB8A /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
 		9A61D0281ACB7EC900D741E2 /* MWLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MWLogger.swift; sourceTree = "<group>"; };
-		9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpriteKit+Spring.swift"; sourceTree = "<group>"; };
 		9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9A61D0341AD021ED00D741E2 /* PushSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSegue.swift; sourceTree = "<group>"; };
 		9A61D0361AD021F900D741E2 /* PopSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopSegue.swift; sourceTree = "<group>"; };
@@ -148,6 +148,7 @@
 				9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */,
 				9A61D03A1AD0260700D741E2 /* CreateUserViewController.swift */,
 				9A61D0381AD0259100D741E2 /* MainMenuViewController.swift */,
+				9A57AE961AE5902200FC2D1D /* AccountViewController.swift */,
 				9A61D05B1AD2109F00D741E2 /* CreateGameViewController.swift */,
 				9A61D05D1AD2B26900D741E2 /* JoinGameViewController.swift */,
 				9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */,
@@ -195,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				9A61D0281ACB7EC900D741E2 /* MWLogger.swift */,
-				9A61D02B1ACF022A00D741E2 /* SpriteKit+Spring.swift */,
 				9A61D0331AD021C100D741E2 /* Custom Storyboard Segue */,
 				9A5582F91AAE690B004F0C2D /* Views */,
 				9A61D0301AD0095600D741E2 /* View Controllers */,
@@ -335,6 +335,7 @@
 			files = (
 				9A61D03F1AD0CB2500D741E2 /* ServerManager.swift in Sources */,
 				9A76B60A1AAFA6CF0042B378 /* BoardView.swift in Sources */,
+				9A57AE971AE5902200FC2D1D /* AccountViewController.swift in Sources */,
 				9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
 				9A61D0561AD1C1BF00D741E2 /* GameServerManager.swift in Sources */,
@@ -342,7 +343,6 @@
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */,
 				9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */,
-				9A61D02C1ACF022A00D741E2 /* SpriteKit+Spring.swift in Sources */,
 				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
 				9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */,
 				9A61D03B1AD0260700D741E2 /* CreateUserViewController.swift in Sources */,

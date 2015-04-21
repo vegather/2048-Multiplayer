@@ -13,6 +13,7 @@ struct SegueIdentifier {
     static let PushMainMenuFromLogin        = "Push Main Menu From Login"
     static let PushMainMenuFromCreateUser   = "Push Main Menu From Create User"
     static let PushCreateUser               = "Push Create User"
+    static let PushAccount                  = "Push Account"
     static let PushCreateGame               = "Push Create Game"
     static let PushJoinGame                 = "Push Join Game"
     static let PushGameFromCreateGame       = "Push Game From Create Game"
@@ -25,4 +26,5 @@ struct SegueIdentifier {
     static let PopToMainMenuFromCreateGame  = "Pop To Main Menu From Create Game"
     static let PopToMainMenuFromJoinGame    = "Pop To Main Menu From Join Game"
     static let PopToMainMenuFromGameOver    = "Pop To Main Menu From Game Over"
+    static let PopToMainMenuFromAccount     = "Pop To Main Menu From Account"
 }

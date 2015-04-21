@@ -431,7 +431,6 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 MWLog("Stopping timer")
                 
                 timeLeftTimer?.invalidate()
-//                timeLeftTimer = nil
                 timeLeft = gameSetup.turnDuration
             } else {
                 MWLog("ERROR: The game is a single player game. Should not use any timers in this case")
@@ -469,7 +468,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 currentUserScore:       gameBrain.userScore,
                 opponentScore:          gameBrain.opponentScore,
                 currentUserDisplayName: gameBrain.userDisplayName,
-                opponentDisplayName:    opponentName)
+                opponentDisplayName:    opponentName,
+                gameEndScreenshot:      self.grabScreenshot())
             
             let timeoutMessage = UIAlertController(
                 title: "You Lost",
@@ -490,6 +490,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             MWLog("ERROR: No gameSetup")
         }
     }
+    
     
     
     
@@ -561,7 +562,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 currentUserScore:       gameBrain.userScore,
                 opponentScore:          gameBrain.opponentScore,
                 currentUserDisplayName: gameBrain.userDisplayName,
-                opponentDisplayName:    opponentName)
+                opponentDisplayName:    opponentName,
+                gameEndScreenshot:      self.grabScreenshot())
             
             let timeoutMessage = UIAlertController(
                 title: "You Won",
@@ -591,21 +593,81 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // -------------------------------
     
     func boardViewDidFinishAnimating() {
-        if gameSetup?.players == Players.Multi {
-            if gameBrain.currentPlayer == Turn.Opponent {
-                MWLog("Opponents turn")
-                turnUserInteractionOffWithMessage("Waiting for opponent to move...")
-            } else if gameBrain.currentPlayer == Turn.User {
-                MWLog("Current users turn")
-                if gameBrain.opponentDisplayName != nil {
-                    MWLog("It's the current users turn, and there is an opponent. Starting current user timer")
-                    turnUserInteractionOn()
-                    startCurrentUserTimer()
-                    timeLeftLabel.hidden = false
+        if let gameSetup = gameSetup {
+            if gameBrain.gameIsOver == false {
+                if gameSetup.players == Players.Multi {
+                    
+                    if gameBrain.currentPlayer == Turn.Opponent {
+                        MWLog("Opponents turn")
+                        turnUserInteractionOffWithMessage("Waiting for opponent to move...")
+                    } else if gameBrain.currentPlayer == Turn.User {
+                        MWLog("Current users turn")
+                        if gameBrain.opponentDisplayName != nil {
+                            MWLog("It's the current users turn, and there is an opponent. Starting current user timer")
+                            turnUserInteractionOn()
+                            startCurrentUserTimer()
+                            timeLeftLabel.hidden = false
+                        } else {
+                            MWLog("No opponent yet")
+                        }
+                    }
                 } else {
-                    MWLog("No opponent yet")
+                    MWLog("Finished animating for singleplayer game. The game goes on.")
                 }
+            } else {
+                // The game is now over
+                
+                if gameSetup.players == Players.Single {
+                    // Singleplayer
+                    
+                    MWLog("A singleplayer game is over")
+                    
+                    gameResult = GameResult(
+                        players:                Players.Single,
+                        boardSize:              gameSetup.dimension,
+                        turnDuration:           gameSetup.turnDuration,
+                        currentUserScore:       gameBrain.userScore,
+                        currentUserDisplayName: gameBrain.userDisplayName,
+                        gameEndScreenshot:      self.grabScreenshot())
+                } else {
+                    // Multiplayer
+                    
+                    MWLog("A multiplayer game is over")
+                    
+                    var didWin: Bool? = nil
+                    if gameBrain.userScore > gameBrain.opponentScore {
+                        didWin = true
+                    } else if gameBrain.userScore < gameBrain.opponentScore {
+                        didWin = false
+                    } // Otherwise draw
+                    
+                    let opponentName: String
+                    if let opponentDisplayName = gameBrain.opponentDisplayName {
+                        opponentName = opponentDisplayName
+                    } else {
+                        opponentName = "Opponent"
+                    }
+                    
+                    gameResult = GameResult(
+                        players:                Players.Multi,
+                        boardSize:              gameSetup.dimension,
+                        turnDuration:           gameSetup.turnDuration,
+                        won:                    didWin,
+                        currentUserScore:       gameBrain.userScore,
+                        opponentScore:          gameBrain.opponentScore,
+                        currentUserDisplayName: gameBrain.userDisplayName,
+                        opponentDisplayName:    opponentName,
+                        gameEndScreenshot:      self.grabScreenshot())
+                }
+                
+//                    Just want the user to see what happened before moving to gameOver screen
+//                    turnUserInteractionOn() // Clear any messages
+//                    self.view.userInteractionEnabled = false
+
+                self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
             }
+        } else {
+            MWLog("ERROR: No gameSetup")
         }
     }
     
@@ -675,55 +737,13 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         MWLog()
         
         if let gameSetup = gameSetup {
-            if gameSetup.players == Players.Single {
-                
-                // Singleplayer
-                gameResult = GameResult(
-                    players:                Players.Single,
-                    boardSize:              gameSetup.dimension,
-                    turnDuration:           gameSetup.turnDuration,
-                    currentUserScore:       gameBrain.userScore,
-                    currentUserDisplayName: gameBrain.userDisplayName)
-            } else {
-                
-                // Multiplayer
-                
-                var didWin: Bool? = nil
-                if gameBrain.userScore > gameBrain.opponentScore {
-                    didWin = true
-                } else if gameBrain.userScore < gameBrain.opponentScore {
-                    didWin = false
-                } // Otherwise draw
-                
-                let opponentName: String
-                if let opponentDisplayName = gameBrain.opponentDisplayName {
-                    opponentName = opponentDisplayName
-                } else {
-                    opponentName = "Opponent"
-                }
-                
-                gameResult = GameResult(
-                    players:                Players.Multi,
-                    boardSize:              gameSetup.dimension,
-                    turnDuration:           gameSetup.turnDuration,
-                    won:                    didWin,
-                    currentUserScore:       gameBrain.userScore,
-                    opponentScore:          gameBrain.opponentScore,
-                    currentUserDisplayName: gameBrain.userDisplayName,
-                    opponentDisplayName:    opponentName)
-            }
             
-            // Just want the user to see what happened before moving to gameOver screen
-            turnUserInteractionOn() // Clear any messages
-            self.view.userInteractionEnabled = false
-            delay(1.0) {
-                self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
-            }
             
         } else {
             MWLog("ERROR: There was no gameSetup")
         }
     }
+    
     
     
     
@@ -762,6 +782,8 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     }
     
     
+    
+    
     // -------------------------------
     // MARK: Game Brain Getting Opponent
     // -------------------------------
@@ -773,8 +795,6 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             opponentScoreLabel.text = "0"
             
             turnUserInteractionOn()
-//            startCurrentUserTimer()
-//            timeLeftLabel.hidden = false
         } else {
             MWLog("opponentName: \(opponentName), but the view has not appeared yet")
         }
@@ -814,14 +834,16 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     currentUserScore:       gameBrain.userScore,
                     opponentScore:          gameBrain.opponentScore,
                     currentUserDisplayName: gameBrain.userDisplayName,
-                    opponentDisplayName:    opponentName)
+                    opponentDisplayName:    opponentName,
+                    gameEndScreenshot:      self.grabScreenshot())
             } else {
                 gameResult = GameResult(
                     players:                Players.Single,
                     boardSize:              gameSetup.dimension,
                     turnDuration:           gameSetup.turnDuration,
                     currentUserScore:       gameBrain.userScore,
-                    currentUserDisplayName: gameBrain.userDisplayName)
+                    currentUserDisplayName: gameBrain.userDisplayName,
+                    gameEndScreenshot:      self.grabScreenshot())
             }
         } else {
             MWLog("ERROR: No gameSetup")
@@ -863,13 +885,23 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     // MARK: Private Helpers
     // -------------------------------
     
-    func delay(delay:Double, closure:()->()) {
+    private func delay(delay:Double, closure:()->()) {
         dispatch_after(
             dispatch_time(
                 DISPATCH_TIME_NOW,
                 Int64(delay * Double(NSEC_PER_SEC))
             ),
             dispatch_get_main_queue(), closure)
+    }
+    
+    private func grabScreenshot() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.gameView!.bounds.size, true, 0);
+        self.gameView!.drawViewHierarchyInRect(self.gameView!.bounds, afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        return image
     }
 }
 

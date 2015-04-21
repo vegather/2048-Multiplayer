@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class GameResult: Printable {
     var players:                Players
@@ -17,6 +18,7 @@ class GameResult: Printable {
     var opponentScore:          Int!    // Only applicable for multiplayer games
     var currentUserDisplayName: String
     var opponentDisplayName:    String! // Only applicable for multiplayer games
+    var gameEndScreenshot:      UIImage
     
     // Use this for singleplayer games
     init(
@@ -24,13 +26,15 @@ class GameResult: Printable {
         boardSize:              Int,
         turnDuration:           Int,
         currentUserScore:       Int,
-        currentUserDisplayName: String)
+        currentUserDisplayName: String,
+        gameEndScreenshot:      UIImage)
     {
         self.players                = players
         self.boardSize              = boardSize
         self.turnDuration           = turnDuration
         self.currentUserScore       = currentUserScore
         self.currentUserDisplayName = currentUserDisplayName
+        self.gameEndScreenshot      = gameEndScreenshot
     }
     
     // Use this for multiplayer games
@@ -42,14 +46,16 @@ class GameResult: Printable {
         currentUserScore:       Int,
         opponentScore:          Int,
         currentUserDisplayName: String,
-        opponentDisplayName:    String)
+        opponentDisplayName:    String,
+        gameEndScreenshot:      UIImage)
     {
         self.init(
             players:                players,
             boardSize:              boardSize,
             turnDuration:           turnDuration,
             currentUserScore:       currentUserScore,
-            currentUserDisplayName: currentUserDisplayName)
+            currentUserDisplayName: currentUserDisplayName,
+            gameEndScreenshot:      gameEndScreenshot)
         
         self.won = won
         self.opponentScore = opponentScore
@@ -58,7 +64,7 @@ class GameResult: Printable {
     
     var description: String {
         get {
-            return "GameResult(players: \(players), boardSize: \(boardSize), turnDuration: \(turnDuration), won: \(won), currentUserScore: \(currentUserScore), opponentScore: \(opponentScore), currentUserDisplayName: \(currentUserDisplayName), opponentDisplayName: \(opponentDisplayName))"
+            return "GameResult(players: \(players), boardSize: \(boardSize), turnDuration: \(turnDuration), won: \(won), currentUserScore: \(currentUserScore), opponentScore: \(opponentScore), currentUserDisplayName: \(currentUserDisplayName), opponentDisplayName: \(opponentDisplayName), gameEndScreenShot.size: \(gameEndScreenshot.size))"
         }
     }
 }

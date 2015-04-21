@@ -29,7 +29,6 @@ class PopSegue: UIStoryboardSegue {
             secondVCView.frame = CGRectOffset(secondVCView.frame, screenWidth, 0.0)
             
             }) { (Finished) -> Void in
-//                self.sourceViewController.dismissViewControllerAnimated(false, completion: nil)
                 self.dismissViewControllersFrom(self.sourceViewController as! UIViewController, allTheWayDownTo: self.destinationViewController as! UIViewController, animated: false)
         }
     }

@@ -194,44 +194,57 @@ class GameServerManager: ServerManager {
                                         
                                         gameEntryPoint.childByAppendingPath(GameKeys.OpponentKey).setValue(GameServerManager.dataBase().authData.uid)
                                         
-                                        let gameDimension           = gameSnapshot.childSnapshotForPath(GameKeys.BoardSizeKey).value as! Int
-                                        let gameTurnDuration        = gameSnapshot.childSnapshotForPath(GameKeys.TurnDurationKey).value as! Int
-                                        
+                                        let boardSizeSnapshot       = gameSnapshot.childSnapshotForPath(GameKeys.BoardSizeKey)
+                                        let turnDurationSnapshot    = gameSnapshot.childSnapshotForPath(GameKeys.TurnDurationKey)
                                         let initialStateSnapshot    = gameSnapshot.childSnapshotForPath(GameKeys.InitialStateKey)
-                                        let tileOneSnapshot         = initialStateSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile1Key)
-                                        let tileTwoSnapshot         = initialStateSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile2Key)
                                         
-                                        let tileOneValueString      = tileOneSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
-                                        let tileOneCoordinateString = tileOneSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
-                                        let tileTwoValueString      = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
-                                        let tileTwoCoordinateString = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
+                                        if boardSizeSnapshot.exists() && turnDurationSnapshot.exists() && initialStateSnapshot.exists() {
                                         
-                                        let tileOneValue = TileValue(rawValue: tileOneValueString.toInt()!) as! T
-                                        let tileTwoValue = TileValue(rawValue: tileTwoValueString.toInt()!) as! T
-                                        
-                                        let tileOneCoordinateParts = tileOneCoordinateString.componentsSeparatedByString(",")
-                                        let tileTwoCoordinateParts = tileTwoCoordinateString.componentsSeparatedByString(",")
-                                        
-                                        let tileOneCoordinate = Coordinate(x: tileOneCoordinateParts[0].toInt()!, y: tileOneCoordinateParts[1].toInt()!)
-                                        let tileTwoCoordinate = Coordinate(x: tileTwoCoordinateParts[0].toInt()!, y: tileTwoCoordinateParts[1].toInt()!)
-                                        
-                                        let setup = GameSetup(
-                                            players:                Players.Multi,
-                                            setupForCreating:       false,
-                                            dimension:              gameDimension,
-                                            turnDuration:           gameTurnDuration,
-                                            firstValue:             tileOneValue,
-                                            firstCoordinate:        tileOneCoordinate,
-                                            secondValue:            tileTwoValue,
-                                            secondCoordinate:       tileTwoCoordinate,
-                                            opponentDisplayName:    opponentName,
-                                            gameServer:             self)
+                                            let gameDimension           = boardSizeSnapshot.value as! Int
+                                            let gameTurnDuration        = turnDurationSnapshot.value as! Int
+                                            
+                                            let tileOneSnapshot         = initialStateSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile1Key)
+                                            let tileTwoSnapshot         = initialStateSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile2Key)
+                                            
+                                            let tileOneValueString      = tileOneSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
+                                            let tileOneCoordinateString = tileOneSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
+                                            let tileTwoValueString      = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
+                                            let tileTwoCoordinateString = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
+                                            
+                                            let tileOneValue = TileValue(rawValue: tileOneValueString.toInt()!) as! T
+                                            let tileTwoValue = TileValue(rawValue: tileTwoValueString.toInt()!) as! T
+                                            
+                                            let tileOneCoordinateParts = tileOneCoordinateString.componentsSeparatedByString(",")
+                                            let tileTwoCoordinateParts = tileTwoCoordinateString.componentsSeparatedByString(",")
+                                            
+                                            let tileOneCoordinate = Coordinate(x: tileOneCoordinateParts[0].toInt()!, y: tileOneCoordinateParts[1].toInt()!)
+                                            let tileTwoCoordinate = Coordinate(x: tileTwoCoordinateParts[0].toInt()!, y: tileTwoCoordinateParts[1].toInt()!)
+                                            
+                                            let setup = GameSetup(
+                                                players:                Players.Multi,
+                                                setupForCreating:       false,
+                                                dimension:              gameDimension,
+                                                turnDuration:           gameTurnDuration,
+                                                firstValue:             tileOneValue,
+                                                firstCoordinate:        tileOneCoordinate,
+                                                secondValue:            tileTwoValue,
+                                                secondCoordinate:       tileTwoCoordinate,
+                                                opponentDisplayName:    opponentName,
+                                                gameServer:             self)
 
-                                        dispatch_async(dispatch_get_main_queue()) {
-                                            completionHandler(gameSetup: setup, errorMessage: nil)
+                                            dispatch_async(dispatch_get_main_queue()) {
+                                                completionHandler(gameSetup: setup, errorMessage: nil)
+                                            }
+                                        } else {
+                                            dispatch_async(dispatch_get_main_queue()) {
+                                                MWLog("Missing boardSize, turnDuration, or initialState")
+                                                completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(gamepin)")
+                                            }
                                         }
                                     } else {
-                                        MWLog("User with uid simplelogin:\(gamepin) does not have a display name")
+                                        dispatch_async(dispatch_get_main_queue()) {
+                                            completionHandler(gameSetup: nil, errorMessage: "User with uid simplelogin:\(gamepin) does not have a display name")
+                                        }
                                     }
                                 }
                         } else {

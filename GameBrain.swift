@@ -79,6 +79,12 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     
     let userDisplayName: String = UserServerManager.lastKnownCurrentUserDisplayName
     
+    private(set) var gameIsOver = false // Will be set to true when there are no more legal moves
+    
+    
+    
+    
+    
     init(delegate: E?) {
         self.delegate = delegate
     } 
@@ -101,17 +107,6 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                     self.delegate?.gameBrainUserHasNewScore(userScore)
                     currentPlayer = Turn.Opponent
                     
-                    // Change currentPlayer
-//                    if currentPlayer == Turn.User {
-//                        userScore += scoreIncrease
-//                        self.delegate?.gameBrainUserHasNewScore(userScore)
-//                        currentPlayer = Turn.Opponent
-//                    } else {
-//                        opponentScore += scoreIncrease
-//                        self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
-//                        currentPlayer = Turn.User
-//                    }
-                    
                     // Have to do switch case to unwrap associated value
                     switch spawn {
                     case let .Spawn(gamePiece):
@@ -132,6 +127,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             
             if gameOver {
                 MWLog("The game is over")
+                gameIsOver = true
                 self.delegate?.gameBrainGameIsOverFromFillingUpBoard()
             } else {
                 MWLog("The game is not over yet")
@@ -222,8 +218,6 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             self.gameServer = gameSetup.gameServer
             self.gameServer.gameDelegate = self
             
-            // MIGHT NEED TO DO SOMETHING WITH THE TURN DURATION IN HERE
-            
             // No point in checking gameOver. The game has after all just started
             let (firstSpawn, _) = self.gameBoard.spawnNodeWithValue(gameSetup.firstTile, atCoordinate: gameSetup.firstCoordinate)
             if let firstSpawn = firstSpawn {
@@ -302,22 +296,13 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             opponentScore += scoreIncrease
             self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
             currentPlayer = Turn.User
-            
-//            if currentPlayer == Turn.User {
-//                userScore += scoreIncrease
-//                self.delegate?.gameBrainUserHasNewScore(userScore)
-//                currentPlayer = Turn.Opponent
-//            } else {
-//                opponentScore += scoreIncrease
-//                self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
-//                currentPlayer = Turn.User
-//            }
         } else {
             MWLog("ERROR: Could not spawn tile")
         }
         
         if gameOverFromSpawn {
             MWLog("The game is over")
+            gameIsOver = true
             self.delegate?.gameBrainGameIsOverFromFillingUpBoard()
         } else {
             MWLog("The game is not over yet")

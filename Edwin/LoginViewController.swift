@@ -63,6 +63,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.text = ""
         
         if UserServerManager.isLoggedIn {
+            MWLog("The user was already logged in, so moving along")
             self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
         }
     }

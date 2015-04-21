@@ -318,50 +318,5 @@ class BoardView: SKScene {
         }
         MWLog()
     }
-    
-//    private func getMoveSequenceForMove(#from: Coordinate, to: Coordinate) -> SKAction {
-//        let destinationPoint = self.positionForCoordinate(to)
-//        let sourcePoint = self.positionForCoordinate(from)
-//        
-//        let firstOvershootPercentage = 6
-//        let secondOvershootPercentage = 2
-//        
-//        var moveAndBounceSequence: SKAction
-//        
-//        if from.y == to.y {
-//            // Going horisontally
-//            let distanceToDestination = abs(destinationPoint.x - sourcePoint.x)
-//            let firstOvershootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
-//            let secondOvershootDistance = distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0)
-//            
-//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
-//            
-//            let firstOvershootDuration = speed * firstOvershootDistance
-//            let secondOvershootDuration = speed * secondOvershootDistance
-//            
-//            if from.x > to.x {
-//                // Going left
-//                let firstMove = SKAction.moveToX(destinationPoint.x - firstOvershootDistance, duration: 1.0)
-//            } else {
-//                // Going right
-//                
-//            }
-//        } else {
-//            // Going vertically
-//            let distanceToDestination = abs(destinationPoint.y - sourcePoint.y)
-//            let firstOverShootDistance = distanceToDestination * (CGFloat(firstOvershootPercentage) / 100.0)
-//            let secondOverShootDistance = firstOverShootDistance + (distanceToDestination * (CGFloat(secondOvershootPercentage) / 100.0))
-//            
-//            let speed = CGFloat(ANIMATION_DURATION) / distanceToDestination
-//            
-//            if from.y > to.y {
-//                // Going up
-//                
-//            } else {
-//                // Going down
-//                
-//            }
-//        }
-    
+        
 }
-//    }

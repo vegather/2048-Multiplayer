@@ -25,38 +25,27 @@ class MainMenuViewController: UIViewController {
         } else if segue.identifier == SegueIdentifier.PushJoinGame {
             // Prepare join game
             MWLog("Will present join game")
+        } else if segue.identifier == SegueIdentifier.PushAccount {
+            // Prepare Account
+            MWLog("Will present Account")
         }
     }
     
     override func segueForUnwindingToViewController(toViewController: UIViewController, fromViewController: UIViewController, identifier: String?) -> UIStoryboardSegue {
         
-        if let id = identifier{
-            if id == SegueIdentifier.PopToMainMenuFromCreateGame {
-                MWLog("Providing unwind segue for PopToMainMenuFromCreateGame")
+        if let id = identifier {
+            
+            if id == SegueIdentifier.PopToMainMenuFromCreateGame ||
+               id == SegueIdentifier.PopToMainMenuFromJoinGame   ||
+               id == SegueIdentifier.PopToMainMenuFromGameOver   ||
+               id == SegueIdentifier.PopToMainMenuFromAccount
+            {
+                MWLog("Providing unwind segue for popping back to the main menu")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
                     performHandler: { () -> Void in
                 })
-                
-                return unwindSegue
-            } else if id == SegueIdentifier.PopToMainMenuFromJoinGame {
-                MWLog("Providing unwind segue for PopToMainMenuFromJoinGame")
-                let unwindSegue = PopSegue(identifier: id,
-                    source: fromViewController,
-                    destination: toViewController,
-                    performHandler: { () -> Void in
-                })
-                
-                return unwindSegue
-            } else if id == SegueIdentifier.PopToMainMenuFromGameOver {
-                MWLog("Providing unwind segue for PopToMainMenuFromGameOver")
-                let unwindSegue = PopSegue(identifier: id,
-                    source: fromViewController,
-                    destination: toViewController,
-                    performHandler: { () -> Void in
-                })
-                
                 return unwindSegue
             }
         }
@@ -74,6 +63,9 @@ class MainMenuViewController: UIViewController {
         } else if sender.identifier == SegueIdentifier.PopToMainMenuFromGameOver {
             // Came back from Game Over
             MWLog("Came back from Game Over")
+        } else if sender.identifier == SegueIdentifier.PopToMainMenuFromAccount {
+            // Came back from Account
+            MWLog("Came back from Account")
         }
     }
 

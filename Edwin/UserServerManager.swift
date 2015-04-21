@@ -67,6 +67,7 @@ class UserServerManager: ServerManager {
     class var isLoggedIn: Bool {
         get {
             if dataBase().authData != nil {
+                MWLog("The user has authData: \(dataBase().authData.auth)")
                 return true
             } else {
                 return false
@@ -92,6 +93,12 @@ class UserServerManager: ServerManager {
         }
     }
     
+    static var currentUserEmail: String? {
+        get {
+            return dataBase().authData.providerData["email"] as? String
+        }
+    }
+    
     
     
     
@@ -108,7 +115,12 @@ class UserServerManager: ServerManager {
             
             if createUserError == nil {
                 
-                let newUser = [FireBaseKeys.Users.Email: email, FireBaseKeys.Users.DisplayName : displayName] as NSDictionary
+                let newUser = [FireBaseKeys.Users.Email:        email,
+                               FireBaseKeys.Users.DisplayName:  displayName,
+                               FireBaseKeys.Users.Wins:         0,
+                               FireBaseKeys.Users.Draws:        0,
+                               FireBaseKeys.Users.Losses:       0] as NSDictionary
+                
                 let userUID = createUserData["uid"] as! String
                 let newUserPath = self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
                 
@@ -127,16 +139,101 @@ class UserServerManager: ServerManager {
         }
     }
     
-    func changeCurrentUsersDisplayNameTo(newDisplayName: String, completionHandler: (errorMessage: String?) -> ()) {
+    class func changeCurrentUsersDisplayNameTo(newDisplayName: String, completionHandler: (errorMessage: String?) -> ()) {
+        let uid = dataBase().authData.uid
         
     }
     
-    func changeCurrentUsersEmailTo(newEmail: String, completionHandler: (errorMessage: String?) -> ()) {
+    class func changeCurrentUsersEmailTo(newEmail: String, withPassword password: String, completionHandler: (errorMessage: String?) -> ()) {
+        if let currentEmail = dataBase().authData.providerData["email"] as? String {
+        
+            dataBase().changeEmailForUser(
+                currentEmail,
+                password: password,
+                toNewEmail: newEmail) { (error: NSError!) -> Void in
+                    if error != nil {
+                        
+                    } else {
+                        completionHandler(errorMessage: nil)
+                    }
+            }
+        } else {
+            MWLog("Could not get current email")
+            completionHandler(errorMessage: "Could not get your current Email. Try logging out and back in.")
+        }
+    }
+    
+    class func changeCurrentUsersPasswordFrom(oldPassword: String, to newPassword: String, completionHandler: (errorMessage: String?) -> ()) {
+        if let currentEmail = dataBase().authData.providerData["email"] as? String {
+            
+        } else {
+            MWLog("Could not get current email")
+            completionHandler(errorMessage: "Could not get your current Email. Try logging out and back in.")
+        }
         
     }
     
-    func changeCurrentUsersPasswordTo(newPassword: String, completionHandler: (errorMessage: String?) -> ()) {
-        
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Getting and Setting Stats
+    // -------------------------------
+    
+    class func getNumberOfWinsStatisticsByIncrementing(shouldIncrement: Bool, completionHandler: (newNumberOfWins: Int) -> ()) {
+        self.getStatisticsWithPathEnding(FireBaseKeys.Users.Wins, shouldIncrement: shouldIncrement, completionHandler: completionHandler)
     }
     
+    class func getNumberOfLossesStatisticsByIncrementing(shouldIncrement: Bool, completionHandler: (newNumberOfLosses: Int) -> ()) {
+        self.getStatisticsWithPathEnding(FireBaseKeys.Users.Losses, shouldIncrement: shouldIncrement, completionHandler: completionHandler)
+    }
+    
+    class func getNumberOfDrawsStatisticsByIncrementing(shouldIncrement: Bool, completionHandler: (newNumberOfDraws: Int) -> ()) {
+        self.getStatisticsWithPathEnding(FireBaseKeys.Users.Draws, shouldIncrement: shouldIncrement, completionHandler: completionHandler)
+    }
+    
+    private class func getStatisticsWithPathEnding(pathEnding: String, shouldIncrement: Bool, completionHandler: (newNumberOfWins: Int) -> ()) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            let currentUserWinsRef = self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(self.dataBase().authData.uid).childByAppendingPath(pathEnding)
+            
+            currentUserWinsRef.runTransactionBlock({ (currentStats: FMutableData!) -> FTransactionResult! in
+                    MWLog("In runTransactionBlock. pathEnding: \(pathEnding), shouldIncrement: \(shouldIncrement)")
+                
+                    var value = currentStats.value as? Int
+                    if value == nil {
+                        value = 0
+                    }
+                    if shouldIncrement {
+                        currentStats.value = value! + 1
+                    } else {
+                        currentStats.value = value!
+                    }
+                
+                    return FTransactionResult.successWithValue(currentStats)
+                }, andCompletionBlock: { (error: NSError!, committed: Bool, theData: FDataSnapshot!) -> Void in
+                    
+                    FTransactionResult.abort()
+                    
+                    if error == nil {
+                        if committed {
+                            MWLog("Got new value: \(theData.value as! Int) for path ending \(pathEnding)")
+                            dispatch_async(dispatch_get_main_queue()) {
+                                completionHandler(newNumberOfWins: theData.value as! Int)
+                            }
+                        } else {
+                            MWLog("Did not commit pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
+                            dispatch_async(dispatch_get_main_queue()) {
+                                completionHandler(newNumberOfWins: 0)
+                            }
+                        }
+                    } else {
+                        MWLog("CompletionBlock got error: \"\(error.localizedDescription)\" pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
+                        dispatch_async(dispatch_get_main_queue()) {
+                            completionHandler(newNumberOfWins: 0)
+                        }
+                    }
+                })
+        }
+    }
 }

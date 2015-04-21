@@ -78,6 +78,46 @@ class GameOverViewController: UIViewController {
             }
         }
     }
+    
+    
+    
+    
+    
+    // -------------------------------
+    // MARK: Actions
+    // -------------------------------
+    
+    @IBAction func shareButtonTapped() {
+        
+        if let gameResult = gameResult {
+            var shareText = ""
+            if gameResult.players == Players.Single {
+                // Singleplayer
+                shareText = "I just scored \(gameResult.currentUserScore) points in Edwin. So addictive!"
+            } else {
+                // Multiplayer
+                if let won = gameResult.won {
+                    if won {
+                        // Current player won
+                        shareText = "I just won against \(gameResult.opponentDisplayName), \(gameResult.opponentScore) to \(gameResult.currentUserScore) in Edwin."
+                    } else {
+                        // Current player lost
+                        shareText = "I just lost against \(gameResult.opponentDisplayName), \(gameResult.opponentScore) to \(gameResult.currentUserScore) in Edwin."
+                    }
+                } else {
+                    // Draw
+                    shareText = "I just played a draw against \(gameResult.opponentDisplayName) in Edwin. We both scored \(gameResult.currentUserScore) points."
+                }
+            }
+            
+            let activitySheet = UIActivityViewController(activityItems: [shareText, gameResult.gameEndScreenshot], applicationActivities: nil)
+            self.presentViewController(activitySheet, animated: true, completion: nil)
+        }
+    }
+
+    
+    
+    
 
     // -------------------------------
     // MARK: Segue Management
