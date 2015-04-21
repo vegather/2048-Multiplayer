@@ -17,12 +17,12 @@ class UserServerManager: ServerManager {
     // -------------------------------
     
     class func loginWithEmail(email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
-        dataBase().authUser(email, password: password) { (error: NSError?, data: FAuthData?) -> Void in
+        ServerManager.dataBase().authUser(email, password: password) { (error: NSError?, data: FAuthData?) -> Void in
             // data.auth is [uid: simplelogin:1, provider: password]
             MWLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
             
             if error == nil, let data = data {
-                self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
+                ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
                     withBlock: { (snapshot: FDataSnapshot!) -> Void in
                         let nameSnapshot = snapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName)
                         if nameSnapshot.exists() {
@@ -61,15 +61,16 @@ class UserServerManager: ServerManager {
     }
     
     class func logout() {
-        dataBase().unauth()
+        ServerManager.dataBase().unauth()
     }
     
     class var isLoggedIn: Bool {
         get {
-            if dataBase().authData != nil {
-                MWLog("The user has authData: \(dataBase().authData.auth)")
+            if ServerManager.dataBase().authData != nil {
+                MWLog("The user has authData: \(ServerManager.dataBase().authData.auth)")
                 return true
             } else {
+                MWLog("Not logged in")
                 return false
             }
         }
@@ -95,7 +96,7 @@ class UserServerManager: ServerManager {
     
     static var currentUserEmail: String? {
         get {
-            return dataBase().authData.providerData["email"] as? String
+            return ServerManager.dataBase().authData.providerData["email"] as? String
         }
     }
     
@@ -109,7 +110,7 @@ class UserServerManager: ServerManager {
     
     // Need to change the profilePicture back to non-optional
     class func createUserWithDisplayName(displayName: String, email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
-        dataBase().createUser(email, password: password) { (createUserError: NSError!, createUserData: [NSObject : AnyObject]!) -> Void in
+        ServerManager.dataBase().createUser(email, password: password) { (createUserError: NSError!, createUserData: [NSObject : AnyObject]!) -> Void in
             // data is [uid: simplelogin:1]
             MWLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
             
@@ -122,7 +123,7 @@ class UserServerManager: ServerManager {
                                FireBaseKeys.Users.Losses:       0] as NSDictionary
                 
                 let userUID = createUserData["uid"] as! String
-                let newUserPath = self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
+                let newUserPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
                 
                 newUserPath.setValue(newUser, withCompletionBlock: { (setNewUserError: NSError!, ref: Firebase!) -> Void in
                     if setNewUserError == nil {
@@ -140,14 +141,14 @@ class UserServerManager: ServerManager {
     }
     
     class func changeCurrentUsersDisplayNameTo(newDisplayName: String, completionHandler: (errorMessage: String?) -> ()) {
-        let uid = dataBase().authData.uid
+        let uid = ServerManager.dataBase().authData.uid
         
     }
     
     class func changeCurrentUsersEmailTo(newEmail: String, withPassword password: String, completionHandler: (errorMessage: String?) -> ()) {
-        if let currentEmail = dataBase().authData.providerData["email"] as? String {
+        if let currentEmail = ServerManager.dataBase().authData.providerData["email"] as? String {
         
-            dataBase().changeEmailForUser(
+            ServerManager.dataBase().changeEmailForUser(
                 currentEmail,
                 password: password,
                 toNewEmail: newEmail) { (error: NSError!) -> Void in
@@ -164,7 +165,7 @@ class UserServerManager: ServerManager {
     }
     
     class func changeCurrentUsersPasswordFrom(oldPassword: String, to newPassword: String, completionHandler: (errorMessage: String?) -> ()) {
-        if let currentEmail = dataBase().authData.providerData["email"] as? String {
+        if let currentEmail = ServerManager.dataBase().authData.providerData["email"] as? String {
             
         } else {
             MWLog("Could not get current email")
@@ -195,7 +196,7 @@ class UserServerManager: ServerManager {
     
     private class func getStatisticsWithPathEnding(pathEnding: String, shouldIncrement: Bool, completionHandler: (newNumberOfWins: Int) -> ()) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-            let currentUserWinsRef = self.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(self.dataBase().authData.uid).childByAppendingPath(pathEnding)
+            let currentUserWinsRef = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(ServerManager.dataBase().authData.uid).childByAppendingPath(pathEnding)
             
             currentUserWinsRef.runTransactionBlock({ (currentStats: FMutableData!) -> FTransactionResult! in
                     MWLog("In runTransactionBlock. pathEnding: \(pathEnding), shouldIncrement: \(shouldIncrement)")

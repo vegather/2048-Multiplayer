@@ -65,6 +65,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if UserServerManager.isLoggedIn {
             MWLog("The user was already logged in, so moving along")
             self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
+        } else {
+            MWLog("The user is NOT logged in. Waiting for user to login...")
         }
     }
     

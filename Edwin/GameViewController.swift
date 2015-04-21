@@ -14,6 +14,15 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     typealias D = TileValue
     let POP_ANIMATION_DURATION = 0.2
     
+    
+    // For single/multi alignment
+    @IBOutlet weak var scoreBoardHeightConstrant:             NSLayoutConstraint!
+    @IBOutlet weak var opponentScoreBox:                      UIView!
+    @IBOutlet weak var currentUserScoreBox:                   UIView!
+    @IBOutlet weak var currentUserScoreBoxTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scoreBox:                              UIView!
+    
+    
     var gameBrain: GameBrain<GameViewController>!
     var gameView:  SKView?
     var gameSetup: GameSetup<D>?
@@ -79,11 +88,6 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         }
     }
     
-    // For single/multi alignment
-    @IBOutlet weak var scoreBoardHeightConstrant: NSLayoutConstraint!
-    @IBOutlet weak var currentUserResultWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var currentPlayerResultBox: UIView!
-    
     // General outlets
     var opponentScore: Int = 0 {
         didSet {
@@ -118,7 +122,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
             if userScoreLabel != nil && userScore != oldValue {
                 UIView.animateWithDuration(self.POP_ANIMATION_DURATION / 2.0,
                     animations: { () -> Void in
-                        self.userScoreLabel.transform = CGAffineTransformScale(self.opponentScoreLabel.transform, 1.3, 1.3)
+                        self.userScoreLabel.transform = CGAffineTransformScale(self.userScoreLabel.transform, 1.3, 1.3)
                     },
                     completion: { (finishedSuccessfully: Bool) -> Void in
                         self.userScoreLabel.text = "\(self.userScore)"
@@ -191,15 +195,17 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     
                     self.turnUserInteractionOn()
                     
-                    self.currentPlayerResultBox.removeConstraint(currentUserResultWidthConstraint)
+                    self.currentUserScoreBox.removeConstraint(currentUserScoreBoxTrailingConstraint)
+                    self.opponentScoreBox.removeFromSuperview()
+                    
                     let newConstraint = NSLayoutConstraint(
-                        item: currentPlayerResultBox,
+                        item: currentUserScoreBox,
                         attribute: NSLayoutAttribute.Trailing,
                         relatedBy: NSLayoutRelation.Equal,
-                        toItem: self.view,
+                        toItem: self.scoreBox,
                         attribute: NSLayoutAttribute.Trailing,
                         multiplier: 1.0,
-                        constant: -16)
+                        constant: -8)
                     self.view.addConstraint(newConstraint)
                     // setNeedsUpdateConstraints() will get called further down
                     
@@ -222,19 +228,15 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                         }
                         
                     } else {
+                        timeLeftLabel.hidden = true
+                        opponentDisplayNameLabel.text = ""
+                        opponentScoreLabel.text = ""
+                        
                         if let gamePin = gameBrain.gamePin {
                             MWLog("Not yet an opponent, but the game has a gamePin")
-                            
-                            timeLeftLabel.hidden = true
-                            opponentDisplayNameLabel.text = "Gamepin"
-                            opponentScoreLabel.text = gamePin
                             self.turnUserInteractionOffWithMessage("Waiting for opponent...")
                         } else {
                             MWLog("No opponent, and no gamePin")
-                            
-                            timeLeftLabel.hidden = true
-                            opponentDisplayNameLabel.text = ""
-                            opponentScoreLabel.text = ""
                             self.turnUserInteractionOffWithMessage("Creating game...")
                         }
                     }
@@ -480,7 +482,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 title: "Got it",
                 style: UIAlertActionStyle.Default,
                 handler: { (action: UIAlertAction!) -> Void in
-                    self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+                    self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
             })
             
             timeoutMessage.addAction(okAction)
@@ -574,7 +576,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                 title: "Got it",
                 style: UIAlertActionStyle.Default,
                 handler: { (action: UIAlertAction!) -> Void in
-                    self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+                    self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
             })
             
             timeoutMessage.addAction(okAction)
@@ -664,7 +666,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
 //                    turnUserInteractionOn() // Clear any messages
 //                    self.view.userInteractionEnabled = false
 
-                self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
+                self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
             }
         } else {
             MWLog("ERROR: No gameSetup")
@@ -817,14 +819,14 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
         
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
+                
                 let opponentName: String
                 if let opponentDisplayName = gameBrain.opponentDisplayName {
+                    alertMessage += " This will also let \(opponentDisplayName) win"
                     opponentName = opponentDisplayName
                 } else {
                     opponentName = "Opponent"
                 }
-                
-                alertMessage += " Also your opponent will win."
                 
                 gameResult = GameResult(
                     players:                Players.Multi,
@@ -845,36 +847,46 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
                     currentUserDisplayName: gameBrain.userDisplayName,
                     gameEndScreenshot:      self.grabScreenshot())
             }
+            
+            let alert = UIAlertController(
+                title: "Are you sure",
+                message: alertMessage,
+                preferredStyle: UIAlertControllerStyle.Alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+            let okAction     = UIAlertAction(title: "Quit",   style: UIAlertActionStyle.Destructive) { (action: UIAlertAction!) -> Void in
+                self.stopCurrentUserTimer()
+                self.stopOpponentTimeoutTimer()
+                self.gameBrain.deleteCurrentGame()
+                
+                if gameSetup.players == Players.Multi && self.gameBrain.opponentDisplayName == nil {
+                    MWLog("There was no game. The user just wants to quit. Will return to main menu")
+                    self.performSegueWithIdentifier(SegueIdentifier.PopToMainMenuFromGame, sender: self)
+                } else {
+                    MWLog("There was an actual game, so show the result of it")
+                    self.performSegueWithIdentifier(SegueIdentifier.PushGameOverFromGame, sender: self)
+                }
+            }
+            
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+            
+            presentViewController(alert, animated: true, completion: nil)
+            
         } else {
             MWLog("ERROR: No gameSetup")
         }
-        
-        let alert = UIAlertController(
-            title: "Are you sure",
-            message: alertMessage,
-            preferredStyle: UIAlertControllerStyle.Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-        let okAction     = UIAlertAction(title: "Quit",   style: UIAlertActionStyle.Destructive) { (action: UIAlertAction!) -> Void in
-            self.stopCurrentUserTimer()
-            self.stopOpponentTimeoutTimer()
-            self.gameBrain.deleteCurrentGame()
-            self.performSegueWithIdentifier(SegueIdentifier.PushByPoppingToOverFromGame, sender: self)
-        }
-        
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-        
-        presentViewController(alert, animated: true, completion: nil)
     }
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         MWLog()
-        if segue.identifier == SegueIdentifier.PushByPoppingToOverFromGame {
+        if segue.identifier == SegueIdentifier.PushGameOverFromGame {
             if let destination = segue.destinationViewController as? GameOverViewController {
-                
+                MWLog("Preparing to show gameResult: \(gameResult)")
                 destination.gameResult = gameResult
             }
+        } else if segue.identifier == SegueIdentifier.PopToMainMenuFromGame {
+            MWLog("Preparing to return to main menu.")
         }
     }
     

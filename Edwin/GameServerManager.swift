@@ -33,7 +33,7 @@ class GameServerManager: ServerManager {
     
     func createGameWithDimension(dimension: Int, turnDuration: Int, completionHandler: (gamePin: String!, errorMessage: String?) -> ()) {
         // Overwrites previous game
-        self.creatorOfCurrentGame = GameServerManager.dataBase().authData.uid
+        self.creatorOfCurrentGame = ServerManager.dataBase().authData.uid
         let initialGameData = [GameKeys.BoardSizeKey    : dimension,
                                GameKeys.TurnDurationKey : turnDuration,
                                GameKeys.LastMoveKey     : [GameKeys.LastMove.MoveDirectionKey   : "_",
@@ -43,7 +43,7 @@ class GameServerManager: ServerManager {
                                                            ]
                               ]
         
-        let dataBasePath = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(self.creatorOfCurrentGame!)
+        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(self.creatorOfCurrentGame!)
         dataBasePath.onDisconnectRemoveValue() // If the app is closed, network is lost, or other error: Remove the game from Firebase
         
         dataBasePath.setValue(initialGameData, withCompletionBlock: { (error: NSError!, ref: Firebase!) -> Void in
@@ -65,7 +65,7 @@ class GameServerManager: ServerManager {
                             if snapshot.key == GameKeys.OpponentKey {
                                 if let opponentUID = snapshot.value as? String {
                                     MWLog("Got opponent with uid \(opponentUID)")
-                                    let userPath = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(opponentUID)
+                                    let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(opponentUID)
                                     userPath.observeSingleEventOfType(FEventType.Value,
                                         withBlock: { (snapshot: FDataSnapshot!) -> Void in
                                             MWLog("Got userdata \"\(snapshot)\" for uid \"\(opponentUID)\"")
@@ -129,8 +129,8 @@ class GameServerManager: ServerManager {
         hasCoordinate secondCoordinate: Coordinate,
         completionHandler:(errorMessage: String?) -> ())
     {
-        let currentUserID = GameServerManager.dataBase().authData.uid
-        let dataBasePath = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(currentUserID).childByAppendingPath(GameKeys.InitialStateKey)
+        let currentUserID = ServerManager.dataBase().authData.uid
+        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(currentUserID).childByAppendingPath(GameKeys.InitialStateKey)
         
         let initialState = [GameKeys.InitialState.Tile1Key:
                                     [GameKeys.InitialState.Tile.PositionKey : "\(firstCoordinate.x),\(firstCoordinate.y)",
@@ -160,7 +160,7 @@ class GameServerManager: ServerManager {
         // Set self as opponent
         // Call completionHandler
         
-        let gameEntryPoint = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepin)")
+        let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepin)")
         
         gameEntryPoint.observeSingleEventOfType(FEventType.Value,
             withBlock: { (gameSnapshot: FDataSnapshot!) -> Void in
@@ -180,7 +180,7 @@ class GameServerManager: ServerManager {
                                     self.processNewLastMove(lastMoveSnapshot)
                                 }
                             
-                            let userPath = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath("simplelogin:\(gamepin)")
+                            let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath("simplelogin:\(gamepin)")
                             userPath.observeSingleEventOfType(FEventType.Value)
                                 { (userSnapshot: FDataSnapshot!) -> Void in
                                     MWLog("Got userdata \"\(userSnapshot)\" for uid \"simplelogin\(gamepin)\"")
@@ -192,7 +192,7 @@ class GameServerManager: ServerManager {
                                         
                                         self.creatorOfCurrentGame = "simplelogin:\(gamepin)"
                                         
-                                        gameEntryPoint.childByAppendingPath(GameKeys.OpponentKey).setValue(GameServerManager.dataBase().authData.uid)
+                                        gameEntryPoint.childByAppendingPath(GameKeys.OpponentKey).setValue(ServerManager.dataBase().authData.uid)
                                         
                                         let boardSizeSnapshot       = gameSnapshot.childSnapshotForPath(GameKeys.BoardSizeKey)
                                         let turnDurationSnapshot    = gameSnapshot.childSnapshotForPath(GameKeys.TurnDurationKey)
@@ -280,7 +280,7 @@ class GameServerManager: ServerManager {
         // Update the LastMove on the server
         // Use updateChildValues to not overwrite
         if let creator = self.creatorOfCurrentGame {
-            let gameEntryPoint = GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(creator)
+            let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(creator)
             let lastMoveEntryPoint = gameEntryPoint.childByAppendingPath(GameKeys.LastMoveKey)
             
             var directionString = "_"
@@ -299,7 +299,7 @@ class GameServerManager: ServerManager {
             let valueString = "\(newTile.scoreValue)"
             
             let newMoveData = [GameKeys.LastMove.MoveDirectionKey  : directionString,
-                               GameKeys.LastMove.UpdaterKey        : GameServerManager.dataBase().authData.uid,
+                               GameKeys.LastMove.UpdaterKey        : ServerManager.dataBase().authData.uid,
                                GameKeys.LastMove.NewTileKey        : [GameKeys.LastMove.NewTile.PositionKey   : coordinateString,
                                                                       GameKeys.LastMove.NewTile.ValueKey      : valueString]
                               ]
@@ -337,7 +337,7 @@ class GameServerManager: ServerManager {
             MWLog("Got moveDirectionString: \(moveDirectionString), spawnCoordinateString: \(spawnCoordinateString), spawnValueString: \(spawnValueString)")
             
             if moveDirectionString != "_" && spawnCoordinateString != "_" && spawnValueString != "_" && updaterString != "_" {
-                if updaterString != GameServerManager.dataBase().authData.uid {
+                if updaterString != ServerManager.dataBase().authData.uid {
                 
                     var direction: MoveDirection
                     switch moveDirectionString {
@@ -383,12 +383,12 @@ class GameServerManager: ServerManager {
     
     func stopListeningForChanges() {
         MWLog()
-        GameServerManager.dataBase().removeAllObservers()
+        ServerManager.dataBase().removeAllObservers()
     }
     
     func deleteEventWithGamepin(gamepinToRemove: String) {
         MWLog("Gamepin to remove: \(gamepinToRemove)")
-        GameServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepinToRemove)").removeValue()
+        ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepinToRemove)").removeValue()
     }
 }
 

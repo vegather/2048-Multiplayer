@@ -38,7 +38,8 @@ class MainMenuViewController: UIViewController {
             if id == SegueIdentifier.PopToMainMenuFromCreateGame ||
                id == SegueIdentifier.PopToMainMenuFromJoinGame   ||
                id == SegueIdentifier.PopToMainMenuFromGameOver   ||
-               id == SegueIdentifier.PopToMainMenuFromAccount
+               id == SegueIdentifier.PopToMainMenuFromAccount    ||
+               id == SegueIdentifier.PopToMainMenuFromGame
             {
                 MWLog("Providing unwind segue for popping back to the main menu")
                 let unwindSegue = PopSegue(identifier: id,
@@ -66,6 +67,9 @@ class MainMenuViewController: UIViewController {
         } else if sender.identifier == SegueIdentifier.PopToMainMenuFromAccount {
             // Came back from Account
             MWLog("Came back from Account")
+        } else if sender.identifier == SegueIdentifier.PopToMainMenuFromGame {
+            // Cancelled a game before it started
+            MWLog("Came back from Game before it even started")
         }
     }
 

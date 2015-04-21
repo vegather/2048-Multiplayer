@@ -69,7 +69,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
         }
     }
     
-    private(set) var opponentDisplayName: String? = nil {
+    private(set) var opponentDisplayName: String? = nil { // Will only be set when the game is starting
         didSet {
             if let opponentDisplayName = opponentDisplayName {
                 self.delegate?.gameBrainDidGetOpponentNamed(opponentDisplayName)
