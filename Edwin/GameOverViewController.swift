@@ -35,11 +35,13 @@ class GameOverViewController: UIViewController {
     @IBOutlet weak var numberOfDrawsSpinner:            UIActivityIndicatorView!
     
     // Misc
+    @IBOutlet weak var shareButton: UIButton!
     let POP_ANIMATION_DURATION = 0.2
     var gameResult: GameResult?
     
     // Need this becuase viewWillAppear gets called twice with current PushSegue
     var viewHasAppeared: Bool = false
+    
     
     
     
@@ -271,6 +273,7 @@ class GameOverViewController: UIViewController {
             }
             
             let activitySheet = UIActivityViewController(activityItems: [shareText, gameResult.gameEndScreenshot], applicationActivities: nil)
+            activitySheet.popoverPresentationController?.sourceView = shareButton
             self.presentViewController(activitySheet, animated: true, completion: nil)
         }
     }

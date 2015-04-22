@@ -51,13 +51,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             selector: Selector("keyboardWillHide:"),
             name: UIKeyboardWillHideNotification,
             object: nil)
-        
-        initialOverEdwinLabelConstraintConstant = overEdwinLabelConstraint.constant
-        initialUnderLoginConstraintConstant = underLoginConstraint.constant
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        initialOverEdwinLabelConstraintConstant = overEdwinLabelConstraint.constant
+        initialUnderLoginConstraintConstant = underLoginConstraint.constant
         
         usernameTextField.text = ""
         passwordTextField.text = ""
