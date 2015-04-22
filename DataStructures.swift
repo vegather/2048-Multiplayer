@@ -171,6 +171,7 @@ protocol Evolvable: Equatable, Printable {
     func evolve() -> Self?
     static func getBaseValue() -> Self  // Gets the lowest value
     var scoreValue: Int { get } // The score increase that this piece should amount to
+    init(scoreValue: Int)
 }
 
 enum TileValue: Int, Evolvable {
@@ -213,6 +214,11 @@ enum TileValue: Int, Evolvable {
         case .OneHundredAndThirtyOneThousandAndSeventyTwo:  return nil
         default:                                            return nil
         }
+    }
+    
+    // Should probably be a failable initializer
+    init(scoreValue: Int) {
+        self = TileValue(rawValue: scoreValue)!
     }
     
     static func getBaseValue() -> TileValue {

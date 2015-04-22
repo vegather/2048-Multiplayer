@@ -16,10 +16,3 @@ protocol EvolvableViewType {
     func evolve()
     var value: C {get set}
 }
-
-protocol GameBoardViewType {
-    init(frame: CGRect, dimension: Int)
-    func performMoveActions<E: Evolvable>(actions: [MoveAction<E>])
-    
-    typealias TileViewType
-}

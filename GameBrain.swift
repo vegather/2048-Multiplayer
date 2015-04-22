@@ -187,16 +187,18 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                     
                     if gameSetup.players == Players.Multi {
                         self.delegate?.gameBrainWillCreateMultiplayerGame()
+
                         
-                        self.gameServer.createGameWithDimension(gameSetup.dimension, turnDuration: gameSetup.turnDuration)
-                            { (gamePin: String!, errorMessage: String?) -> () in
+                        let genericTypeProvider = F(scoreValue: F.getBaseValue().scoreValue)
+                        self.gameServer.createGameWithDimension(genericTypeProvider, dimension: gameSetup.dimension, turnDuration: gameSetup.turnDuration,
+                            completionHandler: { (gamePin: String!, errorMessage: String?) -> () in
                                 if let error = errorMessage {
                                     MWLog("ERROR: Got error from createGame: \(error)")
                                 } else {
                                     MWLog("Got gamePin: \(gamePin)")
                                     self.gamePin = gamePin
                                 }
-                            }
+                            })
                     } else {
                         self.delegate?.gameBrainDidCreateSinglePlayerGame()
                     }

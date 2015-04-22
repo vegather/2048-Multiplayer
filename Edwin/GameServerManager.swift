@@ -24,14 +24,13 @@ class GameServerManager: ServerManager {
     
     private var creatorOfCurrentGame: String? // This will be used to reference a game
     
-    typealias F = TileValue
     
     
     // -------------------------------
     // MARK: Creating and Joining Games
     // -------------------------------
     
-    func createGameWithDimension(dimension: Int, turnDuration: Int, completionHandler: (gamePin: String!, errorMessage: String?) -> ()) {
+    func createGameWithDimension<T: Evolvable>(_: T, dimension: Int, turnDuration: Int, completionHandler: (gamePin: String!, errorMessage: String?) -> ()) {
         // Overwrites previous game
         self.creatorOfCurrentGame = ServerManager.dataBase().authData.uid
         let initialGameData = [GameKeys.BoardSizeKey    : dimension,
@@ -54,7 +53,7 @@ class GameServerManager: ServerManager {
                     { (lastMoveSnapshot: FDataSnapshot!) -> Void in
                         MWLog("Got last move: \(lastMoveSnapshot)")
                         
-                        self.processNewLastMove(lastMoveSnapshot)
+                        self.processNewLastMove(T(scoreValue: T.getBaseValue().scoreValue), lastMoveSnapshot: lastMoveSnapshot)
                 }
                 
                 // Need to start observing the value of the opponent key
@@ -177,7 +176,7 @@ class GameServerManager: ServerManager {
                                     MWLog("Got last move: \(lastMoveSnapshot)")
                                     MWLog("Delegate2: \(self.gameDelegate)")
                                     
-                                    self.processNewLastMove(lastMoveSnapshot)
+                                    self.processNewLastMove(T(scoreValue: T.getBaseValue().scoreValue), lastMoveSnapshot: lastMoveSnapshot)
                                 }
                             
                             let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath("simplelogin:\(gamepin)")
@@ -211,8 +210,8 @@ class GameServerManager: ServerManager {
                                             let tileTwoValueString      = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
                                             let tileTwoCoordinateString = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
                                             
-                                            let tileOneValue = TileValue(rawValue: tileOneValueString.toInt()!) as! T
-                                            let tileTwoValue = TileValue(rawValue: tileTwoValueString.toInt()!) as! T
+                                            let tileOneValue = T(scoreValue: tileOneValueString.toInt()!)
+                                            let tileTwoValue = T(scoreValue: tileTwoValueString.toInt()!)
                                             
                                             let tileOneCoordinateParts = tileOneCoordinateString.componentsSeparatedByString(",")
                                             let tileTwoCoordinateParts = tileTwoCoordinateString.componentsSeparatedByString(",")
@@ -321,7 +320,7 @@ class GameServerManager: ServerManager {
     // MARK: Private Helpers
     // -------------------------------
     
-    private func processNewLastMove(lastMoveSnapshot: FDataSnapshot!) {
+    private func processNewLastMove<T: Evolvable>(_: T, lastMoveSnapshot: FDataSnapshot!) {
         let directionSnapshot           = lastMoveSnapshot.childSnapshotForPath(GameKeys.LastMove.MoveDirectionKey)
         let newTileCoordinateSnapshot   = lastMoveSnapshot.childSnapshotForPath(GameKeys.LastMove.NewTileKey).childSnapshotForPath(GameKeys.LastMove.NewTile.PositionKey)
         let newTileValueSnapshot        = lastMoveSnapshot.childSnapshotForPath(GameKeys.LastMove.NewTileKey).childSnapshotForPath(GameKeys.LastMove.NewTile.ValueKey)
@@ -356,7 +355,7 @@ class GameServerManager: ServerManager {
                     let tileCoordinateParts = spawnCoordinateString.componentsSeparatedByString(",")
                     let tileCoordinate = Coordinate(x: tileCoordinateParts[0].toInt()!, y: tileCoordinateParts[1].toInt()!)
                     
-                    let tileValue = TileValue(rawValue: spawnValueString.toInt()!)! as F
+                    let tileValue = T(scoreValue: spawnValueString.toInt()!)
                     
                     MWLog("Generated direction: \(direction), spawnCoordinate: \(tileCoordinate), spawnValue: \(tileValue)")
                     

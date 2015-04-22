@@ -511,7 +511,7 @@ class GameViewController: UIViewController, GameBrainDelegate, BoardViewDelegate
     private func startOpponentTimeoutTimer() {
         if let gameSetup = gameSetup {
             if gameSetup.players == Players.Multi {
-                let timerDuration = NSTimeInterval(gameSetup.turnDuration * 2)
+                let timerDuration = NSTimeInterval(gameSetup.turnDuration + 5)
                 MWLog("Setting timer to \(timerDuration) seconds")
                 
                 if self.opponentTimeoutTimer != nil {
