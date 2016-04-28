@@ -13,8 +13,8 @@ import UIKit
 class PushSegue: UIStoryboardSegue {
     override func perform() {
         // Assign the source and destination views to local variables.
-        var firstVCView =  (self.sourceViewController      as! UIViewController).view as UIView!
-        var secondVCView = (self.destinationViewController as! UIViewController).view as UIView!
+        let firstVCView =  (self.sourceViewController      as UIViewController).view as UIView!
+        let secondVCView = (self.destinationViewController as UIViewController).view as UIView!
         
         // Get the screen width and height.
         let screenWidth = UIScreen.mainScreen().bounds.size.width
@@ -27,16 +27,31 @@ class PushSegue: UIStoryboardSegue {
         let window = UIApplication.sharedApplication().keyWindow
         window?.insertSubview(secondVCView, aboveSubview: firstVCView)
         
-        
         // Animate the transition.
-        UIView.animateWithDuration(0.4, animations: { () -> Void in
-            firstVCView.frame = CGRectOffset(firstVCView.frame, -screenWidth, 0.0)
-            secondVCView.frame = CGRectOffset(secondVCView.frame, -screenWidth, 0.0)
-            
-            }) { (Finished) -> Void in                
-                self.sourceViewController.presentViewController(self.destinationViewController as! UIViewController,
+        UIView.animateWithDuration(
+            0.4,
+            animations: {
+                firstVCView .frame = CGRectOffset(firstVCView.frame,  -screenWidth, 0.0)
+                secondVCView.frame = CGRectOffset(secondVCView.frame, -screenWidth, 0.0)
+            },
+            completion: { _ in
+                self.sourceViewController.presentViewController(
+                    self.destinationViewController,
                     animated: false,
                     completion: nil)
-        }
+            }
+        )
+        
+//        // Animate the transition.
+//        UIView.animateWithDuration(0.4, animations: { () -> Void in
+//            firstVCView.frame = CGRectOffset(firstVCView.frame, -screenWidth, 0.0)
+//            secondVCView.frame = CGRectOffset(secondVCView.frame, -screenWidth, 0.0)
+//            
+//            }) { (Finished) -> Void in                
+//                self.sourceViewController.presentViewController(
+//                    self.destinationViewController as UIViewController,
+//                    animated: false,
+//                    completion: nil)
+//        }
     }
 }

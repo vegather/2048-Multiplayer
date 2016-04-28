@@ -140,14 +140,14 @@ class GameOverViewController: UIViewController {
                     
                     if let won = gameResult.won {
                         if won {
-                            MWLog("Incrementing wins")
+                            MOONLog("Incrementing wins")
                             shouldIncrementWins = true
                         } else {
-                            MWLog("Incrementing losses")
+                            MOONLog("Incrementing losses")
                             shouldIncrementLosses = true
                         }
                     } else {
-                        MWLog("Incrementing draw")
+                        MOONLog("Incrementing draw")
                         shouldIncrementDraws = true
                     }
                     
@@ -231,13 +231,13 @@ class GameOverViewController: UIViewController {
                         }
                     }
                 } else {
-                    MWLog("ERROR: View has NOT appeared")
+                    MOONLog("ERROR: View has NOT appeared")
                 }
             } else {
-                MWLog("ERROR: Singleplayer")
+                MOONLog("ERROR: Singleplayer")
             }
         } else {
-            MWLog("ERROR: No gameResult")
+            MOONLog("ERROR: No gameResult")
         }
     }
     
@@ -288,7 +288,7 @@ class GameOverViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == SegueIdentifier.PopToMainMenuFromGameOver {
-            MWLog("Preparing for PopToMainMenuFromGameOver")
+            MOONLog("Preparing for PopToMainMenuFromGameOver")
         }
     }
     

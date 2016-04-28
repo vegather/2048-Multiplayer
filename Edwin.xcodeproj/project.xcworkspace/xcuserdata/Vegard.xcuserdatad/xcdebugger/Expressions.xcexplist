@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "Edwin.BoardView.(setNode in _FC9E71D4F6B8DBC3D29C7A17E5DB727B) &lt;A : Edwin.EvolvableViewType, B : Edwin.Evolvable&gt;(Edwin.BoardView&lt;A, B&gt;)(Swift.Optional&lt;A&gt;, forCoordinate : Edwin.Coordinate) -&gt; ():BoardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(G?)node">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

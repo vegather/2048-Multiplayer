@@ -51,12 +51,12 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillShow:"),
+            selector: #selector(CreateUserViewController.keyboardWillShow(_:)),
             name: UIKeyboardWillShowNotification,
             object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillHide:"),
+            selector: #selector(CreateUserViewController.keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
         
@@ -148,21 +148,21 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     private func createUser() {
         dismissKeyboard()
         
-        if count(displayNameTextField.text) > 0 &&
-           count(emailTextField.text) > 0 &&
-           count(firstPasswordTextField.text) > 0 &&
-           count(secondPasswordTextField.text) > 0
+        if displayNameTextField.text!.characters.count > 0 &&
+           emailTextField.text!.characters.count > 0 &&
+           firstPasswordTextField.text!.characters.count > 0 &&
+           secondPasswordTextField.text!.characters.count > 0
         {
             if firstPasswordTextField.text == secondPasswordTextField.text {
                 // Create user
                 spinner.hidden = false
                 spinner.startAnimating()
                 
-                MWLog("Will ask ServerManager to create user")
+                MOONLog("Will ask ServerManager to create user")
                 
-                UserServerManager.createUserWithDisplayName(displayNameTextField.text,
-                    email: emailTextField.text,
-                    password: firstPasswordTextField.text,
+                UserServerManager.createUserWithDisplayName(displayNameTextField.text!,
+                    email: emailTextField.text!,
+                    password: firstPasswordTextField.text!,
                     completionHandler: { (errorMessage) -> () in
                         self.spinner.stopAnimating()
                         if let error = errorMessage {
@@ -190,7 +190,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
     // MARK: Segue Management
     // -------------------------------
     
-    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         if identifier == SegueIdentifier.PopToLoginFromCreateUser {
             return true
         } else if identifier == SegueIdentifier.PushMainMenuFromCreateUser {
@@ -210,7 +210,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         
         if segue.identifier == SegueIdentifier.PopToLoginFromCreateUser {
             // Prepare logout
-            MWLog("Will exit Create user")
+            MOONLog("Will exit Create user")
         } else if segue.identifier == SegueIdentifier.PushMainMenuFromCreateUser {
             
         }
@@ -231,7 +231,7 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
         secondPasswordTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         dismissKeyboard()
     }
     

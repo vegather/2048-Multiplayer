@@ -9,7 +9,7 @@
 import Foundation
 
 protocol GameBoardDelegate: class {
-    typealias A: Evolvable
+    associatedtype A: Evolvable
     
     // Need to separate spawn actions from the rest of the actions here so that
     // I can call spawnNewGamePieceAtRandomPosition only if any actions were produced
@@ -61,7 +61,7 @@ class GameBoard<B: GameBoardDelegate> {
                     if let last = lastValue {
                         if let currentValue = self.board[row][col] {
                             if currentValue == last {
-                                MWLog("Horisontal merge between (\(col),\(row)) and (\(col - 1),\(row))")
+                                MOONLog("Horisontal merge between (\(col),\(row)) and (\(col - 1),\(row))")
                                 canMove = true
                                 break
                             } else {
@@ -90,7 +90,7 @@ class GameBoard<B: GameBoardDelegate> {
                         if let last = lastValue {
                             if let currentValue = self.board[row][col] {
                                 if currentValue == last {
-                                    MWLog("Vertical merge between (\(col),\(row)) and (\(col),\(row - 1))")
+                                    MOONLog("Vertical merge between (\(col),\(row)) and (\(col),\(row - 1))")
                                     canMove = true
                                     break
                                 } else {
@@ -111,14 +111,14 @@ class GameBoard<B: GameBoardDelegate> {
             }
             
             if canMove {
-                MWLog("The board is full, but there are still merges that can be done")
+                MOONLog("The board is full, but there are still merges that can be done")
             } else {
-                MWLog("GAME OVER - The board is full, and there are no more valid moves. ")
+                MOONLog("GAME OVER - The board is full, and there are no more valid moves. ")
             }
             
             return canMove
         } else {
-            MWLog("The board is not full. There are still possible moves")
+            MOONLog("The board is not full. There are still possible moves")
             return true
         }
     }
@@ -132,7 +132,7 @@ class GameBoard<B: GameBoardDelegate> {
     func moveInDirection(direction: MoveDirection) -> (scoreIncrease: Int, moves: [MoveAction<C>]) {
         var resultFromMove:(Int, [MoveAction<C>])
         
-        MWLog("Board before moving")
+        MOONLog("Board before moving")
         self.printBoard()
         
         switch direction {
@@ -147,14 +147,14 @@ class GameBoard<B: GameBoardDelegate> {
         }
         
         let (scoreIncrease, moves) = resultFromMove
-        MWLog()
+        MOONLog()
         
-        MWLog("Board after the move in direction \(direction)")
+        MOONLog("Board after the move in direction \(direction)")
         self.printBoard()
         
-        MWLog("Score increase: \(scoreIncrease)")
+        MOONLog("Score increase: \(scoreIncrease)")
         
-        MWLog("Will return scoreIncrease: \(scoreIncrease), numMoves: \(moves.count)")
+        MOONLog("Will return scoreIncrease: \(scoreIncrease), numMoves: \(moves.count)")
         
         return (scoreIncrease, moves)
     }
@@ -247,7 +247,7 @@ class GameBoard<B: GameBoardDelegate> {
         let leftmostCol = self.findLeftmostColToTheRightOf(fromCoordinate)
         
         if leftmostCol != fromCoordinate.x { // If it could even move
-            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+            if let _ = self.board[fromCoordinate.y][fromCoordinate.x] {
                 returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: leftmostCol, y: fromCoordinate.y))
                 
                 // Update board
@@ -262,9 +262,9 @@ class GameBoard<B: GameBoardDelegate> {
     private func findLeftmostColToTheRightOf(start: Coordinate) -> Int {
         var leftmostCol = start.x - 1
         while leftmostCol >= 0 && self.board[start.y][leftmostCol] == nil {
-            leftmostCol--
+            leftmostCol -= 1
         }
-        leftmostCol++ // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
+        leftmostCol += 1 // leftmostCol is now either on another tile, or -1 (just off the edge) so I need to increment it
         
         return leftmostCol
     }
@@ -282,7 +282,7 @@ class GameBoard<B: GameBoardDelegate> {
         
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
-            for var col = self.dimension - 1; col >= 0; col-- {
+            for var col = self.dimension - 1; col >= 0; col -= 1 {
                 if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempCol { // If we have a temporary index stored
                         if currentPiece == self.board[row][temp] {
@@ -359,7 +359,7 @@ class GameBoard<B: GameBoardDelegate> {
         let rightmostCol = self.findRightmostColToTheRightOf(fromCoordinate)
         
         if rightmostCol != fromCoordinate.x { // If it could even move
-            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+            if let _ = self.board[fromCoordinate.y][fromCoordinate.x] {
                 returnValue = MoveAction.Move(from: fromCoordinate,
                     to: Coordinate(x: rightmostCol, y: fromCoordinate.y))
                 
@@ -375,9 +375,9 @@ class GameBoard<B: GameBoardDelegate> {
     private func findRightmostColToTheRightOf(start: Coordinate) -> Int {
         var rightmostCol = start.x + 1
         while rightmostCol < self.dimension && self.board[start.y][rightmostCol] == nil {
-            rightmostCol++
+            rightmostCol += 1
         }
-        rightmostCol-- // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
+        rightmostCol -= 1 // rightmostCol is now either on another tile, or self.dimension (just off the edge) so I need to decrement it
         
         return rightmostCol
     }
@@ -466,7 +466,7 @@ class GameBoard<B: GameBoardDelegate> {
         let upmostRow = self.findUpmostRowUpwardsFrom(fromCoordinate)
         
         if upmostRow != fromCoordinate.y { // If it could even move
-            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+            if let _ = self.board[fromCoordinate.y][fromCoordinate.x] {
                 returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: upmostRow))
                 
                 // Update board
@@ -481,9 +481,9 @@ class GameBoard<B: GameBoardDelegate> {
     private func findUpmostRowUpwardsFrom(start: Coordinate) -> Int {
         var upmostRow = start.y - 1
         while upmostRow >= 0 && self.board[upmostRow][start.x] == nil {
-            upmostRow--
+            upmostRow -= 1
         }
-        upmostRow++
+        upmostRow += 1
         
         return upmostRow
     }
@@ -501,7 +501,7 @@ class GameBoard<B: GameBoardDelegate> {
         
         for col in 0..<self.dimension {
             var tempRow: Int? //Used to temporary store a row index to check for potential merging
-            for var row = self.dimension - 1; row >= 0; row-- {
+            for var row = self.dimension - 1; row >= 0; row -= 1 {
                 if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempRow { // If we have a temporary index stored
                         if currentPiece == self.board[temp][col] {
@@ -578,7 +578,7 @@ class GameBoard<B: GameBoardDelegate> {
         let downmostRow = self.findDownmostRowDownwardsFrom(fromCoordinate)
         
         if downmostRow != fromCoordinate.y {
-            if let pieceToMove = self.board[fromCoordinate.y][fromCoordinate.x] {
+            if let _ = self.board[fromCoordinate.y][fromCoordinate.x] {
                 returnValue = MoveAction.Move(from: fromCoordinate, to: Coordinate(x: fromCoordinate.x, y: downmostRow))
                 
                 // Update board
@@ -593,9 +593,9 @@ class GameBoard<B: GameBoardDelegate> {
     private func findDownmostRowDownwardsFrom(start: Coordinate) -> Int {
         var downmostRow = start.y + 1
         while downmostRow < self.dimension && self.board[downmostRow][start.x] == nil {
-            downmostRow++
+            downmostRow += 1
         }
-        downmostRow--
+        downmostRow -= 1
         
         return downmostRow
     }
@@ -629,7 +629,7 @@ class GameBoard<B: GameBoardDelegate> {
             
             self.board[spot.y][spot.x] = value
             
-            MWLog("Gameboard after spawn")
+            MOONLog("Gameboard after spawn")
             printBoard()
             
             let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: spot))
@@ -641,14 +641,14 @@ class GameBoard<B: GameBoardDelegate> {
             
             return (spawnAction, gameOver)
         } else {
-            MWLog("The board is full")
+            MOONLog("The board is full")
             return (nil, false)
         }
     }
     
     func spawnNodeWithValue(value: C, atCoordinate coordinate: Coordinate) -> (actions: MoveAction<C>?, gameOver: Bool) {
         if self.board[coordinate.y][coordinate.x] == nil {
-            MWLog("Spawning \(value) at \(coordinate)")
+            MOONLog("Spawning \(value) at \(coordinate)")
             self.board[coordinate.y][coordinate.x] = value
             
             let spawnAction = MoveAction.Spawn(gamePiece: GamePiece(value: value, position: coordinate))
@@ -660,7 +660,7 @@ class GameBoard<B: GameBoardDelegate> {
             
             return (spawnAction, gameOver)
         } else {
-            MWLog("The coordinate: \(coordinate) is already occupied by \(value)")
+            MOONLog("The coordinate: \(coordinate) is already occupied by \(value)")
             return (nil, false)
         }
     }
@@ -682,7 +682,7 @@ class GameBoard<B: GameBoardDelegate> {
                     rowString += "- "
                 }
             }
-            MWLog(rowString)
+            MOONLog(rowString)
         }
     }
     

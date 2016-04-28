@@ -19,7 +19,7 @@ class UserServerManager: ServerManager {
     class func loginWithEmail(email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
         ServerManager.dataBase().authUser(email, password: password) { (error: NSError?, data: FAuthData?) -> Void in
             // data.auth is [uid: simplelogin:1, provider: password]
-            MWLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
+            MOONLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
             
             if error == nil, let data = data {
                 ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
@@ -34,7 +34,7 @@ class UserServerManager: ServerManager {
                         })
                 })
             } else {
-                let errorCode = error!.code as NSInteger
+//                let errorCode = error!.code as NSInteger
                 
                 if let errorCode = FAuthenticationError(rawValue: error!.code) {
                     switch (errorCode) {
@@ -67,10 +67,10 @@ class UserServerManager: ServerManager {
     class var isLoggedIn: Bool {
         get {
             if ServerManager.dataBase().authData != nil {
-                MWLog("The user has authData: \(ServerManager.dataBase().authData.auth)")
+                MOONLog("The user has authData: \(ServerManager.dataBase().authData.auth)")
                 return true
             } else {
-                MWLog("Not logged in")
+                MOONLog("Not logged in")
                 return false
             }
         }
@@ -99,17 +99,17 @@ class UserServerManager: ServerManager {
     // a call to ServerManager.dataBase().changeEmailForUser
     private(set) static var currentUserEmail: String? {
         set {
-            MWLog("Setting email to \(newValue)")
+            MOONLog("Setting email to \(newValue)")
             NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: CURRENT_USER_EMAIL_KEY)
             NSUserDefaults.standardUserDefaults().synchronize()
         }
         get {
             if let email = NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_EMAIL_KEY) {
-                MWLog("Returning email: \(email)")
+                MOONLog("Returning email: \(email)")
                 return email
             } else {
                 let potentialEmail = ServerManager.dataBase().authData.providerData["email"] as? String
-                MWLog("Returning potentialEmail \(potentialEmail)")
+                MOONLog("Returning potentialEmail \(potentialEmail)")
                 return potentialEmail
             }
         }
@@ -127,7 +127,7 @@ class UserServerManager: ServerManager {
     class func createUserWithDisplayName(displayName: String, email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
         ServerManager.dataBase().createUser(email, password: password) { (createUserError: NSError!, createUserData: [NSObject : AnyObject]!) -> Void in
             // data is [uid: simplelogin:1]
-            MWLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
+            MOONLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
             
             if createUserError == nil {
                 
@@ -146,7 +146,7 @@ class UserServerManager: ServerManager {
                             completionHandler(errorMessage: errorMessage)
                         })
                     } else {
-                        MWLog("ERROR: Got error while setting new user \(setNewUserError.localizedDescription)")
+                        MOONLog("ERROR: Got error while setting new user \(setNewUserError.localizedDescription)")
                     }
                 })
             } else {
@@ -209,7 +209,7 @@ class UserServerManager: ServerManager {
                 }
             }
         } else {
-            MWLog("Could not get current email")
+            MOONLog("Could not get current email")
             completionHandler(errorMessage: "Could not get your current Email. Try logging out and back in.")
         }
     }
@@ -235,7 +235,7 @@ class UserServerManager: ServerManager {
                 })
             }
         } else {
-            MWLog("Could not get current email")
+            MOONLog("Could not get current email")
             completionHandler(errorMessage: "Could not get your current Email. Try logging out and back in.")
         }
         
@@ -266,7 +266,7 @@ class UserServerManager: ServerManager {
             let currentUserWinsRef = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(ServerManager.dataBase().authData.uid).childByAppendingPath(pathEnding)
             
             currentUserWinsRef.runTransactionBlock({ (currentStats: FMutableData!) -> FTransactionResult! in
-                    MWLog("In runTransactionBlock. pathEnding: \(pathEnding), shouldIncrement: \(shouldIncrement)")
+                    MOONLog("In runTransactionBlock. pathEnding: \(pathEnding), shouldIncrement: \(shouldIncrement)")
                 
                     var value = currentStats.value as? Int
                     if value == nil {
@@ -285,18 +285,18 @@ class UserServerManager: ServerManager {
                     
                     if error == nil {
                         if committed {
-                            MWLog("Got new value: \(theData.value as! Int) for path ending \(pathEnding)")
+                            MOONLog("Got new value: \(theData.value as! Int) for path ending \(pathEnding)")
                             dispatch_async(dispatch_get_main_queue()) {
                                 completionHandler(newNumberOfWins: theData.value as! Int)
                             }
                         } else {
-                            MWLog("Did not commit pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
+                            MOONLog("Did not commit pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
                             dispatch_async(dispatch_get_main_queue()) {
                                 completionHandler(newNumberOfWins: 0)
                             }
                         }
                     } else {
-                        MWLog("CompletionBlock got error: \"\(error.localizedDescription)\" pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
+                        MOONLog("CompletionBlock got error: \"\(error.localizedDescription)\" pathEnding\(pathEnding), shouldIncrement: \(shouldIncrement)")
                         dispatch_async(dispatch_get_main_queue()) {
                             completionHandler(newNumberOfWins: 0)
                         }

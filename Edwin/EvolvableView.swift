@@ -11,8 +11,8 @@ import SpriteKit
 
 protocol EvolvableViewType {
 
-    typealias C: Evolvable
+    associatedtype C: Evolvable
 
     func evolve()
-    var value: C {get set}
+    var value: C { get set }
 }

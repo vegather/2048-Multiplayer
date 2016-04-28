@@ -103,28 +103,28 @@ class AccountViewController: UIViewController {
                 
                 if let textFields = changeDisplayNameAlert.textFields {
                     if textFields.count == 1 {
-                        let newDisplayNameTextField = textFields[0] as! UITextField
+                        let newDisplayNameTextField = textFields[0] as UITextField
                         let newDisplayName = newDisplayNameTextField.text
                         
-                        MWLog("setting newDisplayName to: \(newDisplayName)")
+                        MOONLog("setting newDisplayName to: \(newDisplayName)")
                         
                         // Call UserServerManager
-                        UserServerManager.changeCurrentUsersDisplayNameTo(newDisplayName) { (errorMessage: String?) -> () in
+                        UserServerManager.changeCurrentUsersDisplayNameTo(newDisplayName!) { (errorMessage: String?) -> () in
                             self.enableButtons()
                             if let errorMessage = errorMessage {
-                                MWLog("Error setting displayName to \(newDisplayName)")
+                                MOONLog("Error setting displayName to \(newDisplayName)")
                                 self.showAlertWithTitle("Could not change Display Name", andMessage: errorMessage)
                             } else {
-                                MWLog("Display got set successfully to \(newDisplayName).")
+                                MOONLog("Display got set successfully to \(newDisplayName).")
                             }
                         }
                         
                     } else {
-                        MWLog("ERROR: There is NOT one textField")
+                        MOONLog("ERROR: There is NOT one textField")
                         self.enableButtons()
                     }
                 } else {
-                    MWLog("ERROR: No textFields")
+                    MOONLog("ERROR: No textFields")
                     self.enableButtons()
                 }
             }
@@ -177,32 +177,32 @@ class AccountViewController: UIViewController {
             
             if let textFields = changeEmailNameAlert.textFields {
                 if textFields.count == 2 {
-                    let newEmailTextField = textFields[0] as! UITextField
-                    let passwordTextField = textFields[1] as! UITextField
+                    let newEmailTextField = textFields[0] as UITextField
+                    let passwordTextField = textFields[1] as UITextField
                     let newEmail = newEmailTextField.text
                     let password = passwordTextField.text
                     
-                    MWLog("Attempting to change email to \(newEmail)")
+                    MOONLog("Attempting to change email to \(newEmail)")
                     
                     // Call UserServerManager
-                    UserServerManager.changeCurrentUsersEmailTo(newEmail, withPassword: password)
+                    UserServerManager.changeCurrentUsersEmailTo(newEmail!, withPassword: password!)
                     { (errorMessage: String?) -> () in
                         self.enableButtons()
                         if let errorMessage = errorMessage {
-                            MWLog("Error setting email to \(newEmail)")
+                            MOONLog("Error setting email to \(newEmail)")
                             self.showAlertWithTitle("Could not change email", andMessage: errorMessage)
                         } else {
                             self.enableButtons()
-                            MWLog("Email got changed successfully to \(newEmail).")
+                            MOONLog("Email got changed successfully to \(newEmail).")
                         }
                     }
                     
                 } else {
-                    MWLog("ERROR: There are NOT two textField")
+                    MOONLog("ERROR: There are NOT two textField")
                     self.enableButtons()
                 }
             } else {
-                MWLog("ERROR: No textFields")
+                MOONLog("ERROR: No textFields")
                 self.enableButtons()
             }
         }
@@ -251,32 +251,32 @@ class AccountViewController: UIViewController {
                 
                 if let textFields = changePasswordAlert.textFields {
                     if textFields.count == 2 {
-                        let oldPasswordTextField = textFields[0] as! UITextField
-                        let newPasswordTextField = textFields[1] as! UITextField
+                        let oldPasswordTextField = textFields[0] as UITextField
+                        let newPasswordTextField = textFields[1] as UITextField
                         let oldPassword = oldPasswordTextField.text
                         let newPassword = newPasswordTextField.text
                         
-                        MWLog("Attempting to change password")
+                        MOONLog("Attempting to change password")
                         
                         // Call UserServerManager
-                        UserServerManager.changeCurrentUsersPasswordFrom(oldPassword, to: newPassword)
+                        UserServerManager.changeCurrentUsersPasswordFrom(oldPassword!, to: newPassword!)
                         { (errorMessage: String?) -> () in
                             self.enableButtons()
                             if let errorMessage = errorMessage {
-                                MWLog("Could not change password")
+                                MOONLog("Could not change password")
                                 self.showAlertWithTitle("Could not change password", andMessage: errorMessage)
                             } else {
                                 self.enableButtons()
-                                MWLog("Successfully changed password.")
+                                MOONLog("Successfully changed password.")
                             }
                         }
                         
                     } else {
-                        MWLog("ERROR: There are NOT two textField")
+                        MOONLog("ERROR: There are NOT two textField")
                         self.enableButtons()
                     }
                 } else {
-                    MWLog("ERROR: No textFields")
+                    MOONLog("ERROR: No textFields")
                     self.enableButtons()
                 }
             }

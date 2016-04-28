@@ -23,9 +23,10 @@ class BoardView: SKScene {
     
     let dimension: Int
     
-    var toMove   = [TwosPowerView, Coordinate, Coordinate]() // View, from, to
+//    var toMove   = [TwosPowerView, Coordinate, Coordinate]() // View, from, to
+    var toMove = [(TwosPowerView, Coordinate, Coordinate)]()
     var toSpawn  = [Coordinate]()
-    var toEvolve = [TwosPowerView, Coordinate]() // Need this to add it back to self.board
+    var toEvolve = [(TwosPowerView, Coordinate)]() // Need this to add it back to self.board
     var toRemove = [TwosPowerView]()
     
     let ANIMATION_DURATION = 0.15
@@ -46,7 +47,7 @@ class BoardView: SKScene {
     }
     
     init(sizeOfBoard: CGSize, dimension: Int, shouldDelayBeforeDoneAnimating: Bool) {
-        MWLog("sizeOfBoard: \(sizeOfBoard), dimension: \(dimension), shouldDelay: \(shouldDelayBeforeDoneAnimating)")
+        MOONLog("sizeOfBoard: \(sizeOfBoard), dimension: \(dimension), shouldDelay: \(shouldDelayBeforeDoneAnimating)")
         
         self.board = [[TwosPowerView?]](count: dimension, repeatedValue: [TwosPowerView?](count: dimension, repeatedValue: nil))
         self.dimension = dimension
@@ -80,62 +81,62 @@ class BoardView: SKScene {
             
             switch action {
             case let .Spawn(gamePiece):
-                MWLog("Adding spawn action")
+                MOONLog("Adding spawn action")
                 self.toSpawn.append(gamePiece.position)
             case let .Move(from, to):
                 if let nodeToMove = self.getNodeForCoordinate(from) {
-                    MWLog("Adding move action")
+                    MOONLog("Adding move action")
                     self.toMove.append((nodeToMove, from, to))
                 } else {
-                    MWLog("Could not find piece at coordinate \(from)")
+                    MOONLog("Could not find piece at coordinate \(from)")
                 }
             case let .Merge(from, andFrom, newPiece):
                 if let firstNode = self.getNodeForCoordinate(from) {
                     if let secondNode = self.getNodeForCoordinate(andFrom) {
-                        MWLog("Adding move actions for merge")
+                        MOONLog("Adding move actions for merge")
                         self.toMove.append((firstNode,  from,    newPiece.position))
                         self.toMove.append((secondNode, andFrom, newPiece.position))
                         
-                        MWLog("Adding evolve action")
+                        MOONLog("Adding evolve action")
                         self.toEvolve.append(firstNode, newPiece.position)
-                        MWLog("Adding remove action")
+                        MOONLog("Adding remove action")
                         self.toRemove.append(secondNode)
                     } else {
-                        MWLog("Could not find piece at coordinate \(andFrom)")
+                        MOONLog("Could not find piece at coordinate \(andFrom)")
                     }
                 } else {
-                    MWLog("Could not find piece at coordinate \(from)")
+                    MOONLog("Could not find piece at coordinate \(from)")
                 }
             }
         }
         
         if toMove.count > 0 {
-            MWLog("Will do moves: \(toMove)")
+            MOONLog("Will do moves: \(toMove)")
             moveNodes(toMove)
-            MWLog("Will clear toMove buffer")
+            MOONLog("Will clear toMove buffer")
             self.toMove.removeAll(keepCapacity: false)
         } else if ongoingAnimations == 0 {
-            MWLog("Will spawn nodes: \(toSpawn)")
+            MOONLog("Will spawn nodes: \(toSpawn)")
             spawnNodes(toSpawn)
-            MWLog("Will clear toSpawn buffer")
+            MOONLog("Will clear toSpawn buffer")
             self.toSpawn.removeAll(keepCapacity: false)
             
-            MWLog("Will evolve nodes: \(toEvolve)")
+            MOONLog("Will evolve nodes: \(toEvolve)")
             evolveNodes(toEvolve)
-            MWLog("Will clear toEvolve buffer")
+            MOONLog("Will clear toEvolve buffer")
             self.toEvolve.removeAll(keepCapacity: false)
             
-            MWLog("Will remove nodes: \(toRemove)")
+            MOONLog("Will remove nodes: \(toRemove)")
             removeNodes(toRemove)
-            MWLog("Will clear toRemove buffer")
+            MOONLog("Will clear toRemove buffer")
             self.toRemove.removeAll(keepCapacity: false)
             
             if self.isDoneAnimating() && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
-                MWLog("Is done animating, and will let the delegate know about it")
+                MOONLog("Is done animating, and will let the delegate know about it")
                 self.hasNotifiedDelegateAboutBeingDoneAnimating = true
                 self.gameViewDelegate?.boardViewDidFinishAnimating()
             } else {
-                MWLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
+                MOONLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
             }
         }
     }
@@ -158,8 +159,7 @@ class BoardView: SKScene {
     private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)]) {
         
         if nodesToMove.count > 0 {
-            for var i = 0; i < nodesToMove.count; i++ {
-                
+            for var i = 0; i < nodesToMove.count; i += 1 {
                 let (node, from, to) = nodesToMove[i]
                 
                 self.ongoingAnimations += 1
@@ -171,32 +171,32 @@ class BoardView: SKScene {
                     
                     self.ongoingAnimations -= 1
                     
-                    MWLog("In completion handler for runAction - i: \(i), nodesToMove.count: \(nodesToMove.count) counter: \(self.ongoingAnimations)")
+                    MOONLog("In completion handler for runAction - i: \(i), nodesToMove.count: \(nodesToMove.count) counter: \(self.ongoingAnimations)")
 
                     if self.ongoingAnimations == 0 {
-                        MWLog("Will spawn nodes: \(self.toSpawn)")
+                        MOONLog("Will spawn nodes: \(self.toSpawn)")
                         self.spawnNodes(self.toSpawn)
-                        MWLog("Will clear toSpawn buffer")
+                        MOONLog("Will clear toSpawn buffer")
                         self.toSpawn.removeAll(keepCapacity: false)
                         
-                        MWLog("Will evolve nodes: \(self.toEvolve)")
+                        MOONLog("Will evolve nodes: \(self.toEvolve)")
                         self.evolveNodes(self.toEvolve)
-                        MWLog("Will clear toEvolve buffer")
+                        MOONLog("Will clear toEvolve buffer")
                         self.toEvolve.removeAll(keepCapacity: false)
                         
-                        MWLog("Will remove nodes: \(self.toRemove)")
+                        MOONLog("Will remove nodes: \(self.toRemove)")
                         self.removeNodes(self.toRemove)
-                        MWLog("Will clear toRemove buffer")
+                        MOONLog("Will clear toRemove buffer")
                         self.toRemove.removeAll(keepCapacity: false)
                         
                         if self.isDoneAnimating() && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
                             if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
-                                MWLog("Is done animating, and will let the delegate know about it")
+                                MOONLog("Is done animating, and will let the delegate know about it")
                                 self.hasNotifiedDelegateAboutBeingDoneAnimating = true
                                 self.gameViewDelegate?.boardViewDidFinishAnimating()
                             }
                         } else {
-                            MWLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
+                            MOONLog("Gone through all the action buffers, but either the animations are not done or we have already notified delegate")
                         }
                     }
                 })
@@ -204,24 +204,24 @@ class BoardView: SKScene {
                 // If there is NOT a new node in the position we came from. Set that to nil
                 if let tileFromSorce = self.getNodeForCoordinate(from) {
                     if tileFromSorce == node && from != to {
-                        MWLog("Will set source \(from) to nil")
+                        MOONLog("Will set source \(from) to nil")
                         self.setNode(nil, forCoordinate: from)
                     } else {
-                        MWLog("\(tileFromSorce) and \(node) are NOT equal or from \(from) and to \(to) ARE equal ")
+                        MOONLog("\(tileFromSorce) and \(node) are NOT equal or from \(from) and to \(to) ARE equal ")
                     }
                 } else {
-                    MWLog("The node at the source \(from) is nil")
+                    MOONLog("The node at the source \(from) is nil")
                 }
                 
                 self.setNode(node, forCoordinate: to)
             }
         } else {
-            MWLog("No nodes to move")
+            MOONLog("No nodes to move")
         }
     }
     
     private func spawnNodes(coordinatesForNodesToSpawn: [Coordinate]) {
-        MWLog("coordinatesForNodesToSpawn: \(coordinatesForNodesToSpawn)")
+        MOONLog("coordinatesForNodesToSpawn: \(coordinatesForNodesToSpawn)")
         for coordinate in coordinatesForNodesToSpawn {
             let nodeToAdd = TwosPowerView(size: self.sizeForTile())
             nodeToAdd.size = self.sizeForTile()
@@ -232,14 +232,14 @@ class BoardView: SKScene {
             
             nodeToAdd.setScale(0.2)
             
-            ongoingAnimations++
+            ongoingAnimations += 1
             let firstPopAction  = SKAction.scaleTo(1.2, duration: 0.1)
             let secondPopAction = SKAction.scaleTo(1.0, duration: 0.05)
             let waitAction      = SKAction.waitForDuration(NSTimeInterval(WAIT_AFTER_ANIMATION_DURATION))
             let cleanupAction   = SKAction.runBlock() {
-                self.ongoingAnimations--
+                self.ongoingAnimations -= 1
                 if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
-                    MWLog("Is done animating, and will let the delegate know about it")
+                    MOONLog("Is done animating, and will let the delegate know about it")
                     self.hasNotifiedDelegateAboutBeingDoneAnimating = true
                     self.gameViewDelegate?.boardViewDidFinishAnimating()
                 }
@@ -251,20 +251,20 @@ class BoardView: SKScene {
     }
     
     private func evolveNodes(nodesToEvolve: [(TwosPowerView, Coordinate)]) {
-        MWLog("nodesToEvolve: \(nodesToEvolve)")
+        MOONLog("nodesToEvolve: \(nodesToEvolve)")
         for (node, coordinate) in nodesToEvolve {
             node.evolve()
             self.setNode(node, forCoordinate: coordinate)
             
-            ongoingAnimations++
+            ongoingAnimations += 1
             let firstPopAction  = SKAction.scaleTo(1.5, duration: 0.06)
             let secondPopAction = SKAction.scaleTo(0.9, duration: 0.07)
             let thirdPopAction  = SKAction.scaleTo(1.0, duration: 0.05)
             let waitAction      = SKAction.waitForDuration(NSTimeInterval(WAIT_AFTER_ANIMATION_DURATION))
             let cleanupAction   = SKAction.runBlock() {
-                self.ongoingAnimations--
+                self.ongoingAnimations -= 1
                 if self.ongoingAnimations == 0 && self.hasNotifiedDelegateAboutBeingDoneAnimating == false {
-                    MWLog("Is done animating, and will let the delegate know about it")
+                    MOONLog("Is done animating, and will let the delegate know about it")
                     self.hasNotifiedDelegateAboutBeingDoneAnimating = true
                     self.gameViewDelegate?.boardViewDidFinishAnimating()
                 }
@@ -275,7 +275,7 @@ class BoardView: SKScene {
     }
     
     private func removeNodes(nodesToRemove: [TwosPowerView]) {
-        MWLog("nodesToRemove: \(nodesToRemove)")
+        MOONLog("nodesToRemove: \(nodesToRemove)")
         for (node) in nodesToRemove {
             node.removeFromParent()
         }
@@ -290,12 +290,12 @@ class BoardView: SKScene {
     // -------------------------------
     
     private func setNode(node: TwosPowerView?, forCoordinate coordinate: Coordinate) {
-        MWLog("Setting \(coordinate) to \(node)")
+        MOONLog("Setting \(coordinate) to \(node)")
         self.board[coordinate.y][coordinate.x] = node
     }
     
     private func getNodeForCoordinate(coordinate: Coordinate) -> TwosPowerView? {
-        MWLog("Getting node at \(coordinate)")
+        MOONLog("Getting node at \(coordinate)")
         return self.board[coordinate.y][coordinate.x]
     }
     
@@ -322,9 +322,9 @@ class BoardView: SKScene {
                     rowString += "- "
                 }
             }
-            MWLog(rowString)
+            MOONLog(rowString)
         }
-        MWLog()
+        MOONLog()
     }
         
 }

@@ -11,8 +11,6 @@
 		9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */; };
 		9A5366DB1ADDF1D5002A2F57 /* BlurryMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */; };
 		9A57AE971AE5902200FC2D1D /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A57AE961AE5902200FC2D1D /* AccountViewController.swift */; };
-		9A5C42FB1AE0620000D3FB8A /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5C42FA1AE0620000D3FB8A /* Firebase.framework */; };
-		9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0281ACB7EC900D741E2 /* MWLogger.swift */; };
 		9A61D02F1ACFFAAB00D741E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */; };
 		9A61D0351AD021ED00D741E2 /* PushSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0341AD021ED00D741E2 /* PushSegue.swift */; };
 		9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A61D0361AD021F900D741E2 /* PopSegue.swift */; };
@@ -33,6 +31,8 @@
 		9AB95D511AD3261D0079ED31 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */; };
 		9AC4171B1AE188C7008D4EF8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AC4171A1AE188C7008D4EF8 /* Images.xcassets */; };
 		9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */; };
+		9ACED0211CD16D0F00DF7A30 /* MOONLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACED0201CD16D0F00DF7A30 /* MOONLogger.swift */; };
+		9ACED0231CD1744D00DF7A30 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ACED0221CD1744D00DF7A30 /* Firebase.framework */; };
 		9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */; };
 		9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA11AA2212800BDCFA8 /* GameViewController.swift */; };
 		9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD7CA31AA2212800BDCFA8 /* Main.storyboard */; };
@@ -56,8 +56,6 @@
 		9A08AFC71AB230CC00A837D1 /* TwosPowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwosPowerView.swift; sourceTree = "<group>"; };
 		9A5366DA1ADDF1D5002A2F57 /* BlurryMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryMessageView.swift; sourceTree = "<group>"; };
 		9A57AE961AE5902200FC2D1D /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
-		9A5C42FA1AE0620000D3FB8A /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
-		9A61D0281ACB7EC900D741E2 /* MWLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MWLogger.swift; sourceTree = "<group>"; };
 		9A61D02E1ACFFAAB00D741E2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9A61D0341AD021ED00D741E2 /* PushSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSegue.swift; sourceTree = "<group>"; };
 		9A61D0361AD021F900D741E2 /* PopSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopSegue.swift; sourceTree = "<group>"; };
@@ -80,6 +78,8 @@
 		9AB95D501AD3261D0079ED31 /* GameOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
 		9AC4171A1AE188C7008D4EF8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9ACB88E81AB06F4C00F4E056 /* EvolvableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvableView.swift; sourceTree = "<group>"; };
+		9ACED0201CD16D0F00DF7A30 /* MOONLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MOONLogger.swift; sourceTree = "<group>"; };
+		9ACED0221CD1744D00DF7A30 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
 		9ADD7C9A1AA2212800BDCFA8 /* Edwin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Edwin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADD7C9E1AA2212800BDCFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -98,8 +98,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A5C42FB1AE0620000D3FB8A /* Firebase.framework in Frameworks */,
 				9A398E5A1AD2B58000889A8E /* SystemConfiguration.framework in Frameworks */,
+				9ACED0231CD1744D00DF7A30 /* Firebase.framework in Frameworks */,
 				9A61D04A1AD0CCCF00D741E2 /* Security.framework in Frameworks */,
 				9A61D0471AD0CCC300D741E2 /* CFNetwork.framework in Frameworks */,
 				9A61D0451AD0CCBB00D741E2 /* libc++.dylib in Frameworks */,
@@ -170,7 +170,7 @@
 		9ADD7C911AA2212800BDCFA8 = {
 			isa = PBXGroup;
 			children = (
-				9A5C42FA1AE0620000D3FB8A /* Firebase.framework */,
+				9ACED0221CD1744D00DF7A30 /* Firebase.framework */,
 				9A61D0481AD0CCCF00D741E2 /* Security.framework */,
 				9A61D0491AD0CCCF00D741E2 /* SystemConfiguration.framework */,
 				9A61D0461AD0CCC300D741E2 /* CFNetwork.framework */,
@@ -195,7 +195,7 @@
 		9ADD7C9C1AA2212800BDCFA8 /* Edwin */ = {
 			isa = PBXGroup;
 			children = (
-				9A61D0281ACB7EC900D741E2 /* MWLogger.swift */,
+				9ACED0201CD16D0F00DF7A30 /* MOONLogger.swift */,
 				9A61D0331AD021C100D741E2 /* Custom Storyboard Segue */,
 				9A5582F91AAE690B004F0C2D /* Views */,
 				9A61D0301AD0095600D741E2 /* View Controllers */,
@@ -277,11 +277,13 @@
 		9ADD7C921AA2212800BDCFA8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Wrong Bag";
 				TargetAttributes = {
 					9ADD7C991AA2212800BDCFA8 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 7C938P24Q2;
 					};
 					9ADD7CAE1AA2212800BDCFA8 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -339,9 +341,9 @@
 				9A61D0371AD021F900D741E2 /* PopSegue.swift in Sources */,
 				9A08AFC81AB230CC00A837D1 /* TwosPowerView.swift in Sources */,
 				9A61D0561AD1C1BF00D741E2 /* GameServerManager.swift in Sources */,
-				9A61D0291ACB7EC900D741E2 /* MWLogger.swift in Sources */,
 				9ACB88E91AB06F4C00F4E056 /* EvolvableView.swift in Sources */,
 				9ADD7CA21AA2212800BDCFA8 /* GameViewController.swift in Sources */,
+				9ACED0211CD16D0F00DF7A30 /* MOONLogger.swift in Sources */,
 				9A61D03D1AD0278500D741E2 /* SegueIdentifiers.swift in Sources */,
 				9ADD7CA01AA2212800BDCFA8 /* AppDelegate.swift in Sources */,
 				9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */,
@@ -416,7 +418,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -483,50 +487,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vegather.Edwin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -535,49 +508,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
-					/Users/Vegard/Documents/My,
-					Files/Programming/iOS/Frameworks,
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Edwin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vegather.Edwin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Edwin-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -585,8 +527,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(SDKROOT)",
 					"$(inherited)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -595,6 +538,7 @@
 				);
 				INFOPLIST_FILE = EdwinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wrongbag.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Edwin.app/Edwin";
 			};
@@ -604,12 +548,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(SDKROOT)",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = EdwinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wrongbag.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Edwin.app/Edwin";
 			};

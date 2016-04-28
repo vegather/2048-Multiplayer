@@ -12,7 +12,7 @@ import SpriteKit
 // This should be a SKLabelNode, but those do not have a backgroundColor property.
 // Most straightforward solution as therefore to subclass SKSpriteNode,
 // and add a SKLabelNode as a child.
-class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
+class TwosPowerView: SKSpriteNode, EvolvableViewType {
     
     typealias C = TileValue
     
@@ -26,7 +26,7 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
         super.init(texture: nil, color: TwosPowerView.getColorForValue(self.value), size: size)
         
         self.label.text = "\(self.value.scoreValue)"
-        self.label.fontSize = self.getFontSizeForString(self.label.text)
+        self.label.fontSize = self.getFontSizeForString(self.label.text!)
         self.label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
         
         
@@ -41,14 +41,14 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
         if let newValue = self.value.evolve() {
             self.value = newValue
             self.label.text = "\(newValue.scoreValue)"
-            self.label.fontSize = self.getFontSizeForString(self.label.text)
+            self.label.fontSize = self.getFontSizeForString(self.label.text!)
             self.color = TwosPowerView.getColorForValue(newValue)
         }
     }
     
     func getFontSizeForString(string: String) -> CGFloat {
         let font = UIFont(name: "AvenirNext-Regular", size: 32)!
-        let size = (string as NSString).sizeWithAttributes([NSFontAttributeName as NSObject : font as AnyObject])
+        let size = (string as NSString).sizeWithAttributes([NSFontAttributeName as String : font as AnyObject])
         let pointsPerPixel =  font.pointSize / (max(size.width, size.height) * 1.2)
         let desiredPointSize = self.size.height * pointsPerPixel
         
@@ -98,8 +98,6 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType, Printable {
             return UIColor(red: 44.0 / 255.0,  green: 62.0 / 255.0,  blue: 80.0 / 255.0,  alpha: 1.0) // Midnight Blue
         case .OneHundredAndThirtyOneThousandAndSeventyTwo:
             return UIColor(red: 127.0 / 255.0, green: 140.0 / 255.0, blue: 141.0 / 255.0, alpha: 1.0) // Asbestos
-        default:
-            return UIColor.whiteColor()
         }
     }
     

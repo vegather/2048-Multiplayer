@@ -51,36 +51,36 @@ class GameServerManager: ServerManager {
                 
                 dataBasePath.childByAppendingPath(GameKeys.LastMoveKey).observeEventType(FEventType.Value)
                     { (lastMoveSnapshot: FDataSnapshot!) -> Void in
-                        MWLog("Got last move: \(lastMoveSnapshot)")
+                        MOONLog("Got last move: \(lastMoveSnapshot)")
                         
                         self.processNewLastMove(T(scoreValue: T.getBaseValue().scoreValue), lastMoveSnapshot: lastMoveSnapshot)
                 }
                 
                 // Need to start observing the value of the opponent key
-                let handle = dataBasePath.observeEventType(FEventType.ChildAdded,
+                _ = dataBasePath.observeEventType(FEventType.ChildAdded,
                     withBlock: { (snapshot: FDataSnapshot!) -> Void in
-                        MWLog("A child was added to the current game. Snapshot: \(snapshot), KEY: \(snapshot.key)")
+                        MOONLog("A child was added to the current game. Snapshot: \(snapshot), KEY: \(snapshot.key)")
                         if snapshot != nil {
                             if snapshot.key == GameKeys.OpponentKey {
                                 if let opponentUID = snapshot.value as? String {
-                                    MWLog("Got opponent with uid \(opponentUID)")
+                                    MOONLog("Got opponent with uid \(opponentUID)")
                                     let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(opponentUID)
                                     userPath.observeSingleEventOfType(FEventType.Value,
                                         withBlock: { (snapshot: FDataSnapshot!) -> Void in
-                                            MWLog("Got userdata \"\(snapshot)\" for uid \"\(opponentUID)\"")
+                                            MOONLog("Got userdata \"\(snapshot)\" for uid \"\(opponentUID)\"")
                                             if let opponentName = snapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName).value as? String {
-                                                MWLog("Opponent name \"\(opponentName)\"")
+                                                MOONLog("Opponent name \"\(opponentName)\"")
                                                 self.creatorDelegate?.gotOpponentWithDisplayName(opponentName)
                                             } else {
-                                                MWLog("User with uid \(opponentUID) does not have a display name")
+                                                MOONLog("User with uid \(opponentUID) does not have a display name")
                                             }
                                     })
                                     
                                 } else {
-                                    MWLog("ERROR: Could not get an opponent for value: \(snapshot.value)")
+                                    MOONLog("ERROR: Could not get an opponent for value: \(snapshot.value)")
                                 }
                             } else {
-                                MWLog("ERROR: Will call completionHandler with \"No opponent yet\"")
+                                MOONLog("ERROR: Will call completionHandler with \"No opponent yet\"")
                                 dispatch_async(dispatch_get_main_queue()) {
                                     completionHandler(gamePin: nil, errorMessage: "No opponent yet")
                                 }
@@ -104,7 +104,7 @@ class GameServerManager: ServerManager {
                 
                 var gamePin: String
                 if self.creatorOfCurrentGame!.hasPrefix("simplelogin:") {
-                    gamePin = ((self.creatorOfCurrentGame! as NSString).substringFromIndex(count("simplelogin:")) as String)
+                    gamePin = ((self.creatorOfCurrentGame! as NSString).substringFromIndex("simplelogin:".characters.count) as String)
                 } else {
                     gamePin = self.creatorOfCurrentGame!
                 }
@@ -122,7 +122,7 @@ class GameServerManager: ServerManager {
     }
     
     func addInitialStateToCurrentGame<T: Evolvable>(
-        #firstTile: T,
+        firstTile firstTile: T,
         hasCoordinate firstCoordinate: Coordinate,
         secondTile: T,
         hasCoordinate secondCoordinate: Coordinate,
@@ -169,12 +169,12 @@ class GameServerManager: ServerManager {
                         if gameSnapshot.childSnapshotForPath(GameKeys.OpponentKey).exists() == false {
                             // There is no opponent yet
                             
-                            MWLog("Delegate1: \(self.gameDelegate)")
+                            MOONLog("Delegate1: \(self.gameDelegate)")
                             
                             gameEntryPoint.childByAppendingPath(GameKeys.LastMoveKey).observeEventType(FEventType.Value)
                                 { (lastMoveSnapshot: FDataSnapshot!) -> Void in
-                                    MWLog("Got last move: \(lastMoveSnapshot)")
-                                    MWLog("Delegate2: \(self.gameDelegate)")
+                                    MOONLog("Got last move: \(lastMoveSnapshot)")
+                                    MOONLog("Delegate2: \(self.gameDelegate)")
                                     
                                     self.processNewLastMove(T(scoreValue: T.getBaseValue().scoreValue), lastMoveSnapshot: lastMoveSnapshot)
                                 }
@@ -182,9 +182,9 @@ class GameServerManager: ServerManager {
                             let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath("simplelogin:\(gamepin)")
                             userPath.observeSingleEventOfType(FEventType.Value)
                                 { (userSnapshot: FDataSnapshot!) -> Void in
-                                    MWLog("Got userdata \"\(userSnapshot)\" for uid \"simplelogin\(gamepin)\"")
+                                    MOONLog("Got userdata \"\(userSnapshot)\" for uid \"simplelogin\(gamepin)\"")
                                     if let opponentName = userSnapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName).value as? String {
-                                        MWLog("Game creator (opponent) name \"\(opponentName)\"")
+                                        MOONLog("Game creator (opponent) name \"\(opponentName)\"")
                                         
                                         // ####  WARNING!!  ####
                                         // SHOULD USE MORE PROTECTION IN HERE! THIS MIGHT CRASH!! AND IT DOES!
@@ -210,14 +210,14 @@ class GameServerManager: ServerManager {
                                             let tileTwoValueString      = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.ValueKey).value    as! String
                                             let tileTwoCoordinateString = tileTwoSnapshot.childSnapshotForPath(GameKeys.InitialState.Tile.PositionKey).value as! String
                                             
-                                            let tileOneValue = T(scoreValue: tileOneValueString.toInt()!)
-                                            let tileTwoValue = T(scoreValue: tileTwoValueString.toInt()!)
+                                            let tileOneValue = T(scoreValue: Int(tileOneValueString)!)
+                                            let tileTwoValue = T(scoreValue: Int(tileTwoValueString)!)
                                             
                                             let tileOneCoordinateParts = tileOneCoordinateString.componentsSeparatedByString(",")
                                             let tileTwoCoordinateParts = tileTwoCoordinateString.componentsSeparatedByString(",")
                                             
-                                            let tileOneCoordinate = Coordinate(x: tileOneCoordinateParts[0].toInt()!, y: tileOneCoordinateParts[1].toInt()!)
-                                            let tileTwoCoordinate = Coordinate(x: tileTwoCoordinateParts[0].toInt()!, y: tileTwoCoordinateParts[1].toInt()!)
+                                            let tileOneCoordinate = Coordinate(x: Int(tileOneCoordinateParts[0])!, y: Int(tileOneCoordinateParts[1])!)
+                                            let tileTwoCoordinate = Coordinate(x: Int(tileTwoCoordinateParts[0])!, y: Int(tileTwoCoordinateParts[1])!)
                                             
                                             let setup = GameSetup(
                                                 players:                Players.Multi,
@@ -236,7 +236,7 @@ class GameServerManager: ServerManager {
                                             }
                                         } else {
                                             dispatch_async(dispatch_get_main_queue()) {
-                                                MWLog("Missing boardSize, turnDuration, or initialState")
+                                                MOONLog("Missing boardSize, turnDuration, or initialState")
                                                 completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(gamepin)")
                                             }
                                         }
@@ -305,10 +305,10 @@ class GameServerManager: ServerManager {
             
             lastMoveEntryPoint.setValue(newMoveData)
             
-            MWLog("Updated LastMove with direction: \(directionString), spawnCoordinate: \(coordinateString), spawnValue: \(valueString)")
+            MOONLog("Updated LastMove with direction: \(directionString), spawnCoordinate: \(coordinateString), spawnValue: \(valueString)")
             
         } else {
-            MWLog("ERROR: No game? Or something")
+            MOONLog("ERROR: No game? Or something")
         }
     }
     
@@ -333,7 +333,7 @@ class GameServerManager: ServerManager {
             let spawnValueString      = newTileValueSnapshot.value as! String
             let updaterString         = updaterSnapshot.value as! String
             
-            MWLog("Got moveDirectionString: \(moveDirectionString), spawnCoordinateString: \(spawnCoordinateString), spawnValueString: \(spawnValueString)")
+            MOONLog("Got moveDirectionString: \(moveDirectionString), spawnCoordinateString: \(spawnCoordinateString), spawnValueString: \(spawnValueString)")
             
             if moveDirectionString != "_" && spawnCoordinateString != "_" && spawnValueString != "_" && updaterString != "_" {
                 if updaterString != ServerManager.dataBase().authData.uid {
@@ -353,24 +353,24 @@ class GameServerManager: ServerManager {
                     }
                     
                     let tileCoordinateParts = spawnCoordinateString.componentsSeparatedByString(",")
-                    let tileCoordinate = Coordinate(x: tileCoordinateParts[0].toInt()!, y: tileCoordinateParts[1].toInt()!)
+                    let tileCoordinate = Coordinate(x: Int(tileCoordinateParts[0])!, y: Int(tileCoordinateParts[1])!)
                     
-                    let tileValue = T(scoreValue: spawnValueString.toInt()!)
+                    let tileValue = T(scoreValue: Int(spawnValueString)!)
                     
-                    MWLog("Generated direction: \(direction), spawnCoordinate: \(tileCoordinate), spawnValue: \(tileValue)")
+                    MOONLog("Generated direction: \(direction), spawnCoordinate: \(tileCoordinate), spawnValue: \(tileValue)")
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        MWLog("Notifying \(self.gameDelegate)")
+                        MOONLog("Notifying \(self.gameDelegate)")
                         self.gameDelegate?.opponentDidPerformMoveInDirection(direction, whichSpawnedTile: tileValue, atCoordinate: tileCoordinate)
                     }
                 } else {
-                    MWLog("That last move was done by the current user")
+                    MOONLog("That last move was done by the current user")
                 }
             } else {
-                MWLog("ERROR: At least one of the fields does not exist")
+                MOONLog("ERROR: At least one of the fields does not exist")
             }
         } else {
-            MWLog("ERROR: Bad format")
+            MOONLog("ERROR: Bad format")
         }
     }
     
@@ -381,12 +381,12 @@ class GameServerManager: ServerManager {
     // -------------------------------
     
     func stopListeningForChanges() {
-        MWLog()
+        MOONLog()
         ServerManager.dataBase().removeAllObservers()
     }
     
     func deleteEventWithGamepin(gamepinToRemove: String) {
-        MWLog("Gamepin to remove: \(gamepinToRemove)")
+        MOONLog("Gamepin to remove: \(gamepinToRemove)")
         ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepinToRemove)").removeValue()
     }
 }

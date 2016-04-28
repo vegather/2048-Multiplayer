@@ -43,12 +43,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillShow:"),
+            selector: #selector(LoginViewController.keyboardWillShow(_:)),
             name: UIKeyboardWillShowNotification,
             object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillHide:"),
+            selector: #selector(LoginViewController.keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
     }
@@ -63,10 +63,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.text = ""
         
         if UserServerManager.isLoggedIn {
-            MWLog("The user was already logged in, so moving along")
+            MOONLog("The user was already logged in, so moving along")
             self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
         } else {
-            MWLog("The user is NOT logged in. Waiting for user to login...")
+            MOONLog("The user is NOT logged in. Waiting for user to login...")
         }
     }
     
@@ -164,15 +164,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private func loginUser() {
         dismissKeyboard()
         
-        if count(usernameTextField.text) > 0 &&
-           count(passwordTextField.text) > 0
+        if usernameTextField.text!.characters.count > 0 &&
+           passwordTextField.text!.characters.count > 0
         {
             spinner.hidden = false
             spinner.startAnimating()
             
-            MWLog("Will ask serverManager to login user")
+            MOONLog("Will ask serverManager to login user")
             
-            UserServerManager.loginWithEmail(usernameTextField.text, password: passwordTextField.text, completionHandler: { (errorMessage: String?) -> () in
+            UserServerManager.loginWithEmail(usernameTextField.text!, password: passwordTextField.text!, completionHandler: { (errorMessage: String?) -> () in
                 self.spinner.stopAnimating()
                 
                 if let error = errorMessage {
@@ -194,9 +194,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // MARK: Custom Segue Management
     // -------------------------------
     
-    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         if identifier == SegueIdentifier.PushMainMenuFromLogin {
-            MWLog("Should perform the PushMainMenu segue")
+            MOONLog("Should perform the PushMainMenu segue")
             
             if UserServerManager.isLoggedIn {
                 return true
@@ -205,10 +205,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return false
             }
         } else if identifier == SegueIdentifier.PushCreateUser {
-            MWLog("Should perform the PushCreateUser segue")
+            MOONLog("Should perform the PushCreateUser segue")
             return true
         } else {
-            MWLog("Should NOT perform an unknown segue")
+            MOONLog("Should NOT perform an unknown segue")
             return false
         }
     }
@@ -217,15 +217,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         dismissKeyboard()
         
         if segue.identifier == SegueIdentifier.PushMainMenuFromLogin {
-            let mainMenuViewController = segue.destinationViewController as! MainMenuViewController
+//            let _ = segue.destinationViewController as! MainMenuViewController
             // Prepare the main menu
-            MWLog("Preparing the Main Menu")
+            MOONLog("Preparing the Main Menu")
         } else if segue.identifier == SegueIdentifier.PushCreateUser {
-            let createUserViewController = segue.destinationViewController as! CreateUserViewController
+//            let _ = segue.destinationViewController as! CreateUserViewController
             // Prepare create user
-            MWLog("Preparing Create User")
+            MOONLog("Preparing Create User")
         } else {
-            MWLog("Preparing for an unknown segue")
+            MOONLog("Preparing for an unknown segue")
         }
     }
     
@@ -233,7 +233,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         if let id = identifier{
             if id == SegueIdentifier.PopToLoginFromMainMenu {
-                MWLog("Providing unwind segue for PopToLoginFromMainMenu")
+                MOONLog("Providing unwind segue for PopToLoginFromMainMenu")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
@@ -243,7 +243,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return unwindSegue
             }
             else if id == SegueIdentifier.PopToLoginFromCreateUser {
-                MWLog("Providing unwind segue for PopToLoginFromCreateUser")
+                MOONLog("Providing unwind segue for PopToLoginFromCreateUser")
                 let unwindSegue = PopSegue(identifier: id,
                     source: fromViewController,
                     destination: toViewController,
@@ -254,16 +254,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        return super.segueForUnwindingToViewController(toViewController, fromViewController: fromViewController, identifier: identifier)
+        return super.segueForUnwindingToViewController(toViewController, fromViewController: fromViewController, identifier: identifier)!
     }
     
     @IBAction func returnToLoginFromSegueAction(sender: UIStoryboardSegue){
         if sender.identifier == SegueIdentifier.PopToLoginFromCreateUser {
             // Came back from create user
-            MWLog("Came back from Create User")
+            MOONLog("Came back from Create User")
         } else if sender.identifier == SegueIdentifier.PopToLoginFromMainMenu {
             // Came back from main menu
-            MWLog("Came back from Main Menu")
+            MOONLog("Came back from Main Menu")
         }
     }
     
@@ -279,7 +279,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         dismissKeyboard()
     }
     

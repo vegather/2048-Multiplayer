@@ -29,12 +29,12 @@ class JoinGameViewController: UIViewController {
         super.viewWillAppear(animated)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillShow:"),
+            selector: #selector(JoinGameViewController.keyboardWillShow(_:)),
             name: UIKeyboardWillShowNotification,
             object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("keyboardWillHide:"),
+            selector: #selector(JoinGameViewController.keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
         
@@ -130,7 +130,7 @@ class JoinGameViewController: UIViewController {
     }
     
     private func enteredGamepin() -> String? {
-        if count(gamePinTextField.text) > 0 {
+        if gamePinTextField.text!.characters.count > 0 {
             return gamePinTextField.text
         } else {
             return nil
@@ -148,7 +148,7 @@ class JoinGameViewController: UIViewController {
         gamePinTextField.resignFirstResponder()
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         dismissKeyboard()
     }
     
@@ -176,7 +176,7 @@ class JoinGameViewController: UIViewController {
     // -------------------------------
     
     private func showAlertWithTitle(title: String, andMessage message: String) {
-        MWLog("Will show alert with title \"\(title)\" and message \"\(message)\"")
+        MOONLog("Will show alert with title \"\(title)\" and message \"\(message)\"")
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         let doneAction = UIAlertAction(title: "Got it", style: UIAlertActionStyle.Default, handler: nil)

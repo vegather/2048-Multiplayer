@@ -33,7 +33,7 @@ class BlurryMessageView: UIView {
         addSubViews()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         addSubViews()
     }

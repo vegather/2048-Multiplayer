@@ -13,10 +13,10 @@ import UIKit
 class PopSegue: UIStoryboardSegue {
     override func perform() {
         // Assign the source and destination views to local variables.
-        var secondVCView = (self.sourceViewController      as! UIViewController).view as UIView!
-        var firstVCView  = (self.destinationViewController as! UIViewController).view as UIView!
+        let secondVCView = (self.sourceViewController      as UIViewController).view as UIView!
+        let firstVCView  = (self.destinationViewController as UIViewController).view as UIView!
         
-        let screenHeight = UIScreen.mainScreen().bounds.size.height
+//        let screenHeight = UIScreen.mainScreen().bounds.size.height
         let screenWidth = UIScreen.mainScreen().bounds.size.width
         
         let window = UIApplication.sharedApplication().keyWindow
@@ -29,7 +29,7 @@ class PopSegue: UIStoryboardSegue {
             secondVCView.frame = CGRectOffset(secondVCView.frame, screenWidth, 0.0)
             
             }) { (Finished) -> Void in
-                self.dismissViewControllersFrom(self.sourceViewController as! UIViewController, allTheWayDownTo: self.destinationViewController as! UIViewController, animated: false)
+                self.dismissViewControllersFrom(self.sourceViewController as UIViewController, allTheWayDownTo: self.destinationViewController as UIViewController, animated: false)
         }
     }
     

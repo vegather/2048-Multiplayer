@@ -14,7 +14,7 @@ import Foundation
 // For these tiles, mergeTilesAtCoordinate will be called.
 protocol GameBrainDelegate: class {
     
-    typealias D: Evolvable
+    associatedtype D: Evolvable
     
     func gameBrainDidProduceActions(actions: [MoveAction<D>], forSetup: Bool)
     func gameBrainUserHasNewScore(newUserScore: Int)
@@ -53,9 +53,9 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     private(set) var currentPlayer: Turn = Turn.User { // Public getter, private setter
         didSet {
             if currentPlayer == Turn.User {
-                MWLog("Changed current player to \"User\"")
+                MOONLog("Changed current player to \"User\"")
             } else {
-                MWLog("Changed current player to \"Opponent\"")
+                MOONLog("Changed current player to \"Opponent\"")
             }
             self.delegate?.gameBrainDidChangeTurnTo(self.currentPlayer)
         }
@@ -90,7 +90,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     } 
     
     func moveInDirection(direction: MoveDirection) {
-        let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
+        let (scoreIncrease, actions): (Int, [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
         if actions.count > 0 {
             
             let (spawn, gameOver) = self.gameBoard.spawnNewGamePieceAtRandomPosition()
@@ -101,7 +101,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                 
                 if gameSetup.players == Players.Multi {
                     
-                    MWLog("Multi player game")
+                    MOONLog("Multi player game")
                     
                     userScore += scoreIncrease
                     self.delegate?.gameBrainUserHasNewScore(userScore)
@@ -110,31 +110,31 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                     // Have to do switch case to unwrap associated value
                     switch spawn {
                     case let .Spawn(gamePiece):
-                        MWLog("Letting server know about new LastMove")
+                        MOONLog("Letting server know about new LastMove")
                         gameServer.performedMoveInDirection(direction,
                             whichSpawnedTile: gamePiece.value,
                             atCoordinate: gamePiece.position)
                     default: break
                     }
                 } else if gameSetup.players == Players.Single {
-                    MWLog("Single Player game")
+                    MOONLog("Single Player game")
                     userScore += scoreIncrease
                     self.delegate?.gameBrainUserHasNewScore(userScore)
                 }
             } else {
-                MWLog("ERROR: Could not spawn")
+                MOONLog("ERROR: Could not spawn")
             }
             
             if gameOver {
-                MWLog("The game is over")
+                MOONLog("The game is over")
                 gameIsOver = true
                 self.delegate?.gameBrainGameIsOverFromFillingUpBoard()
             } else {
-                MWLog("The game is not over yet")
+                MOONLog("The game is not over yet")
             }
             
         } else {
-            MWLog("ERROR: That is not a legal move")
+            MOONLog("ERROR: That is not a legal move")
         }
     }
     
@@ -156,7 +156,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
         self.gameBoard = GameBoard<GameBrain>(dimension: gameSetup.dimension)
         
         if gameSetup.setupForCreating {
-            MWLog("Setting up for creating")
+            MOONLog("Setting up for creating")
             
             self.currentPlayer = Turn.User
             
@@ -193,9 +193,9 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                         self.gameServer.createGameWithDimension(genericTypeProvider, dimension: gameSetup.dimension, turnDuration: gameSetup.turnDuration,
                             completionHandler: { (gamePin: String!, errorMessage: String?) -> () in
                                 if let error = errorMessage {
-                                    MWLog("ERROR: Got error from createGame: \(error)")
+                                    MOONLog("ERROR: Got error from createGame: \(error)")
                                 } else {
-                                    MWLog("Got gamePin: \(gamePin)")
+                                    MOONLog("Got gamePin: \(gamePin)")
                                     self.gamePin = gamePin
                                 }
                             })
@@ -206,13 +206,13 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                     let spawnActions = [firstSpawnAction, secondSpawnAction]
                     self.delegate?.gameBrainDidProduceActions(spawnActions, forSetup: true)
                 } else {
-                    MWLog("ERROR: Could not spawn second random tile")
+                    MOONLog("ERROR: Could not spawn second random tile")
                 }
             } else {
-                MWLog("ERROR: Could not spawn first random tile")
+                MOONLog("ERROR: Could not spawn first random tile")
             }
         } else {
-            MWLog("Setting up for joining")
+            MOONLog("Setting up for joining")
             // Setup for joining, implied that it's a Players.Multi game
             
             self.currentPlayer = Turn.Opponent
@@ -228,12 +228,12 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                     let spawns = [firstSpawn, secondSpawn]
                     self.delegate?.gameBrainDidProduceActions(spawns, forSetup: true)
                     self.delegate?.gameBrainDidJoinGame()
-                    MWLog("Finished joining game")
+                    MOONLog("Finished joining game")
                 } else {
-                    MWLog("ERROR: Could not spawn second planned tile")
+                    MOONLog("ERROR: Could not spawn second planned tile")
                 }
             } else {
-                MWLog("ERROR: Could not spawn first planned tile")
+                MOONLog("ERROR: Could not spawn first planned tile")
             }
         }
     }
@@ -265,7 +265,7 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             secondTile: valueTwo,
             hasCoordinate: coordinateTwo)
             { (errorMessage: String?) -> () in
-                MWLog("ERROR: Got error while adding initial state to Firebase. Error Message: \(errorMessage)")
+                MOONLog("ERROR: Got error while adding initial state to Firebase. Error Message: \(errorMessage)")
             }
     }
     
@@ -283,14 +283,14 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
         // Send direction to VC
         // Send spawn to VC
         
-        MWLog("Received direction: \(direction), spawnCoordinate: \(coordinate), spawnValue: \(newTile)")
+        MOONLog("Received direction: \(direction), spawnCoordinate: \(coordinate), spawnValue: \(newTile)")
         
-        let (scoreIncrease: Int, actions: [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
+        let (scoreIncrease, actions): (Int, [MoveAction<F>]) = self.gameBoard.moveInDirection(direction)
         
         let (spawnAction, gameOverFromSpawn) = self.gameBoard.spawnNodeWithValue(newTile as! F, atCoordinate: coordinate)
         if let spawnAction = spawnAction {
             
-            MWLog("Will notify GameVC \(self.delegate) about new actions")
+            MOONLog("Will notify GameVC \(self.delegate) about new actions")
             
             self.delegate?.gameBrainDidProduceActions(actions, forSetup: false)
             self.delegate?.gameBrainDidProduceActions([spawnAction], forSetup: false)
@@ -299,15 +299,15 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
             self.delegate?.gameBrainOpponentHasNewScore(opponentScore)
             currentPlayer = Turn.User
         } else {
-            MWLog("ERROR: Could not spawn tile")
+            MOONLog("ERROR: Could not spawn tile")
         }
         
         if gameOverFromSpawn {
-            MWLog("The game is over")
+            MOONLog("The game is over")
             gameIsOver = true
             self.delegate?.gameBrainGameIsOverFromFillingUpBoard()
         } else {
-            MWLog("The game is not over yet")
+            MOONLog("The game is not over yet")
         }
     }
     

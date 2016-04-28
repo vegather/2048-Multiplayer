@@ -22,8 +22,28 @@ class CreateGameViewController: UIViewController {
     @IBOutlet weak var turnDurationPreviewLabel: UILabel!
     
     @IBOutlet weak var numberOfPlayersSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var numberOfPlayersLabel: UILabel!
     
+    var shouldCreateGameWithoutUser = false {
+        didSet {
+            updateWithOrWithoutUserState()
+        }
+    }
     
+    private func updateWithOrWithoutUserState() {
+        if shouldCreateGameWithoutUser {
+            numberOfPlayersSegmentedControl.selectedSegmentIndex = 0
+            numberOfPlayersDidChange(numberOfPlayersSegmentedControl)
+            
+            numberOfPlayersLabel.alpha = 0.3
+            numberOfPlayersSegmentedControl.alpha = 0.3
+            numberOfPlayersSegmentedControl.enabled = false
+        } else {
+            numberOfPlayersLabel.alpha = 1.0
+            numberOfPlayersSegmentedControl.alpha = 1.0
+            numberOfPlayersSegmentedControl.enabled = true
+        }
+    }
     
     typealias D = TileValue
     
@@ -41,8 +61,8 @@ class CreateGameViewController: UIViewController {
         turnDuration = Int(turnDurationStepper.value)
         turnDurationPreviewLabel.text = "\(turnDuration) sec"
         
-        numberOfPlayersSegmentedControl.selectedSegmentIndex = 1
-        let playersSegmentedIndex = numberOfPlayersSegmentedControl.selectedSegmentIndex
+        numberOfPlayersSegmentedControl.selectedSegmentIndex = 0
+//        let playersSegmentedIndex = numberOfPlayersSegmentedControl.selectedSegmentIndex
         if numberOfPlayersSegmentedControl.selectedSegmentIndex == 0 {
             numberOfPlayers = Players.Single
         } else {
@@ -52,6 +72,8 @@ class CreateGameViewController: UIViewController {
         let font = UIFont(name: "AvenirNext-Regular", size: 14)!
         let attributes = [NSFontAttributeName as NSObject : font as AnyObject]
         numberOfPlayersSegmentedControl.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        
+        updateWithOrWithoutUserState()
     }
     
     
