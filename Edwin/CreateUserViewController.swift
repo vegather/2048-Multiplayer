@@ -164,13 +164,15 @@ class CreateUserViewController: UIViewController, UITextFieldDelegate {
                     email: emailTextField.text!,
                     password: firstPasswordTextField.text!,
                     completionHandler: { (errorMessage) -> () in
-                        self.spinner.stopAnimating()
-                        if let error = errorMessage {
-                            // Got error
-                            self.showAlertWithTitle("Could not create user", andMessage: error)
-                        } else {
-                            // Success
-                            self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromCreateUser, sender: self)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.spinner.stopAnimating()
+                            if let error = errorMessage {
+                                // Got error
+                                self.showAlertWithTitle("Could not create user", andMessage: error)
+                            } else {
+                                // Success
+                                self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromCreateUser, sender: self)
+                            }
                         }
                 })
             } else {

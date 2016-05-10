@@ -282,7 +282,9 @@ class GameBoard<B: GameBoardDelegate> {
         
         for row in 0..<self.dimension {
             var tempCol:  Int? //Used to temporary store a column index to check for potential merging
-            for var col = self.dimension - 1; col >= 0; col -= 1 {
+            
+            for col in (self.dimension - 1).stride(through: 0, by: -1) {
+//            for var col = self.dimension - 1; col >= 0; col -= 1 {
                 if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempCol { // If we have a temporary index stored
                         if currentPiece == self.board[row][temp] {
@@ -501,7 +503,8 @@ class GameBoard<B: GameBoardDelegate> {
         
         for col in 0..<self.dimension {
             var tempRow: Int? //Used to temporary store a row index to check for potential merging
-            for var row = self.dimension - 1; row >= 0; row -= 1 {
+            for row in (self.dimension - 1).stride(through: 0, by: -1) {
+//            for var row = self.dimension - 1; row >= 0; row -= 1 {
                 if let currentPiece: C = self.board[row][col] { // If there is a piece at this position
                     if let temp = tempRow { // If we have a temporary index stored
                         if currentPiece == self.board[temp][col] {

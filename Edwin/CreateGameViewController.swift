@@ -62,17 +62,14 @@ class CreateGameViewController: UIViewController {
         turnDurationPreviewLabel.text = "\(turnDuration) sec"
         
         numberOfPlayersSegmentedControl.selectedSegmentIndex = 0
-//        let playersSegmentedIndex = numberOfPlayersSegmentedControl.selectedSegmentIndex
+
         if numberOfPlayersSegmentedControl.selectedSegmentIndex == 0 {
             numberOfPlayers = Players.Single
         } else {
             numberOfPlayers = Players.Multi
         }
         
-        let font = UIFont(name: "AvenirNext-Regular", size: 14)!
-        let attributes = [NSFontAttributeName as NSObject : font as AnyObject]
-        numberOfPlayersSegmentedControl.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
-        
+        updateButtonsState()
         updateWithOrWithoutUserState()
     }
     
@@ -93,22 +90,10 @@ class CreateGameViewController: UIViewController {
     }
     
     @IBAction func numberOfPlayersDidChange(sender: UISegmentedControl) {
-        if sender.selectedSegmentIndex == 0 {
-            numberOfPlayers = Players.Single
-            
-            turnDurationLabel.alpha = 0.3
-            turnDurationStepper.enabled = false
-            turnDurationStepper.alpha = 0.3
-            turnDurationPreviewLabel.alpha = 0.3
-        } else {
-            numberOfPlayers = Players.Multi
-            
-            turnDurationLabel.alpha = 1.0
-            turnDurationStepper.enabled = true
-            turnDurationStepper.alpha = 1.0
-            turnDurationPreviewLabel.alpha = 1.0
-        }
+        updateButtonsState()
     }
+    
+    
     
     
     
@@ -144,5 +129,23 @@ class CreateGameViewController: UIViewController {
             turnDuration: self.turnDuration)
         
         return setup
+    }
+    
+    func updateButtonsState() {
+        if numberOfPlayersSegmentedControl.selectedSegmentIndex == 0 {
+            numberOfPlayers = Players.Single
+            
+            turnDurationLabel.alpha = 0.3
+            turnDurationStepper.enabled = false
+            turnDurationStepper.alpha = 0.3
+            turnDurationPreviewLabel.alpha = 0.3
+        } else {
+            numberOfPlayers = Players.Multi
+            
+            turnDurationLabel.alpha = 1.0
+            turnDurationStepper.enabled = true
+            turnDurationStepper.alpha = 1.0
+            turnDurationPreviewLabel.alpha = 1.0
+        }
     }
 }

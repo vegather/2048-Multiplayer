@@ -159,7 +159,7 @@ class BoardView: SKScene {
     private func moveNodes(nodesToMove: [(TwosPowerView, Coordinate, Coordinate)]) {
         
         if nodesToMove.count > 0 {
-            for var i = 0; i < nodesToMove.count; i += 1 {
+            for i in 0 ..< nodesToMove.count {
                 let (node, from, to) = nodesToMove[i]
                 
                 self.ongoingAnimations += 1
@@ -167,6 +167,7 @@ class BoardView: SKScene {
                 let destination = self.positionForCoordinate(to)
                 
                 let moveAction = SKAction.moveTo(destination, duration: ANIMATION_DURATION)
+                moveAction.timingMode = .EaseIn
                 node.runAction(moveAction, completion: { () -> Void in
                     
                     self.ongoingAnimations -= 1

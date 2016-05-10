@@ -21,7 +21,7 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType {
     
     required init(size: CGSize) {
         self.value = TileValue.getBaseValue()
-        self.label = SKLabelNode(fontNamed: "AvenirNext-Regular")
+        self.label = SKLabelNode(fontNamed: "BrandonGrotesque-Regular")
         
         super.init(texture: nil, color: TwosPowerView.getColorForValue(self.value), size: size)
         
@@ -47,7 +47,17 @@ class TwosPowerView: SKSpriteNode, EvolvableViewType {
     }
     
     func getFontSizeForString(string: String) -> CGFloat {
-        let font = UIFont(name: "AvenirNext-Regular", size: 32)!
+        let font: UIFont
+        if let brandon = UIFont(name: "BrandonGrotesque-Regular", size: 34) {
+            MOONLog("Using Brandon for tiles")
+            font = brandon
+        } else if let avenir = UIFont(name: "AvenirNext-Regular", size: 32) {
+            MOONLog("Using Avenir for tiles")
+            font = avenir
+        } else {
+            MOONLog("Using system font for tiles")
+            font = UIFont.systemFontOfSize(32)
+        }
         let size = (string as NSString).sizeWithAttributes([NSFontAttributeName as String : font as AnyObject])
         let pointsPerPixel =  font.pointSize / (max(size.width, size.height) * 1.2)
         let desiredPointSize = self.size.height * pointsPerPixel

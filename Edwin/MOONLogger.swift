@@ -29,6 +29,7 @@ private struct Constants {
 
 private let logQueue = dispatch_queue_create("com.moonLogger.logQueue", DISPATCH_QUEUE_SERIAL)
 private var logFile: UnsafeMutablePointer<FILE> = nil
+private let IsDebugging = false
 
 
 
@@ -49,61 +50,63 @@ func MOONLog(
     lineNumber  : Int    = #line,
     stream      : UnsafeMutablePointer<FILE> = stdout)
 {
-    dispatch_async(logQueue) {
-        
-        var printString = ""
-		
-        // Going with this ANSI C solution here because it's about 1.5x
-        // faster than the NSDateFormatter alternative.
-        if Constants.ShouldIncludeTime {
-            let bufferSize = 32
-            var buffer = [Int8](count: bufferSize, repeatedValue: 0)
-            var timeValue = time(nil)
-            let tmValue = localtime(&timeValue)
+    if IsDebugging {
+        dispatch_async(logQueue) {
             
-            strftime(&buffer, bufferSize, "%Y-%m-%d %H:%M:%S", tmValue)
-            if let dateFormat = String(CString: buffer, encoding: NSUTF8StringEncoding) {
-                var timeForMilliseconds = timeval()
-                gettimeofday(&timeForMilliseconds, nil)
-                let timeSince1970 = NSDate().timeIntervalSince1970
-                let seconds = floor(timeSince1970)
-                let thousands = UInt(floor((timeSince1970 - seconds) * 1000.0))
-                let milliseconds = String(format: "%03u", arguments: [thousands])
-                printString = dateFormat + "." + milliseconds + "    "
+            var printString = ""
+            
+            // Going with this ANSI C solution here because it's about 1.5x
+            // faster than the NSDateFormatter alternative.
+            if Constants.ShouldIncludeTime {
+                let bufferSize = 32
+                var buffer = [Int8](count: bufferSize, repeatedValue: 0)
+                var timeValue = time(nil)
+                let tmValue = localtime(&timeValue)
+                
+                strftime(&buffer, bufferSize, "%Y-%m-%d %H:%M:%S", tmValue)
+                if let dateFormat = String(CString: buffer, encoding: NSUTF8StringEncoding) {
+                    var timeForMilliseconds = timeval()
+                    gettimeofday(&timeForMilliseconds, nil)
+                    let timeSince1970 = NSDate().timeIntervalSince1970
+                    let seconds = floor(timeSince1970)
+                    let thousands = UInt(floor((timeSince1970 - seconds) * 1000.0))
+                    let milliseconds = String(format: "%03u", arguments: [thousands])
+                    printString = dateFormat + "." + milliseconds + "    "
+                }
             }
-        }
-		
-        // Limit the fileName to 25 characters
-        var fileName = (filePath as NSString).lastPathComponent
-        if fileName.characters.count > Constants.FileNameWidth {
-            fileName = fileName.substringToIndex(fileName.startIndex.advancedBy(Constants.FileNameWidth - 3)) + "..."
-        }
-        
-        // Limit the functionName to 40 characters
-        var functionNameToPrint = functionName
-        if functionName.characters.count > Constants.MethodNameWidth {
-            functionNameToPrint = functionName.substringToIndex(functionName.startIndex.advancedBy(Constants.MethodNameWidth - 3)) + "..."
-        }
-        
-        // Construct the message to be printed
-        var message = ""
-        for (i, item) in items.enumerate() {
-            message += "\(item)"
-            if i < items.count-1 { message += separator }
-        }
+            
+            // Limit the fileName to 25 characters
+            var fileName = (filePath as NSString).lastPathComponent
+            if fileName.characters.count > Constants.FileNameWidth {
+                fileName = fileName.substringToIndex(fileName.startIndex.advancedBy(Constants.FileNameWidth - 3)) + "..."
+            }
+            
+            // Limit the functionName to 40 characters
+            var functionNameToPrint = functionName
+            if functionName.characters.count > Constants.MethodNameWidth {
+                functionNameToPrint = functionName.substringToIndex(functionName.startIndex.advancedBy(Constants.MethodNameWidth - 3)) + "..."
+            }
+            
+            // Construct the message to be printed
+            var message = ""
+            for (i, item) in items.enumerate() {
+                message += "\(item)"
+                if i < items.count-1 { message += separator }
+            }
 
-        printString += String(format: "l:%-5d %-\(Constants.FileNameWidth)s  %-\(Constants.MethodNameWidth)s  %@",
-            lineNumber,
-            COpaquePointer(fileName.cStringUsingEncoding(NSUTF8StringEncoding)!),
-            COpaquePointer(functionNameToPrint.cStringUsingEncoding(NSUTF8StringEncoding)!),
-            message)
-        
-        // Write to the specified stream (stdout by default)
-        MOONLogger.writeMessage(printString, toStream: stream)
-        
-        if logFile != nil {
-            // Write to the logFile
-            MOONLogger.writeMessage(printString, toStream: logFile)
+            printString += String(format: "l:%-5d %-\(Constants.FileNameWidth)s  %-\(Constants.MethodNameWidth)s  %@",
+                lineNumber,
+                COpaquePointer(fileName.cStringUsingEncoding(NSUTF8StringEncoding)!),
+                COpaquePointer(functionNameToPrint.cStringUsingEncoding(NSUTF8StringEncoding)!),
+                message)
+            
+            // Write to the specified stream (stdout by default)
+            MOONLogger.writeMessage(printString, toStream: stream)
+            
+            if logFile != nil {
+                // Write to the logFile
+                MOONLogger.writeMessage(printString, toStream: logFile)
+            }
         }
     }
 }

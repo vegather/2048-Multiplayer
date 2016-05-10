@@ -12,31 +12,34 @@ import UIKit
 private let FIREBASE_URL = "https://project-edwin.firebaseio.com"
 
 struct FireBaseKeys {
-    static let GameSessionsKey  = "GameSessions"
-    static let UsersKey         = "Users"
+    static let UserIdentifierCounter = "UserIdentifierCounter"
+    static let GameSessionsKey       = "GameSessions"
+    static let UsersKey              = "Users"
     struct Users {
-        static let DisplayName  = "DisplayName"
-        static let Email        = "Email"
-        static let Wins         = "NumberOfWins"
-        static let Losses       = "NumberOfLosses"
-        static let Draws        = "NumberOfDraws"
+        static let DisplayName = "DisplayName"
+        static let Email       = "Email"
+        static let Wins        = "NumberOfWins"
+        static let Losses      = "NumberOfLosses"
+        static let Draws       = "NumberOfDraws"
+        static let Identifier  = "Identifier"
     }
 }
 
 struct GameKeys {
-    static let BoardSizeKey     = "BoardSize"
-    static let TurnDurationKey  = "TurnDuration"
-    static let LastMoveKey      = "LastMove"
-    static let OpponentKey      = "Opponent"
-    static let InitialStateKey  = "InitialState"
+    static let BoardSizeKey    = "BoardSize"
+    static let TurnDurationKey = "TurnDuration"
+    static let LastMoveKey     = "LastMove"
+    static let CreatorKey      = "Creator"
+    static let JoinerKey       = "Joiner"
+    static let InitialStateKey = "InitialState"
     
     struct InitialState {
-        static let Tile1Key     = "Tile1"
-        static let Tile2Key     = "Tile2"
+        static let Tile1Key  = "Tile1"
+        static let Tile2Key  = "Tile2"
         
         struct Tile {
-            static let PositionKey  = "Position"
-            static let ValueKey     = "Value"
+            static let PositionKey = "Position"
+            static let ValueKey    = "Value"
         }
     }
     
@@ -46,17 +49,17 @@ struct GameKeys {
         static let NewTileKey       = "NewTile"
         
         struct NewTile {
-            static let PositionKey  = "Position"
-            static let ValueKey     = "Value"
+            static let PositionKey = "Position"
+            static let ValueKey    = "Value"
         }
     }
 }
 
 struct Direction {
-    static let Up       = "Up"
-    static let Down     = "Down"
-    static let Left     = "Left"
-    static let Right    = "Right"
+    static let Up    = "Up"
+    static let Down  = "Down"
+    static let Left  = "Left"
+    static let Right = "Right"
 }
 
 

@@ -118,7 +118,7 @@ class JoinGameViewController: UIViewController {
                 gamePin,
                 completionHandler: { (gameSetup: GameSetup<T>!, errorMessage: String?) -> () in
                     if let errorMessage = errorMessage {
-                        self.showAlertWithTitle("Error while joining game", andMessage: errorMessage)
+                        self.showAlertWithTitle("Could not join game", andMessage: errorMessage)
                     } else {
                         self.gameSetup = gameSetup
                         self.performSegueWithIdentifier(SegueIdentifier.PushGameFromJoinGame, sender: self)
@@ -129,9 +129,9 @@ class JoinGameViewController: UIViewController {
         }
     }
     
-    private func enteredGamepin() -> String? {
-        if gamePinTextField.text!.characters.count > 0 {
-            return gamePinTextField.text
+    private func enteredGamepin() -> Int? {
+        if let enteredText = gamePinTextField.text where gamePinTextField.text!.characters.count > 0 {
+            return Int(enteredText)
         } else {
             return nil
         }

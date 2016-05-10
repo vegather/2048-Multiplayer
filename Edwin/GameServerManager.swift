@@ -22,7 +22,11 @@ class GameServerManager: ServerManager {
     var creatorDelegate: GameCreatorDelegate?
     var gameDelegate: GameDelegate?
     
-    private var creatorOfCurrentGame: String? // This will be used to reference a game
+    private var gamePin: Int? // This will be used to reference a game
+    
+    func gameIdentifier(gamepin: Int) -> String {
+        return "gamepin\(gamepin)"
+    }
     
     
     
@@ -30,11 +34,23 @@ class GameServerManager: ServerManager {
     // MARK: Creating and Joining Games
     // -------------------------------
     
-    func createGameWithDimension<T: Evolvable>(_: T, dimension: Int, turnDuration: Int, completionHandler: (gamePin: String!, errorMessage: String?) -> ()) {
+    func createGameWithDimension<T: Evolvable>(_: T, dimension: Int, turnDuration: Int, completionHandler: (gamePin: Int?, errorMessage: String?) -> ()) {
         // Overwrites previous game
-        self.creatorOfCurrentGame = ServerManager.dataBase().authData.uid
+        
+        if let userIdentifier = UserServerManager.currentUserIdentifier {
+            gamePin = userIdentifier
+            MOONLog("Will create game with gamepin: \(gamePin!)")
+        } else {
+            MOONLog("UserServerManager returned nil for currentUserIdentifier. Not set?")
+            dispatch_async(dispatch_get_main_queue()) {
+                completionHandler(gamePin: nil,
+                                  errorMessage: "There seems to be something wrong with your account. Try to log out and back in again.")
+            }
+            return
+        }
         let initialGameData = [GameKeys.BoardSizeKey    : dimension,
                                GameKeys.TurnDurationKey : turnDuration,
+                               GameKeys.CreatorKey      : ServerManager.dataBase().authData.uid,
                                GameKeys.LastMoveKey     : [GameKeys.LastMove.MoveDirectionKey   : "_",
                                                           GameKeys.LastMove.UpdaterKey          : "_",
                                                           GameKeys.LastMove.NewTileKey          : [GameKeys.LastMove.NewTile.PositionKey    : "_",
@@ -42,7 +58,8 @@ class GameServerManager: ServerManager {
                                                            ]
                               ]
         
-        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(self.creatorOfCurrentGame!)
+        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey)
+                                                   .childByAppendingPath(self.gameIdentifier(self.gamePin!))
         dataBasePath.onDisconnectRemoveValue() // If the app is closed, network is lost, or other error: Remove the game from Firebase
         
         dataBasePath.setValue(initialGameData, withCompletionBlock: { (error: NSError!, ref: Firebase!) -> Void in
@@ -61,7 +78,7 @@ class GameServerManager: ServerManager {
                     withBlock: { (snapshot: FDataSnapshot!) -> Void in
                         MOONLog("A child was added to the current game. Snapshot: \(snapshot), KEY: \(snapshot.key)")
                         if snapshot != nil {
-                            if snapshot.key == GameKeys.OpponentKey {
+                            if snapshot.key == GameKeys.JoinerKey {
                                 if let opponentUID = snapshot.value as? String {
                                     MOONLog("Got opponent with uid \(opponentUID)")
                                     let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(opponentUID)
@@ -102,20 +119,13 @@ class GameServerManager: ServerManager {
                         }
                 })
                 
-                var gamePin: String
-                if self.creatorOfCurrentGame!.hasPrefix("simplelogin:") {
-                    gamePin = ((self.creatorOfCurrentGame! as NSString).substringFromIndex("simplelogin:".characters.count) as String)
-                } else {
-                    gamePin = self.creatorOfCurrentGame!
-                }
-                
                 dispatch_async(dispatch_get_main_queue()) {
-                    completionHandler(gamePin: gamePin, errorMessage: nil)
+                    completionHandler(gamePin: self.gamePin, errorMessage: nil)
                 }
                 
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    completionHandler(gamePin: nil, errorMessage: error.localizedDescription)
+                    completionHandler(gamePin: self.gamePin, errorMessage: error.localizedDescription)
                 }
             }
         })
@@ -128,8 +138,16 @@ class GameServerManager: ServerManager {
         hasCoordinate secondCoordinate: Coordinate,
         completionHandler:(errorMessage: String?) -> ())
     {
-        let currentUserID = ServerManager.dataBase().authData.uid
-        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(currentUserID).childByAppendingPath(GameKeys.InitialStateKey)
+        guard let gamePin = gamePin else {
+            MOONLog("Gamepin was not set")
+            dispatch_async(dispatch_get_main_queue()) {
+                completionHandler(errorMessage: "Gamepin was not set")
+            }
+            return
+        }
+        let dataBasePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey)
+                                                   .childByAppendingPath(gameIdentifier(gamePin))
+                                                   .childByAppendingPath(GameKeys.InitialStateKey)
         
         let initialState = [GameKeys.InitialState.Tile1Key:
                                     [GameKeys.InitialState.Tile.PositionKey : "\(firstCoordinate.x),\(firstCoordinate.y)",
@@ -139,34 +157,39 @@ class GameServerManager: ServerManager {
                                      GameKeys.InitialState.Tile.ValueKey    : "\(secondTile.scoreValue)"]
                            ]
         
-        dataBasePath.setValue(initialState, withCompletionBlock: { (error: NSError!, ref: Firebase!) -> Void in
-            if error == nil {
+        dataBasePath.setValue(initialState, withCompletionBlock: { (error: NSError?, ref: Firebase!) -> Void in
+            if let error = error {
+                dispatch_async(dispatch_get_main_queue()) {
+                    completionHandler(errorMessage: error.localizedDescription)
+                }
+            } else {
                 // No error
                 dispatch_async(dispatch_get_main_queue()) {
                     completionHandler(errorMessage: nil)
-                }
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    completionHandler(errorMessage: error.localizedDescription)
                 }
             }
         })
     }
     
-    func joinGameWithGamepin<T: Evolvable>(gamepin: String, completionHandler: (gameSetup: GameSetup<T>!, errorMessage: String?) -> ()) {
+    func joinGameWithGamepin<T: Evolvable>(gamePinToJoin: Int, completionHandler: (gameSetup: GameSetup<T>!, errorMessage: String?) -> ()) {
         // Check if game with gamepin exists
         // Check if that game does not have an opponent
         // Set self as opponent
         // Call completionHandler
         
-        let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepin)")
+        self.gamePin = gamePinToJoin
+        
+        let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey)
+                                                     .childByAppendingPath(gameIdentifier(self.gamePin!))
         
         gameEntryPoint.observeSingleEventOfType(FEventType.Value,
             withBlock: { (gameSnapshot: FDataSnapshot!) -> Void in
                 if gameSnapshot.exists() {
-                    if gameSnapshot.childSnapshotForPath(GameKeys.InitialStateKey).exists() == true {
+                    if gameSnapshot.childSnapshotForPath(GameKeys.InitialStateKey).exists() &&
+                       gameSnapshot.childSnapshotForPath(GameKeys.CreatorKey)     .exists()
+                    {
                         // The game has an initial state
-                        if gameSnapshot.childSnapshotForPath(GameKeys.OpponentKey).exists() == false {
+                        if gameSnapshot.childSnapshotForPath(GameKeys.JoinerKey).exists() == false {
                             // There is no opponent yet
                             
                             MOONLog("Delegate1: \(self.gameDelegate)")
@@ -179,19 +202,20 @@ class GameServerManager: ServerManager {
                                     self.processNewLastMove(T(scoreValue: T.getBaseValue().scoreValue), lastMoveSnapshot: lastMoveSnapshot)
                                 }
                             
-                            let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath("simplelogin:\(gamepin)")
-                            userPath.observeSingleEventOfType(FEventType.Value)
-                                { (userSnapshot: FDataSnapshot!) -> Void in
-                                    MOONLog("Got userdata \"\(userSnapshot)\" for uid \"simplelogin\(gamepin)\"")
-                                    if let opponentName = userSnapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName).value as? String {
+                            let oppenentUID = gameSnapshot.childSnapshotForPath(GameKeys.CreatorKey).value as! String
+                            let opponentPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(oppenentUID)
+                            opponentPath.observeSingleEventOfType(FEventType.Value)
+                                { (opponentSnapshot: FDataSnapshot!) -> Void in
+                                    MOONLog("Got userdata \"\(opponentSnapshot)\" for uid \"gamepin\(self.gamePin)\"")
+                                    if let opponentName = opponentSnapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName).value as? String {
                                         MOONLog("Game creator (opponent) name \"\(opponentName)\"")
                                         
                                         // ####  WARNING!!  ####
                                         // SHOULD USE MORE PROTECTION IN HERE! THIS MIGHT CRASH!! AND IT DOES!
                                         
-                                        self.creatorOfCurrentGame = "simplelogin:\(gamepin)"
                                         
-                                        gameEntryPoint.childByAppendingPath(GameKeys.OpponentKey).setValue(ServerManager.dataBase().authData.uid)
+                                        
+                                        gameEntryPoint.childByAppendingPath(GameKeys.JoinerKey).setValue(ServerManager.dataBase().authData.uid)
                                         
                                         let boardSizeSnapshot       = gameSnapshot.childSnapshotForPath(GameKeys.BoardSizeKey)
                                         let turnDurationSnapshot    = gameSnapshot.childSnapshotForPath(GameKeys.TurnDurationKey)
@@ -237,12 +261,12 @@ class GameServerManager: ServerManager {
                                         } else {
                                             dispatch_async(dispatch_get_main_queue()) {
                                                 MOONLog("Missing boardSize, turnDuration, or initialState")
-                                                completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(gamepin)")
+                                                completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(self.gamePin)")
                                             }
                                         }
                                     } else {
                                         dispatch_async(dispatch_get_main_queue()) {
-                                            completionHandler(gameSetup: nil, errorMessage: "User with uid simplelogin:\(gamepin) does not have a display name")
+                                            completionHandler(gameSetup: nil, errorMessage: "User with gamepin:\(self.gamePin) does not have a display name")
                                         }
                                     }
                                 }
@@ -258,14 +282,14 @@ class GameServerManager: ServerManager {
                     }
                 } else {
                     dispatch_async(dispatch_get_main_queue()) {
-                        completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(gamepin)")
+                        completionHandler(gameSetup: nil, errorMessage: "There is no game with gamepin \(self.gamePin)")
                     }
                 }
                 
             }) { (error: NSError!) -> Void in
                 if error == nil {
                     dispatch_async(dispatch_get_main_queue()) {
-                        completionHandler(gameSetup: nil, errorMessage: "Unknown error while getting game with gamepin \(gamepin)")
+                        completionHandler(gameSetup: nil, errorMessage: "Unknown error while getting game with gamepin \(self.gamePin)")
                     }
                 } else {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -278,8 +302,9 @@ class GameServerManager: ServerManager {
     func performedMoveInDirection<T: Evolvable>(direction: MoveDirection, whichSpawnedTile newTile: T, atCoordinate coordinate: Coordinate) {
         // Update the LastMove on the server
         // Use updateChildValues to not overwrite
-        if let creator = self.creatorOfCurrentGame {
-            let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath(creator)
+        if let gamePin = gamePin {
+            let gameEntryPoint = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey)
+                                                         .childByAppendingPath(gameIdentifier(gamePin))
             let lastMoveEntryPoint = gameEntryPoint.childByAppendingPath(GameKeys.LastMoveKey)
             
             var directionString = "_"
@@ -385,9 +410,10 @@ class GameServerManager: ServerManager {
         ServerManager.dataBase().removeAllObservers()
     }
     
-    func deleteEventWithGamepin(gamepinToRemove: String) {
+    func deleteEventWithGamepin(gamepinToRemove: Int) {
         MOONLog("Gamepin to remove: \(gamepinToRemove)")
-        ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey).childByAppendingPath("simplelogin:\(gamepinToRemove)").removeValue()
+        ServerManager.dataBase().childByAppendingPath(FireBaseKeys.GameSessionsKey)
+                                .childByAppendingPath(gameIdentifier(gamepinToRemove)).removeValue()
     }
 }
 

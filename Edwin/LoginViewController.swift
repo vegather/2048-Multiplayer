@@ -18,7 +18,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var overEdwinLabelConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var createUserButton: UIButton!
     @IBOutlet weak var edwinLabel: UILabel!
+    
+    @IBOutlet weak var loginAsDemo1Button: UIButton!
+    @IBOutlet weak var loginAsDemo2Button: UIButton!
     
     var initialUnderLoginConstraintConstant: CGFloat!
     var initialOverEdwinLabelConstraintConstant: CGFloat!
@@ -111,7 +115,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let keyboardTopWithSpace = keyboardEndFrame.origin.y - LOGIN_BUTTON_MIN_DISTANCE_FROM_KEYBOARD
         let distanceToMoveButton = loginButtonBottom - keyboardTopWithSpace
         
-        if distanceToMoveButton > 0 {
+//        if distanceToMoveButton > 0 {
             // Should move
             let movedTopOfUsernameFieldWithSpace = self.usernameTextField.frame.origin.y - distanceToMoveButton - TEXT_FIELD_MIN_DISTANCE_FROM_EDWIN_LABEL
             let bottomOfEdwinLabel = edwinLabel.frame.origin.y + edwinLabel.frame.size.height
@@ -132,7 +136,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             UIView.setAnimationBeginsFromCurrentState(true)
             view.layoutIfNeeded()
             UIView.commitAnimations()
-        }
+//        }
     }
     
     func keyboardWillHide(notification: NSNotification) {
@@ -161,32 +165,47 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // MARK: Login User
     // -------------------------------
     
-    private func loginUser() {
-        dismissKeyboard()
-        
+    private func loginAsRegularUser() {
         if usernameTextField.text!.characters.count > 0 &&
-           passwordTextField.text!.characters.count > 0
+            passwordTextField.text!.characters.count > 0
         {
-            spinner.hidden = false
-            spinner.startAnimating()
-            
-            MOONLog("Will ask serverManager to login user")
-            
-            UserServerManager.loginWithEmail(usernameTextField.text!, password: passwordTextField.text!, completionHandler: { (errorMessage: String?) -> () in
-                self.spinner.stopAnimating()
-                
-                if let error = errorMessage {
-                    // Got error
-                    self.showAlertWithTitle("Could not log in", andMessage: error)
-                } else {
-                    // Successfully logged in
-                    self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
-                }
-            })
+            loginWithEmail(usernameTextField.text!, password: passwordTextField.text!)
         } else {
+            dismissKeyboard()
             showAlertWithTitle("Missing fields", andMessage: "You need to fill in both the email field, and the password to log in")
         }
     }
+    
+    @IBAction func loginAsDemo1() {
+        loginWithEmail("demo1@demo1.com", password: "demo1")
+    }
+    
+    @IBAction func loginAsDemo2() {
+        loginWithEmail("demo2@demo2.com", password: "demo2")
+    }
+    
+    private func loginWithEmail(email: String, password: String) {
+        dismissKeyboard()
+        spinner.hidden = false
+        spinner.startAnimating()
+        setButtonsEnabled(false)
+        
+        MOONLog("Will ask serverManager to login user")
+        
+        UserServerManager.loginWithEmail(email, password: password) { errorMessage  in
+            self.spinner.stopAnimating()
+            self.setButtonsEnabled(true)
+            
+            if let error = errorMessage {
+                // Got error
+                self.showAlertWithTitle("Could not log in", andMessage: error)
+            } else {
+                // Successfully logged in
+                self.performSegueWithIdentifier(SegueIdentifier.PushMainMenuFromLogin, sender: self)
+            }
+        }
+    }
+    
     
     
     
@@ -201,7 +220,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if UserServerManager.isLoggedIn {
                 return true
             } else {
-                loginUser()
+                loginAsRegularUser()
                 return false
             }
         } else if identifier == SegueIdentifier.PushCreateUser {
@@ -287,8 +306,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     // -------------------------------
-    // MARK: Show error alert
+    // MARK: Private Helpers
     // -------------------------------
+    
+    private func setButtonsEnabled(value: Bool) {
+        usernameTextField .enabled = value
+        passwordTextField .enabled = value
+        loginButton       .enabled = value
+        createUserButton  .enabled = value
+        loginAsDemo1Button.enabled = value
+        loginAsDemo2Button.enabled = value
+    }
     
     private func showAlertWithTitle(title: String, andMessage message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)

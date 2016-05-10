@@ -18,42 +18,39 @@ class UserServerManager: ServerManager {
     
     class func loginWithEmail(email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
         ServerManager.dataBase().authUser(email, password: password) { (error: NSError?, data: FAuthData?) -> Void in
-            // data.auth is [uid: simplelogin:1, provider: password]
             MOONLog("Returned error \"\(error)\", data: \"\(data)\", authData: \"\(data?.auth)\"")
             
             if error == nil, let data = data {
-                ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid).observeSingleEventOfType(FEventType.Value,
-                    withBlock: { (snapshot: FDataSnapshot!) -> Void in
-                        let nameSnapshot = snapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName)
-                        if nameSnapshot.exists() {
-                            self.lastKnownCurrentUserDisplayName = nameSnapshot.value as! String
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            completionHandler(errorMessage: nil)
-                        })
-                })
-            } else {
-//                let errorCode = error!.code as NSInteger
+                let userPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(data.uid)
+                userPath.observeSingleEventOfType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
+                    let nameSnapshot = snapshot.childSnapshotForPath(FireBaseKeys.Users.DisplayName)
+                    if nameSnapshot.exists() {
+                        self.lastKnownCurrentUserDisplayName = nameSnapshot.value as! String
+                    }
                 
+                    let userIdentifier = snapshot.childSnapshotForPath(FireBaseKeys.Users.Identifier)
+                    if userIdentifier.exists() {
+                        self.currentUserIdentifier = userIdentifier.value as? Int
+                    }
+                    
+                    self.currentUserEmail = email
+                        
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completionHandler(errorMessage: nil)
+                    }
+                }
+            } else {
                 if let errorCode = FAuthenticationError(rawValue: error!.code) {
+                    var errorMessage = ""
                     switch (errorCode) {
-                    case .UserDoesNotExist:
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            completionHandler(errorMessage: "That user does not exist")
-                        })
-                    case .InvalidEmail:
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            completionHandler(errorMessage: "That is not a valid email address")
-                        })
-                    case .InvalidPassword:
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            completionHandler(errorMessage: "Incorrect password")
-                        })
-                    default:
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            completionHandler(errorMessage: "Unknown error while logging in")
-                        })
+                        case .UserDoesNotExist: errorMessage = "That user does not exist"
+                        case .InvalidEmail:     errorMessage = "That is not a valid email address"
+                        case .InvalidPassword:  errorMessage = "Incorrect password"
+                        default:                errorMessage = "Unknown error while logging in"
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completionHandler(errorMessage: errorMessage)
                     }
                 }
             }
@@ -62,6 +59,9 @@ class UserServerManager: ServerManager {
     
     class func logout() {
         ServerManager.dataBase().unauth()
+        
+        currentUserIdentifier = nil
+        currentUserEmail = nil
     }
     
     class var isLoggedIn: Bool {
@@ -76,42 +76,59 @@ class UserServerManager: ServerManager {
         }
     }
     
-    static let CURRENT_USER_NAME_KEY  = "CurrentUserDisplayName"
-    static let CURRENT_USER_EMAIL_KEY = "CurrentUserEmail"
+    private struct UserDefaultKeys {
+        static let DisplayName    = "CurrentUserDisplayName"
+        static let Email          = "CurrentUserEmail"
+        static let UserIdentifier = "CurrentUserIdentifier"
+    }
     
     private(set) static var lastKnownCurrentUserDisplayName: String {
-        set {
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: CURRENT_USER_NAME_KEY)
-            NSUserDefaults.standardUserDefaults().synchronize()
-        }
         get {
-            if let name = NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_NAME_KEY) {
+            if let name = NSUserDefaults.standardUserDefaults().stringForKey(UserDefaultKeys.DisplayName) {
                 return name
             } else {
-                NSUserDefaults.standardUserDefaults().setObject("You", forKey: CURRENT_USER_NAME_KEY)
+                NSUserDefaults.standardUserDefaults().setObject("You", forKey: UserDefaultKeys.DisplayName)
                 NSUserDefaults.standardUserDefaults().synchronize()
                 return "You"
             }
         }
-    }
-    
-    // Need this because apparently the email in authData.prividerData is not updated after 
-    // a call to ServerManager.dataBase().changeEmailForUser
-    private(set) static var currentUserEmail: String? {
         set {
-            MOONLog("Setting email to \(newValue)")
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: CURRENT_USER_EMAIL_KEY)
+            MOONLog("Setting display name to \(lastKnownCurrentUserDisplayName)")
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: UserDefaultKeys.DisplayName)
             NSUserDefaults.standardUserDefaults().synchronize()
         }
+    }
+    
+    // Need this because apparently the email in authData.providerData is not updated after
+    // a call to ServerManager.dataBase().changeEmailForUser
+    private(set) static var currentUserEmail: String? {
         get {
-            if let email = NSUserDefaults.standardUserDefaults().stringForKey(CURRENT_USER_EMAIL_KEY) {
-                MOONLog("Returning email: \(email)")
-                return email
+            let email = NSUserDefaults.standardUserDefaults().stringForKey(UserDefaultKeys.Email)
+            MOONLog("Returning email: \(email)")
+            return email
+        }
+        set {
+            MOONLog("Setting email to \(newValue)")
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: UserDefaultKeys.Email)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
+    
+    private(set) static var currentUserIdentifier: Int? {
+        get {
+            let identifier = NSUserDefaults.standardUserDefaults().objectForKey(UserDefaultKeys.UserIdentifier) as? NSNumber
+            MOONLog("Returning UserIdentifier: \(identifier)")
+            return identifier?.integerValue
+        }
+        set {
+            MOONLog("Setting currentUserIdentifier to \(newValue)")
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            if let identifier = newValue {
+                userDefaults.setObject(NSNumber(integer: identifier), forKey: UserDefaultKeys.UserIdentifier)
             } else {
-                let potentialEmail = ServerManager.dataBase().authData.providerData["email"] as? String
-                MOONLog("Returning potentialEmail \(potentialEmail)")
-                return potentialEmail
+                userDefaults.setObject(nil, forKey: UserDefaultKeys.UserIdentifier)
             }
+            userDefaults.synchronize()
         }
     }
     
@@ -124,40 +141,84 @@ class UserServerManager: ServerManager {
     // -------------------------------
     
     // Need to change the profilePicture back to non-optional
-    class func createUserWithDisplayName(displayName: String, email: String, password: String, completionHandler:(errorMessage: String?) -> ()) {
-        ServerManager.dataBase().createUser(email, password: password) { (createUserError: NSError!, createUserData: [NSObject : AnyObject]!) -> Void in
-            // data is [uid: simplelogin:1]
-            MOONLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
+    // The completion handler will be called on an undefined thread.
+    class func createUserWithDisplayName(
+        displayName      : String,
+        email            : String,
+        password         : String,
+        completionHandler: (errorMessage: String?) -> ())
+    {
+        ServerManager.dataBase().createUser(
+            email,
+            password: password,
+            withValueCompletionBlock: { (createUserError: NSError!, createUserData: [NSObject : AnyObject]!) -> Void in
             
-            if createUserError == nil {
+                MOONLog("Created user returned error \"\(createUserError)\", data: \"\(createUserData)\"")
                 
-                let newUser = [FireBaseKeys.Users.Email:        email,
-                               FireBaseKeys.Users.DisplayName:  displayName,
-                               FireBaseKeys.Users.Wins:         0,
-                               FireBaseKeys.Users.Draws:        0,
-                               FireBaseKeys.Users.Losses:       0] as NSDictionary
+                if createUserError == nil {
+                    
+                    let userIdentifierCounter = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UserIdentifierCounter)
+                    
+                    userIdentifierCounter.runTransactionBlock(
+                        { (data: FMutableData!) -> FTransactionResult! in
+                            var value = data.value as? Int
+                            if value == nil { value = 0 }
+                            data.value = value! + 1
+                            return FTransactionResult.successWithValue(data)
+                        },
+                        andCompletionBlock: { (error: NSError?, committed: Bool, snapshot: FDataSnapshot?) in
+                            // Make sure the transaction succeeded, fail otherwise
+                            guard let newIdentifier = snapshot?.value as? NSNumber where error == nil && committed == true else {
+                                MOONLog("ERROR: Got error \"\(error)\" in completion for transaction. Committed: \(committed), Snapshot: \(snapshot)")
+                                
+                                ServerManager.dataBase().removeUser(email, password: password) { _ in
+                                    completionHandler(errorMessage: "Unable to create the user. Try again!")
+                                }
+                                return
+                            }
+                            
+                            let newUser = [
+                                FireBaseKeys.Users.Email:        email,
+                                FireBaseKeys.Users.DisplayName:  displayName,
+                                FireBaseKeys.Users.Wins:         0,
+                                FireBaseKeys.Users.Draws:        0,
+                                FireBaseKeys.Users.Losses:       0,
+                                FireBaseKeys.Users.Identifier:   newIdentifier
+                            ] as NSDictionary
+                            
+                            MOONLog("CREATED USER DATA: \(createUserData)")
+                            
+                            let userUID = createUserData["uid"] as! String
+                            let newUserPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
+                            
+                            newUserPath.setValue(newUser, withCompletionBlock: { (setNewUserError: NSError!, ref: Firebase!) -> Void in
+                                guard setNewUserError == nil else {
+                                    MOONLog("ERROR: Got error while setting new user \(setNewUserError.localizedDescription)")
+                                    
+                                    ServerManager.dataBase().removeUser(email, password: password) { _ in
+                                        completionHandler(errorMessage: "Unable to create the user. Try again!")
+                                    }
+                                    return
+                                }
+                                
+                                // Everything went as planned, so we can log in
+                                self.loginWithEmail(email, password: password) { completionHandler(errorMessage: $0) }
+                            })
+                        }
+                    )
                 
-                let userUID = createUserData["uid"] as! String
-                let newUserPath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(userUID)
-                
-                newUserPath.setValue(newUser, withCompletionBlock: { (setNewUserError: NSError!, ref: Firebase!) -> Void in
-                    if setNewUserError == nil {
-                        self.loginWithEmail(email, password: password, completionHandler: { (errorMessage: String?) -> () in
-                            completionHandler(errorMessage: errorMessage)
-                        })
-                    } else {
-                        MOONLog("ERROR: Got error while setting new user \(setNewUserError.localizedDescription)")
-                    }
-                })
-            } else {
-                completionHandler(errorMessage: "\(createUserError)")
+                } else {
+                    completionHandler(errorMessage: "\(createUserError)")
+                }
             }
-        }
+        )
     }
     
     class func changeCurrentUsersDisplayNameTo(newDisplayName: String, completionHandler: (errorMessage: String?) -> ()) {
         let uid = ServerManager.dataBase().authData.uid
-        let displayNamePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey).childByAppendingPath(uid).childByAppendingPath(FireBaseKeys.Users.DisplayName)
+        let displayNamePath = ServerManager.dataBase().childByAppendingPath(FireBaseKeys.UsersKey)
+                                                      .childByAppendingPath(uid)
+                                                      .childByAppendingPath(FireBaseKeys.Users.DisplayName)
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
             displayNamePath.setValue(newDisplayName, withCompletionBlock: { (error: NSError!, fireRef: Firebase!) -> Void in

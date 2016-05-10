@@ -40,6 +40,14 @@
 		9ADD7CB61AA2212800BDCFA8 /* EdwinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */; };
 		9ADD7CCA1AA2259C00BDCFA8 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */; };
 		9ADD7CD01AA233E300BDCFA8 /* GameBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */; };
+		9ADDE9321CD646B000CB6D0D /* Brandon_bld.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE92E1CD646B000CB6D0D /* Brandon_bld.otf */; };
+		9ADDE9331CD646B000CB6D0D /* Brandon_light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE92F1CD646B000CB6D0D /* Brandon_light.otf */; };
+		9ADDE9341CD646B000CB6D0D /* Brandon_med.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE9301CD646B000CB6D0D /* Brandon_med.otf */; };
+		9ADDE9351CD646B000CB6D0D /* Brandon_reg.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE9311CD646B000CB6D0D /* Brandon_reg.otf */; };
+		9ADDE9361CD646F900CB6D0D /* Brandon_bld.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE92E1CD646B000CB6D0D /* Brandon_bld.otf */; };
+		9ADDE9371CD646F900CB6D0D /* Brandon_light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE92F1CD646B000CB6D0D /* Brandon_light.otf */; };
+		9ADDE9381CD646F900CB6D0D /* Brandon_med.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE9301CD646B000CB6D0D /* Brandon_med.otf */; };
+		9ADDE9391CD646F900CB6D0D /* Brandon_reg.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADDE9311CD646B000CB6D0D /* Brandon_reg.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +99,10 @@
 		9ADD7CB51AA2212800BDCFA8 /* EdwinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdwinTests.swift; sourceTree = "<group>"; };
 		9ADD7CC91AA2259C00BDCFA8 /* DataStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataStructures.swift; path = ../DataStructures.swift; sourceTree = "<group>"; };
 		9ADD7CCF1AA233E300BDCFA8 /* GameBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameBrain.swift; path = ../GameBrain.swift; sourceTree = "<group>"; };
+		9ADDE92E1CD646B000CB6D0D /* Brandon_bld.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld.otf; sourceTree = "<group>"; };
+		9ADDE92F1CD646B000CB6D0D /* Brandon_light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_light.otf; sourceTree = "<group>"; };
+		9ADDE9301CD646B000CB6D0D /* Brandon_med.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_med.otf; sourceTree = "<group>"; };
+		9ADDE9311CD646B000CB6D0D /* Brandon_reg.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_reg.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +220,10 @@
 		9ADD7C9D1AA2212800BDCFA8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9ADDE92E1CD646B000CB6D0D /* Brandon_bld.otf */,
+				9ADDE92F1CD646B000CB6D0D /* Brandon_light.otf */,
+				9ADDE9301CD646B000CB6D0D /* Brandon_med.otf */,
+				9ADDE9311CD646B000CB6D0D /* Brandon_reg.otf */,
 				9ADD7CA81AA2212800BDCFA8 /* LaunchScreen.xib */,
 				9ADD7C9F1AA2212800BDCFA8 /* AppDelegate.swift */,
 				9ADD7C9E1AA2212800BDCFA8 /* Info.plist */,
@@ -315,9 +331,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ADDE9351CD646B000CB6D0D /* Brandon_reg.otf in Resources */,
 				9AC4171B1AE188C7008D4EF8 /* Images.xcassets in Resources */,
 				9ADD7CA51AA2212800BDCFA8 /* Main.storyboard in Resources */,
 				9ADD7CAA1AA2212800BDCFA8 /* LaunchScreen.xib in Resources */,
+				9ADDE9321CD646B000CB6D0D /* Brandon_bld.otf in Resources */,
+				9ADDE9331CD646B000CB6D0D /* Brandon_light.otf in Resources */,
+				9ADDE9341CD646B000CB6D0D /* Brandon_med.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +345,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ADDE9361CD646F900CB6D0D /* Brandon_bld.otf in Resources */,
+				9ADDE9371CD646F900CB6D0D /* Brandon_light.otf in Resources */,
+				9ADDE9381CD646F900CB6D0D /* Brandon_med.otf in Resources */,
+				9ADDE9391CD646F900CB6D0D /* Brandon_reg.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
