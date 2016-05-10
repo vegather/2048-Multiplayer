@@ -15,7 +15,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+//        for family in UIFont.familyNames()
+//        {
+//            print("\(family)")
+//            for names in UIFont.fontNamesForFamilyName(family)
+//            {
+//                print("== \(names)")
+//            }
+//        }
+        
+        if let font = UIFont(name: "BrandonGrotesque-Regular", size: 16.0) {
+            UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: font],
+                                                                   forState: .Normal)
+        }
+        
         return true
     }
 

@@ -13,10 +13,9 @@ import UIKit
 class PopSegue: UIStoryboardSegue {
     override func perform() {
         // Assign the source and destination views to local variables.
-        let secondVCView = (self.sourceViewController      as UIViewController).view as UIView!
-        let firstVCView  = (self.destinationViewController as UIViewController).view as UIView!
+        let secondVCView = sourceViewController     .view
+        let firstVCView  = destinationViewController.view
         
-//        let screenHeight = UIScreen.mainScreen().bounds.size.height
         let screenWidth = UIScreen.mainScreen().bounds.size.width
         
         let window = UIApplication.sharedApplication().keyWindow
@@ -24,22 +23,29 @@ class PopSegue: UIStoryboardSegue {
         
         
         // Animate the transition.
-        UIView.animateWithDuration(0.4, animations: { () -> Void in
-            firstVCView.frame = CGRectOffset(firstVCView.frame, screenWidth, 0.0)
-            secondVCView.frame = CGRectOffset(secondVCView.frame, screenWidth, 0.0)
-            
-            }) { (Finished) -> Void in
-                self.dismissViewControllersFrom(self.sourceViewController as UIViewController, allTheWayDownTo: self.destinationViewController as UIViewController, animated: false)
-        }
+        UIView.animateWithDuration(
+            0.4,
+            animations: {
+                firstVCView.frame  = CGRectOffset(firstVCView.frame,  screenWidth, 0.0)
+                secondVCView.frame = CGRectOffset(secondVCView.frame, screenWidth, 0.0)
+            },
+            completion: { _ in
+                self.dismissViewControllersFrom(
+                    self.sourceViewController,
+                    allTheWayDownTo: self.destinationViewController,
+                    animated: false
+                )
+            }
+        )
     }
     
     // Recursively dismisses all the VCs downto to.
     private func dismissViewControllersFrom(from: UIViewController, allTheWayDownTo to: UIViewController, animated: Bool) {
         if from != to {
             if let presentingVC = from.presentingViewController {
-                presentingVC.dismissViewControllerAnimated(animated, completion: { () -> Void in
+                presentingVC.dismissViewControllerAnimated(animated) {
                     self.dismissViewControllersFrom(presentingVC, allTheWayDownTo: to, animated: animated)
-                })
+                }
             }
         }
     }

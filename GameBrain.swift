@@ -139,8 +139,8 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
     }
     
     func deleteCurrentGame() {
-        if let gamePin = self.gamePin {
-            self.gameServer.deleteEventWithGamepin(gamePin)
+        if let gamePinString = self.gamePin, gamePinInt = Int(gamePinString) {
+            self.gameServer.deleteEventWithGamepin(gamePinInt)
         }
     }
     
@@ -191,12 +191,14 @@ class GameBrain<E: GameBrainDelegate>: GameDelegate, GameCreatorDelegate, GameBo
                         
                         let genericTypeProvider = F(scoreValue: F.getBaseValue().scoreValue)
                         self.gameServer.createGameWithDimension(genericTypeProvider, dimension: gameSetup.dimension, turnDuration: gameSetup.turnDuration,
-                            completionHandler: { (gamePin: String!, errorMessage: String?) -> () in
+                            completionHandler: { (gamePin: Int?, errorMessage: String?) -> () in
                                 if let error = errorMessage {
                                     MOONLog("ERROR: Got error from createGame: \(error)")
-                                } else {
+                                } else if let gamePin = gamePin {
                                     MOONLog("Got gamePin: \(gamePin)")
-                                    self.gamePin = gamePin
+                                    self.gamePin = "\(gamePin)"
+                                } else {
+                                    MOONLog("WTF!?! There was no error, and no gamepin returned from createGameWithDimension")
                                 }
                             })
                     } else {
